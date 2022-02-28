@@ -1,31 +1,59 @@
+//fonctions à modifier this.a par this.triangle[i] where i = 0 pour a, 1 pour b, 2 pour c
+//calculateAngle
+//returnXcenter //ok normalement
+//returnYcenter //ok normalement
+// calculatePerpendicularBisector //ok normalement
+
 export class Triangle {
     constructor(a,b,c,color=255)
     {
-        this.a = a; //from class Ball
-        this.b = b;
-        this.c = c;
-        this.angle_a = this.calculateAngle(this.c,this.a,this.b);
-        this.angle_b = this.calculateAngle(this.a,this.b,this.c);
-        this.angle_c = this.calculateAngle(this.b,this.c,this.a);
-        this.x = (a.x+b.x+c.x)/3; //Gravity Center X (or centroid x)
-        this.y = (a.y+b.y+c.y)/3; //Gravity Center Y (or centroid y)
+        this.triangle=[a,b,c] //a, b, c from class Ball
+        this.angle_a = this.calculateAngle(2,0,1);
+        this.angle_b = this.calculateAngle(0,1,2);
+        this.angle_c = this.calculateAngle(1,2,0);
+        this.x = (this.triangle[0].x+this.triangle[1].x+this.triangle[2].x)/3; //Gravity Center X (or centroid x)
+        this.y = (this.triangle[0].y+this.triangle[1].y+this.triangle[2].y)/3; //Gravity Center Y (or centroid y)
         this.color = this.IsRightTriangle() ? [0,170,255] : color;
 
         //FOR PERPENDICULAR BIJECTOR
-        this.middle1 = createVector(this.returnXCenter(this.a,this.b), this.returnYCenter(this.a,this.b))
-        this.extremity1_1 = this.calculatePerpendicularBisector(this.middle1,this.b)
+        this.middle1 = createVector(this.returnXCenter(0,1), this.returnYCenter(0,1))
+        this.extremity1_1 = this.calculatePerpendicularBisector(this.middle1,1)
         this.extremity1_2 = createVector(this.middle1.x-(this.extremity1_1.x-this.middle1.x),this.middle1.y-(this.extremity1_1.y-this.middle1.y))
 
-        this.middle2 = createVector(this.returnXCenter(this.b,this.c), this.returnYCenter(this.b,this.c))
-        this.extremity2_1 = this.calculatePerpendicularBisector(this.middle2,this.c)
+        this.middle2 = createVector(this.returnXCenter(1,2), this.returnYCenter(1,2))
+        this.extremity2_1 = this.calculatePerpendicularBisector(this.middle2,2)
         this.extremity2_2 = createVector(this.middle2.x-(this.extremity2_1.x-this.middle2.x),this.middle2.y-(this.extremity2_1.y-this.middle2.y))
 
-        this.middle3 = createVector(this.returnXCenter(this.c,this.a), this.returnYCenter(this.c,this.a))
-        this.extremity3_1 = this.calculatePerpendicularBisector(this.middle3,this.a)
+        this.middle3 = createVector(this.returnXCenter(2,0), this.returnYCenter(2,0))
+        this.extremity3_1 = this.calculatePerpendicularBisector(this.middle3,0)
         this.extremity3_2 = createVector(this.middle3.x-(this.extremity3_1.x-this.middle3.x),this.middle3.y-(this.extremity3_1.y-this.middle3.y))
 
         this.circumcenter = this.intersect_point(this.extremity1_1,this.extremity1_2,this.extremity2_1,this.extremity2_2)
 
+    }
+
+    updateTriangleInfos(color = 255) {
+        this.angle_a = this.calculateAngle(2,0,1);
+        this.angle_b = this.calculateAngle(0,1,2);
+        this.angle_c = this.calculateAngle(1,2,0);
+        this.x = (this.triangle[0].x+this.triangle[1].x+this.triangle[2].x)/3; //Gravity Center X (or centroid x)
+        this.y = (this.triangle[0].y+this.triangle[1].y+this.triangle[2].y)/3; //Gravity Center Y (or centroid y)
+        this.color = this.IsRightTriangle() ? [0,170,255] : color;
+
+        //FOR PERPENDICULAR BIJECTOR
+        this.middle1 = createVector(this.returnXCenter(0,1), this.returnYCenter(0,1))
+        this.extremity1_1 = this.calculatePerpendicularBisector(this.middle1,1)
+        this.extremity1_2 = createVector(this.middle1.x-(this.extremity1_1.x-this.middle1.x),this.middle1.y-(this.extremity1_1.y-this.middle1.y))
+
+        this.middle2 = createVector(this.returnXCenter(1,2), this.returnYCenter(1,2))
+        this.extremity2_1 = this.calculatePerpendicularBisector(this.middle2,2)
+        this.extremity2_2 = createVector(this.middle2.x-(this.extremity2_1.x-this.middle2.x),this.middle2.y-(this.extremity2_1.y-this.middle2.y))
+
+        this.middle3 = createVector(this.returnXCenter(2,0), this.returnYCenter(2,0))
+        this.extremity3_1 = this.calculatePerpendicularBisector(this.middle3,0)
+        this.extremity3_2 = createVector(this.middle3.x-(this.extremity3_1.x-this.middle3.x),this.middle3.y-(this.extremity3_1.y-this.middle3.y))
+
+        this.circumcenter = this.intersect_point(this.extremity1_1,this.extremity1_2,this.extremity2_1,this.extremity2_2)
     }
 
     IsRightTriangle() {
@@ -43,9 +71,9 @@ export class Triangle {
         sketch.push();
         sketch.stroke(this.color)
         sketch.strokeWeight(5)
-        sketch.line(this.a.x,this.a.y,this.b.x,this.b.y)
-        sketch.line(this.a.x,this.a.y,this.c.x,this.c.y)
-        sketch.line(this.c.x,this.c.y,this.b.x,this.b.y)
+        sketch.line(this.triangle[0].x,this.triangle[0].y,this.triangle[1].x,this.triangle[1].y)
+        sketch.line(this.triangle[0].x,this.triangle[0].y,this.triangle[2].x,this.triangle[2].y)
+        sketch.line(this.triangle[2].x,this.triangle[2].y,this.triangle[1].x,this.triangle[1].y)
         sketch.pop();
     }
 
@@ -60,32 +88,32 @@ export class Triangle {
 
         sketch.push();
         sketch.translate(
-            (this.a.x<this.x) ? this.a.x-distance : this.a.x +distance, 
-            (this.a.y<this.y) ? this.a.y-distance : this.a.y +distance
+            (this.triangle[0].x<this.x) ? this.triangle[0].x-distance : this.triangle[0].x +distance, 
+            (this.triangle[0].y<this.y) ? this.triangle[0].y-distance : this.triangle[0].y +distance
         );
         sketch.textAlign(CENTER, CENTER);
-        sketch.rotate( radians(angle_text) );
+        //sketch.rotate( radians(angle_text) );
         sketch.text(this.angle_a+"°", 0,0);
         sketch.pop();
 
         sketch.push();
         sketch.translate(
-            (this.b.x<this.x) ? this.b.x-distance : this.b.x +distance,
-            (this.b.y<this.y) ? this.b.y-distance : this.b.y +distance
+            (this.triangle[1].x<this.x) ? this.triangle[1].x-distance : this.triangle[1].x +distance,
+            (this.triangle[1].y<this.y) ? this.triangle[1].y-distance : this.triangle[1].y +distance
         );
         sketch.textAlign(CENTER, CENTER);
-        sketch.rotate( radians(angle_text) );
+        //sketch.rotate( radians(angle_text) );
         sketch.text(this.angle_b+"°", 0,0);
         sketch.pop();
 
         sketch.push();
         sketch.translate(
-            (this.c.x<this.x) ? this.c.x-distance : this.c.x +distance,
-            (this.c.y<this.y) ? this.c.y-distance : this.c.y +distance
+            (this.triangle[2].x<this.x) ? this.triangle[2].x-distance : this.triangle[2].x +distance,
+            (this.triangle[2].y<this.y) ? this.triangle[2].y-distance : this.triangle[2].y +distance
         );
         sketch.textAlign(CENTER, CENTER);
-        sketch.rotate( radians(angle_text) );
-        sketch.text(this.angle_b+"°", 0,0);
+        //sketch.rotate( radians(angle_text) );
+        sketch.text(this.angle_c+"°", 0,0);
         sketch.pop();
     }
 
@@ -93,17 +121,16 @@ export class Triangle {
         return round(dist(p1.x,p1.y,p2.x,p2.y),5)
     }
 
-    calculateAngle(p1,p2,p3) { //angle around balls_index_2
-        // return round(acos(this.distanceOf2Balls(p2,p3)
-        //                 / this.distanceOf2Balls(p1,p2)) * 180 / PI)
-        let AB = this.distanceOf2Balls(p1,p2);
-        let BC = this.distanceOf2Balls(p2,p3);
-        let AC = this.distanceOf2Balls(p1,p3);
+    calculateAngle(p1,p2,p3) { 
+        // console.log(this.triangle[p1])
+        let AB = this.distanceOf2Balls(this.triangle[p1],this.triangle[p2]);
+        let BC = this.distanceOf2Balls(this.triangle[p2],this.triangle[p3]);
+        let AC = this.distanceOf2Balls(this.triangle[p1],this.triangle[p3]);
         return round(acos((BC**2 + AB**2 - AC**2)/(2*BC*AB)) * 180 / PI)
     }
 
     calculatePerpendicularBisector(i,p1) {
-        let u = createVector(p1.x-i.x,p1.y-i.y)
+        let u = createVector(this.triangle[p1].x-i.x,this.triangle[p1].y-i.y)
         let v = createVector(-u.y,u.x)
         return createVector(v.x+i.x,v.y+i.y)
         // let v = createVector(p2.x-p3.x,p2.y-2*p3.y)
@@ -129,11 +156,12 @@ export class Triangle {
     }
 
     returnXCenter(p1,p2) {
-        return int((p1.x+p2.x)/2)
+        // console.log(this.triangle[p1].x)
+        return int((this.triangle[p1].x+this.triangle[p2].x)/2)
     }
 
     returnYCenter(p1,p2) {
-        return int((p1.y+p2.y)/2)
+        return int((this.triangle[p1].y+this.triangle[p2].y)/2)
     }
 
 
@@ -149,9 +177,9 @@ export class Triangle {
         sketch.push();
         sketch.stroke(255,255,0)
         sketch.strokeWeight(5)
-        sketch.line(this.a.x,this.a.y,this.returnXCenter(this.b,this.c),this.returnYCenter(this.b, this.c))
-        sketch.line(this.b.x,this.b.y,this.returnXCenter(this.a,this.c),this.returnYCenter(this.a, this.c))
-        sketch.line(this.c.x,this.c.y,this.returnXCenter(this.b,this.a),this.returnYCenter(this.b, this.a))
+        sketch.line(this.triangle[0].x,this.triangle[0].y,this.returnXCenter(1,2),this.returnYCenter(1, 2))
+        sketch.line(this.triangle[1].x,this.triangle[1].y,this.returnXCenter(0,2),this.returnYCenter(0, 2))
+        sketch.line(this.triangle[2].x,this.triangle[2].y,this.returnXCenter(1,0),this.returnYCenter(1, 0))
         sketch.pop();
     }
 
@@ -174,7 +202,7 @@ export class Triangle {
       sketch.stroke(255,0,255)
       sketch.strokeWeight(8)
       sketch.fill(0)
-      sketch.circle(this.circumcenter.x,this.circumcenter.y,(this.distanceOf2Balls(this.circumcenter,this.a))*2)
+      sketch.circle(this.circumcenter.x,this.circumcenter.y,(this.distanceOf2Balls(this.circumcenter,this.triangle[0]))*2)
       sketch.pop();
     }
 }

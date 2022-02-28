@@ -18,9 +18,9 @@ export const menu = new p5(( sketch ) => {
             l.update_data(data)
         });
 
-        socket.on("cue", (data) => {
-            //l.update_data(data)
-        });
+        // socket.on("cue", (data) => {
+        //     //l.update_data(data)
+        // });
 
         sketch.emit = (name, data) => {
             socket.emit(name, data);
@@ -31,6 +31,12 @@ export const menu = new p5(( sketch ) => {
 
     sketch.windowResized = () => {
         resizeCanvas(windowWidth, windowHeight);
+    }
+
+    sketch.pause = () => {
+    }
+
+    sketch.resume = () => {
     }
 
     sketch.update = () => {
