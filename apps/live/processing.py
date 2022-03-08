@@ -1,4 +1,4 @@
-from apps.application import BaseApplication
+from core.application import BaseApplication
 import socketio
 
 class Application(BaseApplication):
@@ -13,11 +13,11 @@ class Application(BaseApplication):
         self.sio.connect("https://vps.thomasjuldo.com/", socketio_path="/realtimepool/socket.io")
         
 
-    def listener(self, source, event):
-        super().listener(source, event)
+    def listener(self, source, event, data):
+        super().listener(source, event, data)
 
-        if source == "ball" and event == "ball_data":
-            self.data = self.hal.get_driver_event_data("ball", "ball_data")
+        if source == "ball" and event == "ball_data" and data is not None:
+            self.data = data
 
             l= []
             for x,y in self.data:

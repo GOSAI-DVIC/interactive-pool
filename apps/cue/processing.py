@@ -1,5 +1,5 @@
 
-from apps.application import BaseApplication
+from core.application import BaseApplication
 
 
 class Application(BaseApplication):
@@ -20,9 +20,8 @@ class Application(BaseApplication):
         #         },
         #     )
 
-    def listener(self, source, event):
-        super().listener(source, event)
+    def listener(self, source, event, data):
+        super().listener(source, event, data)
 
-        if source == "cue" and event == "cue_data":
-            self.data = self.hal.get_driver_event_data("cue", "cue_data")
-            self.server.send_data("cue", self.data)
+        if source == "cue" and event == "cue_data" and data is not None:
+            self.server.send_data("cue", data)
