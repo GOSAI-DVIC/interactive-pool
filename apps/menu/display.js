@@ -1,49 +1,34 @@
-import {Ball} from "./components/ball.js"
 import {Balls} from "./components/balls.js"
 
-export const menu = new p5(( sketch ) => {
+export const menu = new p5(sketch => {
     sketch.name = "menu"
     sketch.activated = false
 
-    let l = [];
+    let balls = new Balls();
+    let fps = "30.00";
 
     sketch.set = (width, height, socket) => {
-
-        l = new Balls()
-
         sketch.selfCanvas = sketch.createCanvas(width, height).position(0, 0);
-
-        socket.on("ball", (data) => {
-            //console.log(data)
-            l.update_data(data)
-        });
-
-        // socket.on("cue", (data) => {
-        //     //l.update_data(data)
-        // });
-
-        sketch.emit = (name, data) => {
-            socket.emit(name, data);
-        }
-
+        socket.on("ball", data => balls.update_data(data));
+        // socket.on("cue", (data) => l.update_data(data));
+        socket.on("fps",  data => fps = data);
+        sketch.emit = (name, data) => socket.emit(name, data);
         sketch.activated = true
-    }
+    };
 
-    sketch.windowResized = () => {
-        resizeCanvas(windowWidth, windowHeight);
-    }
+    sketch.resume = () => {};
+    sketch.pause  = () => {};
+    sketch.update = () => {};
 
-    sketch.pause = () => {
-    }
-
-    sketch.resume = () => {
-    }
-
-    sketch.update = () => {
-    }
+    sketch.windowResized = () => resizeCanvas(windowWidth, windowHeight);
 
     sketch.show = () => {
         sketch.clear();
-        l.show(sketch);
-    }
+        
+        balls.show(sketch);
+                
+        sketch.textSize(32);
+        sketch.fill(255, 255, 255);
+        sketch.text(`DETECTION: ${fps} FPS`, 50, 50);
+    };
 });
