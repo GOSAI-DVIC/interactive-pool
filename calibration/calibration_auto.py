@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-import cv2.aruco as aruco
+from cv2 import aruco
 from itertools import permutations  
 import json
 
@@ -116,10 +116,10 @@ def drawArucoFrame():
     #place aruco patters on images at projected_coords coordinates
     arucoFrame=np.full((1080,1920,3), 255,np.uint8)
 
-    aruco0 = cv2.imread("core/calibration/aruco0.png")
-    aruco1 = cv2.imread("core/calibration/aruco1.png")
-    aruco2 = cv2.imread("core/calibration/aruco2.png")
-    aruco3 = cv2.imread("core/calibration/aruco3.png")  
+    aruco0 = cv2.imread("home/calibration/aruco0.png")
+    aruco1 = cv2.imread("home/calibration/aruco1.png")
+    aruco2 = cv2.imread("home/calibration/aruco2.png")
+    aruco3 = cv2.imread("home/calibration/aruco3.png")  
     
     arucoFrame[projected_coords[0][1]:projected_coords[0][1]+aruco0.shape[0], projected_coords[0][0]:projected_coords[0][0]+aruco0.shape[1]] = aruco0
     arucoFrame[projected_coords[1][1]:projected_coords[1][1]+aruco1.shape[0], projected_coords[1][0]:projected_coords[1][0]+aruco1.shape[1]] = aruco1
@@ -141,6 +141,7 @@ def findArucoMarkers(img, markerSize=4, totalMarkers=250,draw=True):
     elif(ids.size != 4):
         print("%s aruco patterns detected out of 4" % ids.size)
     else:
+        print("%s aruco patterns detected out of 4" % ids.size)
         #converting NumPy arrays into a int list + sort aruco patterns in order
         ids = [i[0] for i in ids.tolist()]
         coords = [bboxs[i][0][0].tolist() for i in range(len(ids))]
@@ -306,8 +307,8 @@ d_information={"projection_matrix": projection_matrix,
 
 d_information={k:v.tolist() for k,v in d_information.items()}
 
-with open('core/calibration/calibration_data.json', 'w') as f:
-    json.dump(d_information, f)
+with open('home/calibration/calibration_data.json', 'w') as f:
+    json.dump(d_information, f, indent=4)
 
 print("calibration terminée")
 

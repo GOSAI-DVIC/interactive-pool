@@ -129,7 +129,7 @@ export class Balls {
             for (let i = this.ball_nb; i<this.previous_ball_nb; i++)
             {
                 this.balls[i].x = -500;
-                this.balls[i].y = - 500;
+                this.balls[i].y = -500;
             }
             this.previous_ball_nb = this.ball_nb
             this.triangle_nb = floor(this.ball_nb/3)
