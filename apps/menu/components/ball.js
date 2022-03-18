@@ -36,12 +36,12 @@ export class Ball {
   // }
 
     show(sketch) {
-      sketch.push();
+      // sketch.push();
       sketch.stroke(255)
       sketch.strokeWeight(8)
-      //sketch.noFill()
-      sketch.fill(0)
+      sketch.noFill()
+      // sketch.fill(0)
       sketch.circle(this.x,this.y,this.r)
-      sketch.pop();
+      // sketch.pop();
     }
 }
