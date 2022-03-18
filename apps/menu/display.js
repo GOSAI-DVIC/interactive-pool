@@ -18,7 +18,7 @@ export const menu = new p5(sketch => {
 
     sketch.resume = () => {};
     sketch.pause  = () => {};
-    sketch.update = () => {};
+    sketch.update = () => { balls.update()};
 
     sketch.windowResized = () => resizeCanvas(windowWidth, windowHeight);
 

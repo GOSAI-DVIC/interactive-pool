@@ -94,55 +94,8 @@ export class Balls {
     }
 
     update_data(data) {
-        if (data != undefined) {
-            this.ball_nb = 0
-
-            this.boxes[0] = false
-            this.boxes[1] = false
-            this.boxes[2] = false
-            this.boxes[3] = false
-
-            for (let b of data){
-                if(this.RectContainCoords(370, 850, 55, 55,b[0],b[1]))
-                {
-                    this.boxes[0] = true
-                }
-                else if(this.RectContainCoords(370, 725, 55, 55,b[0],b[1]))
-                {
-                    this.boxes[1] = true;
-                }
-                else if(this.RectContainCoords(370, 600, 55, 55,b[0],b[1]))
-                {
-                    this.boxes[2] = true;
-                }
-                else if(this.RectContainCoords(370, 475, 55, 55,b[0],b[1]))
-                {
-                    this.boxes[3] = true;
-                }
-                else
-                {
-                    this.balls[this.ball_nb].x = b[0]
-                    this.balls[this.ball_nb].y = b[1]
-                    this.ball_nb += 1
-                }
-            }
-            for (let i = this.ball_nb; i<this.previous_ball_nb; i++)
-            {
-                this.balls[i].x = -500;
-                this.balls[i].y = -500;
-            }
-            this.previous_ball_nb = this.ball_nb
-            this.triangle_nb = floor(this.ball_nb/3)
-            // console.log(this.triangle_nb)
-            if(this.triangle_nb>=4)
-            {
-                this.triangle_nb=3
-            }
-            for (let i = 0; i< this.triangle_nb; i++)
-            {
-                this.triangles[i].updateTriangleInfos()
-            }
-        }
+        if (data == undefined)  return;
+        this.data = data;
     }
 
     RectContainCoords(x, y, w, h,a,b) {
@@ -150,6 +103,54 @@ export class Balls {
     }
 
     update(){
+        if (this.data == undefined) return;
+        this.ball_nb = 0
+
+        this.boxes[0] = false
+        this.boxes[1] = false
+        this.boxes[2] = false
+        this.boxes[3] = false
+
+        for (let b of this.data){
+            if(this.RectContainCoords(370, 850, 55, 55,b[0],b[1]))
+            {
+                this.boxes[0] = true
+            }
+            else if(this.RectContainCoords(370, 725, 55, 55,b[0],b[1]))
+            {
+                this.boxes[1] = true;
+            }
+            else if(this.RectContainCoords(370, 600, 55, 55,b[0],b[1]))
+            {
+                this.boxes[2] = true;
+            }
+            else if(this.RectContainCoords(370, 475, 55, 55,b[0],b[1]))
+            {
+                this.boxes[3] = true;
+            }
+            else
+            {
+                this.balls[this.ball_nb].x = b[0]
+                this.balls[this.ball_nb].y = b[1]
+                this.ball_nb += 1
+            }
+        }
+        for (let i = this.ball_nb; i<this.previous_ball_nb; i++)
+        {
+            this.balls[i].x = -500;
+            this.balls[i].y = -500;
+        }
+        this.previous_ball_nb = this.ball_nb
+        this.triangle_nb = floor(this.ball_nb/3)
+        // console.log(this.triangle_nb)
+        if(this.triangle_nb>=4)
+        {
+            this.triangle_nb=3
+        }
+        for (let i = 0; i< this.triangle_nb; i++)
+        {
+            this.triangles[i].updateTriangleInfos()
+        }
         
     }
 
