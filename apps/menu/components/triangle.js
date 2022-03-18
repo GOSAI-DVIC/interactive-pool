@@ -78,7 +78,6 @@ export class Triangle {
     }
 
     showAngle(sketch){
-        sketch.push();
         sketch.textSize(48);
         sketch.noStroke();
         sketch.fill(255);
@@ -92,7 +91,7 @@ export class Triangle {
             (this.triangle[0].y<this.y) ? this.triangle[0].y-distance : this.triangle[0].y +distance
         );
         sketch.textAlign(CENTER, CENTER);
-        //sketch.rotate( radians(angle_text) );
+        sketch.rotate( radians(angle_text) );
         sketch.text(this.angle_a+"°", 0,0);
         sketch.pop();
 
@@ -102,7 +101,7 @@ export class Triangle {
             (this.triangle[1].y<this.y) ? this.triangle[1].y-distance : this.triangle[1].y +distance
         );
         sketch.textAlign(CENTER, CENTER);
-        //sketch.rotate( radians(angle_text) );
+        sketch.rotate( radians(angle_text) );
         sketch.text(this.angle_b+"°", 0,0);
         sketch.pop();
 
@@ -112,7 +111,7 @@ export class Triangle {
             (this.triangle[2].y<this.y) ? this.triangle[2].y-distance : this.triangle[2].y +distance
         );
         sketch.textAlign(CENTER, CENTER);
-        //sketch.rotate( radians(angle_text) );
+        sketch.rotate( radians(angle_text) );
         sketch.text(this.angle_c+"°", 0,0);
         sketch.pop();
     }
