@@ -1,13 +1,11 @@
-
 from core.application import BaseApplication
 
-
 class Application(BaseApplication):
-    """cue"""
+    """Cue"""
 
     def __init__(self, name, hal, server, manager):
         super().__init__(name,hal,server,manager)
-        self.requires["cue"] = ["cue_data"]
+        self.requires["cue"] = ["cue"]
 
         # @self.server.sio.on(f"started_menu")
         # def _send_data(*_) -> None:
@@ -23,5 +21,5 @@ class Application(BaseApplication):
     def listener(self, source, event, data):
         super().listener(source, event, data)
 
-        if source == "cue" and event == "cue_data" and data is not None:
-            self.server.send_data("cue", data)
+        if source == "cue" and data is not None:
+            if event == "cue": self.server.send_data("cue", data)
