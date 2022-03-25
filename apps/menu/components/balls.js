@@ -2,7 +2,7 @@ import {Ball} from "./ball.js"
 import {Triangle} from "./triangle.js"
 
 // let rectangle_box1 = [360, 850, 55, 55]
-let max_ball = 16;
+let max_ball = 20;
 
 export class Balls {
     constructor()
@@ -132,6 +132,7 @@ export class Balls {
             {
                 this.balls[this.ball_nb].x = b[0]
                 this.balls[this.ball_nb].y = b[1]
+                if (this.ball_nb >= max_ball) break
                 this.ball_nb += 1
             }
         }
