@@ -1,6 +1,6 @@
 import {Balls} from "./components/balls.js"
 
-export const menu = new p5(sketch => {
+export const triangles = new p5(sketch => {
     sketch.name = "menu"
     sketch.activated = false
 
