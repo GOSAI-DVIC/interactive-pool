@@ -56,5 +56,5 @@ To update the empty background :
 1. Remove any objects on the pool table
 2. `make background`
 
-![Empty background picture](/home/background.jpg)
+![Empty background picture](background.jpg)
 *Empty Background*
