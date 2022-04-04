@@ -4,11 +4,6 @@ import {Triangle} from "./triangle.js"
 // let rectangle_box1 = [360, 850, 55, 55]
 let max_ball = 20; //Min 9
 
-let button_coords = [[450, 850, 55, 55],
- [450, 725, 55, 55],
- [450, 600, 55, 55],
- [450, 475, 55, 55]]
-
 export class Balls {
     constructor()
     {
@@ -31,6 +26,11 @@ export class Balls {
         this.triangles.push(new Triangle(this.balls[0],this.balls[1],this.balls[2]));
         this.triangles.push(new Triangle(this.balls[3],this.balls[4],this.balls[5]));
         this.triangles.push(new Triangle(this.balls[6],this.balls[7],this.balls[8]));
+
+        this.button_coords = [[450, 850, 55, 55],
+        [450, 725, 55, 55],
+        [450, 600, 55, 55],
+        [450, 475, 55, 55]]
         // console.log(this.triangles[0])
 
         // pool_coords = loadJSON('/calibration/calibration_data.json');
@@ -94,7 +94,7 @@ export class Balls {
             {
                 sketch.stroke(255)
             }
-            sketch.rect(button_coords[i][0], button_coords[i][1],button_coords[i][2],button_coords[i][3]);
+            sketch.rect(this.button_coords[i][0], this.button_coords[i][1],this.button_coords[i][2],this.button_coords[i][3]);
             t += 125;
         }
         sketch.pop();
@@ -119,19 +119,19 @@ export class Balls {
         this.boxes[3] = false
 
         for (let b of this.data){
-            if(this.RectContainCoords(button_coords[0][0], button_coords[0][1],button_coords[0][2],button_coords[0][3] ,b[0],b[1]))
+            if(this.RectContainCoords(this.button_coords[0][0], this.button_coords[0][1],this.button_coords[0][2],this.button_coords[0][3] ,b[0],b[1]))
             {
                 this.boxes[0] = true
             }
-            else if(this.RectContainCoords(button_coords[1][0], button_coords[1][1],button_coords[1][2],button_coords[1][3],b[0],b[1]))
+            else if(this.RectContainCoords(this.button_coords[1][0], this.button_coords[1][1],this.button_coords[1][2],this.button_coords[1][3],b[0],b[1]))
             {
                 this.boxes[1] = true;
             }
-            else if(this.RectContainCoords(button_coords[2][0], button_coords[2][1],button_coords[2][2],button_coords[2][3],b[0],b[1]))
+            else if(this.RectContainCoords(this.button_coords[2][0], this.button_coords[2][1],this.button_coords[2][2],this.button_coords[2][3],b[0],b[1]))
             {
                 this.boxes[2] = true;
             }
-            else if(this.RectContainCoords(button_coords[3][0], button_coords[3][1],button_coords[3][2],button_coords[3][3],b[0],b[1]))
+            else if(this.RectContainCoords(this.button_coords[3][0], this.button_coords[3][1],this.button_coords[3][2],this.button_coords[3][3],b[0],b[1]))
             {
                 this.boxes[3] = true;
             }
