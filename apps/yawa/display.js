@@ -1,5 +1,5 @@
 export const yawa = new p5(( sketch ) => {
-    sketch.name = "live"
+    sketch.name = "yawa"
     sketch.activated = false
 
     let input, button, greeting;
