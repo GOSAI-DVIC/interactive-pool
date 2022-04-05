@@ -19,7 +19,10 @@ export const triangles = new p5(sketch => {
         socket.on("ball", data => balls.update_data(data));
         // socket.on("cue", (data) => l.update_data(data));
         socket.on("fps",  data => fps = data);
-        sketch.emit = (name, data) => socket.emit(name, data);
+        sketch.emit = (name, data = undefined) =>  {
+            if (data == undefined) socket.emit(name);
+            else socket.emit(name, data)
+        }
         sketch.activated = true
     };
 
