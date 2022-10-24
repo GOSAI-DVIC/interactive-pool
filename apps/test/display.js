@@ -24,9 +24,7 @@ export const test = new p5(sketch => {
         // console.log(calib) //Object
         // console.log(calib.default.projection_matrix) //Array[3]
 
-    mat = new ProjectionMatrix(
-        [[-671, -157], [-674, 495],[680, -151],[674, 499]]// GOOD the afternoon
-        ,[[0,0],[0,1080],[1920,0],[1920,1080]])
+    mat = new ProjectionMatrix(calib.default.outpts, calib.default.screen_coords)
         mat.edit = true;
 
         socket.on("ball", data => balls.update_data(data));
@@ -50,7 +48,7 @@ export const test = new p5(sketch => {
         mat.apply(2);
         fill(0);
         balls.show(sketch,f);
-        
+
         push();
         textFont(f);
         textSize(32);
