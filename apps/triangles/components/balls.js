@@ -27,24 +27,25 @@ export class Balls {
         this.triangles.push(new Triangle(this.balls[3],this.balls[4],this.balls[5]));
         this.triangles.push(new Triangle(this.balls[6],this.balls[7],this.balls[8]));
 
-        this.button_coords = [[450, 850, 55, 55],
-        [450, 725, 55, 55],
-        [450, 600, 55, 55],
-        [450, 475, 55, 55]]
+        this.button_coords = [[120, 555, 55, 55],
+        [120, 430, 55, 55],
+        [120, 305, 55, 55],
+        [120, 180, 55, 55]]
         // console.log(this.triangles[0])
 
         // pool_coords = loadJSON('/calibration/calibration_data.json');
         // console.log(pool_coords.pool_coords[0])
     }
 
-    show(sketch) {
+    show(sketch, f) {
         sketch.push();
+
         if(this.boxes[3]==true)
         {
             for (let i=0; i< this.triangle_nb; i++)
             {
                 this.triangles[i].showCircumCircle(sketch)
-            } 
+            }
         }
         if(this.boxes[0]==true)
         {
@@ -53,7 +54,7 @@ export class Balls {
                 // console.log(this.triangles[i])
                 // console.log(this.triangle_nb) //okay
                 this.triangles[i].show(sketch);
-                this.triangles[i].showAngle(sketch);
+                this.triangles[i].showAngle(sketch,f);
             }
         }
         if(this.boxes[1]==true)
@@ -63,14 +64,14 @@ export class Balls {
                 this.triangles[i].showCentroid(sketch);
                 this.triangles[i].showMediane(sketch);
 
-            } 
+            }
         }
         if(this.boxes[2]==true)
         {
             for (let i=0; i< this.triangle_nb; i++)
             {
                 this.triangles[i].showPerpendicularBisector(sketch)
-            } 
+            }
         }
         for (let ball of this.balls)
         {
@@ -81,6 +82,14 @@ export class Balls {
     }
 
     show_menu(sketch) {
+        sketch.fullscreen()
+        // line(0,1080,1920,0)
+        // line(0,0,1920,1080)
+        // line(0,0,1920,0)
+        // line(0,0,0,1080)
+        // line(0,1080,1920,1080)
+        // line(1920,0,1920,1080)
+
         sketch.push();
         sketch.strokeWeight(5)
         sketch.noFill()
@@ -159,7 +168,7 @@ export class Balls {
         {
             this.triangles[i].updateTriangleInfos()
         }
-        
+
     }
 
     distanceOf2Balls(index_ball_1,index_ball_2){

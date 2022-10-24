@@ -7,8 +7,8 @@
         "height": 1080
     },
     "applications": {
-        "startup": ["test"],
+        "startup": ["triangles"],
         "disabled": []
-    }
-
+    },
+    "calibrate": true
 }
