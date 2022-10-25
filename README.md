@@ -1,4 +1,20 @@
-# Interactive Pool platform
+<div align='center'>
+
+[![Android fonts](https://see.fontimg.com/api/renderfont4/JKwK/eyJyIjoiZnMiLCJoIjo5NCwidyI6MTA5MSwiZnMiOjg2LCJmZ2MiOiIjMDAwMDAwIiwiYmdjIjoiI0ZGRkZGRiIsInQiOjF9/SW50ZXJhY3RpdmUgcG9vbA/falling-sky.png)](https://www.fontspace.com/category/android)
+
+<p style="text-align:center;"><img src="./docs/images/interactive_pool.png" alt="DVIC Interactive Pool Pictur" width="320" height="180" title="DVIC Interactive Pool Picture"></p>
+
+![Python](https://img.shields.io/badge/python-v3.8.10-blue)
+[<img src="https://custom-icon-badges.demolab.com/badge/Project Website-DVIC-orange.svg?logo=link&logoColor=white">](https://dvic.devinci.fr/projects/educationnal-billard)
+
+[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+
+
+</div>
+
+---
+
+## Basic Overview
 
 The interactive pool is a mathematics and physics learning platform using gamification. A projector, a camera and an artificial intelligence transform any pool table into an augmented reality platform.
 
@@ -23,13 +39,18 @@ Simply enter `make stop && make boot` on the terminal
 To start an application : `start <app_name>`
 To stop  an application : `stop <app_name>`
 
-## Camera-projector system
+## Hardware : a Camera-projector system
+
+The interactive pool function thanks to a camera-projector system :
+
+<div align='center'>
+<p style="text-align:center;"><img src="./docs/images/camera_projector_dvic.jpg" alt="DVIC Camera-projector system" width="270" height="360" title="DVIC Camera-projector system"><img src="./docs/images/camera_projector_schema.png" alt="DVIC Camera-projector system" width="357" height="360" title="DVIC Camera-projector system"></p>
+*Camera-Projector System*
+</div>
+<br>
 
 Camera and videoprojector must be positionned up to the pool table, on the middle. The camera must have the entire table perimeter in view.
 Here are two tasks to perform while installing or moving the camera-projector system on the interactive pool.
-
-![Camera-Projector System](https://dvic.devinci.fr/api/v3/img/full/6wdzzwclskz2ej6u7s5k8hurhst4j0.png)
-*Camera-Projector System*
 
 ### Calibration of the interactive pool
 
