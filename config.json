@@ -9,6 +9,6 @@
     "applications": {
         "startup": ["triangles"],
         "disabled": []
-    }
-
+    },
+    "calibrate": true
 }

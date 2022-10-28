@@ -16,7 +16,7 @@ export class Ball {
     changeColor(rgb) {
         this.color = rgb; //example : (255,141,92) or 255 for gray shades
     }
-    
+
     contains(px, py) {
       let d = dist(px, py, this.x, this.y);
       if (d < this.r) {
@@ -41,6 +41,13 @@ export class Ball {
       sketch.strokeWeight(8)
       sketch.noFill()
       // sketch.fill(0)
+
+      //TEST
+      // circle(0,0, this.r)
+      // circle(1920,0, this.r)
+      // circle(0,1080, this.r)
+      // circle(1920,1080, this.r)
+      // circle(960,540, this.r)
       sketch.circle(this.x,this.y,this.r)
       // sketch.pop();
     }

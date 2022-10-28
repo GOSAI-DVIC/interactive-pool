@@ -77,8 +77,9 @@ export class Triangle {
         sketch.pop();
     }
 
-    showAngle(sketch){
-        sketch.textSize(48);
+    showAngle(sketch,f){
+        sketch.textFont(f, 48);
+        // textSize(48);
         sketch.noStroke();
         sketch.fill(255);
         let distance = 60;
@@ -87,7 +88,7 @@ export class Triangle {
 
         sketch.push();
         sketch.translate(
-            (this.triangle[0].x<this.x) ? this.triangle[0].x-distance : this.triangle[0].x +distance, 
+            (this.triangle[0].x<this.x) ? this.triangle[0].x-distance : this.triangle[0].x +distance,
             (this.triangle[0].y<this.y) ? this.triangle[0].y-distance : this.triangle[0].y +distance
         );
         sketch.textAlign(CENTER, CENTER);
@@ -120,7 +121,7 @@ export class Triangle {
         return round(dist(p1.x,p1.y,p2.x,p2.y),5)
     }
 
-    calculateAngle(p1,p2,p3) { 
+    calculateAngle(p1,p2,p3) {
         // console.log(this.triangle[p1])
         let AB = this.distanceOf2Balls(this.triangle[p1],this.triangle[p2]);
         let BC = this.distanceOf2Balls(this.triangle[p2],this.triangle[p3]);
@@ -138,19 +139,19 @@ export class Triangle {
     }
 
     intersect_point(point1, point2, point3, point4) {
-        let ua = ((point4.x - point3.x) * (point1.y - point3.y) - 
+        let ua = ((point4.x - point3.x) * (point1.y - point3.y) -
                   (point4.y - point3.y) * (point1.x - point3.x)) /
-                 ((point4.y - point3.y) * (point2.x - point1.x) - 
+                 ((point4.y - point3.y) * (point2.x - point1.x) -
                   (point4.x - point3.x) * (point2.y - point1.y));
-       
-       let ub = ((point2.x - point1.x) * (point1.y - point3.y) - 
+
+       let ub = ((point2.x - point1.x) * (point1.y - point3.y) -
                   (point2.y - point1.y) * (point1.x - point3.x)) /
-                 ((point4.y - point3.y) * (point2.x - point1.x) - 
+                 ((point4.y - point3.y) * (point2.x - point1.x) -
                   (point4.x - point3.x) * (point2.y - point1.y));
-       
+
        let x = point1.x + ua * (point2.x - point1.x);
        let y = point1.y + ua * (point2.y - point1.y);
-       
+
        return createVector(x, y)
     }
 
@@ -192,7 +193,6 @@ export class Triangle {
         sketch.line(this.extremity1_1.x,this.extremity1_1.y, this.extremity1_2.x,this.extremity1_2.y)
         sketch.line(this.extremity2_1.x,this.extremity2_1.y, this.extremity2_2.x,this.extremity2_2.y)
         sketch.line(this.extremity3_1.x,this.extremity3_1.y, this.extremity3_2.x,this.extremity3_2.y)
-        
         sketch.pop();
     }
 
