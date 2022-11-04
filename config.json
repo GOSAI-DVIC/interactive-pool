@@ -7,7 +7,7 @@
         "height": 1080
     },
     "applications": {
-        "startup": ["triangles"],
+        "startup": ["music"],
         "disabled": []
     },
     "calibrate": true
