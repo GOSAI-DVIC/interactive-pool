@@ -10,12 +10,12 @@ export const sandtable = new p5(sketch => {
 
     let crabs = [];
     let balls = [];
-    let bubbles = [];
     let deaths = [];
-    var sable;
     let max_ball = 20;
     let ball_nb;
     let previous_ball_nb = max_ball;
+    let chrono = 0;
+
 
     sketch.preload = () => {
         sable = loadImage('./platform/home/apps/sandtable/components/sable.jpg');
@@ -23,6 +23,9 @@ export const sandtable = new p5(sketch => {
 
     sketch.set = (width, height, socket) => {
         sketch.selfCanvas = sketch.createCanvas(width, height, sketch.WEBGL).position(0, 0);
+
+        topcolor = color(255,222,173);
+        bottomcolor = color(139,69,19);
 
         for(let i=0; i<max_ball; i++)
         {
@@ -38,10 +41,11 @@ export const sandtable = new p5(sketch => {
             let x = 0;
             let y = random(height);
             let r = random(40, 60);
-
-            let crab = new Crab(x, y, r);
+            let state = true;
+            let crab = new Crab(x, y, r,state);
             crabs.push(crab);
         }
+
     }
 
     sketch.update_data = (data) => {
@@ -76,37 +80,32 @@ export const sandtable = new p5(sketch => {
         //sketch.rect(0,0,1920,1080);
         sketch.push();
         sketch.push();
-        
-        // sketch.push();
-        // sketch.noStroke();
-        
-        // sketch.translate(400,400);
-        // sketch.imageMode(CORNER);
-        // sketch.texture(sable,0,0);
-        // sketch.plane(1920,1080);
-        // sketch.pop();
         sketch.pop();
 
         for (let d of deaths) {
             d.show(sketch);
         }
-        for (let crab of crabs) {
-            crab.show(sketch);
-            crab.move();
-        }
+        //for (let crab of crabs) {
+        //    crab.show(sketch);
+        //    crab.move();
+        //}
         for (let ball of balls) {
             ball.show(sketch);
         }
     
-        let crabASuppr = [];
 
         for (var i = 0; i<crabs.length; i++) {
+
             for (let ball of balls) {
                 if (dist(ball.x, ball.y, crabs[i].x, crabs[i].y)<(crabs[i].getR()/2) + (ball.getR()/2)) {
-                    crabASuppr.push(i);
-                    crabs[i].death();
-                    deaths.push(crabs[i]);
-                }
+                    
+                    crabs[i].stateLife = false;
+                    
+                }  
+            }
+            crabs[i].show(sketch);
+            if(crabs[i].stateLife == true){
+                crabs[i].move();
             }
         }                  
         sketch.pop();
