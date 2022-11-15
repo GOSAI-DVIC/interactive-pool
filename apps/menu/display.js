@@ -1,7 +1,7 @@
 // import {className} from "./components/file.js";
 
-export const startup = new p5((sketch) => {
-    sketch.name = "startup";
+export const menu = new p5((sketch) => {
+    sketch.name = "menu";
     sketch.activated = false;
 
     let f;
@@ -19,7 +19,10 @@ export const startup = new p5((sketch) => {
 
     let hands_position = [];
     // let hands_handedness = [];
-    // let hands_sign = [];
+    let hands_sign = [];
+    let counter_menu_trigger = 0;
+    let trigger_menu = false;
+    let current_hand_sign = "";
 
     sketch.preload = () => {
         f = loadFont("/gosai/pool/core/server/assets/FallingSky-JKwK.otf");
@@ -37,7 +40,8 @@ export const startup = new p5((sketch) => {
             hands_position = data["hands_landmarks"];
             // console.log(hands_position);
             // hands_handedness = data["hands_handedness"];
-            // hands_sign = data["hands_sign"];
+            hands_sign = data["hands_sign"];
+            // console.log(hands_sign);
         });
         // Set up your app here
         // socket.on("ball", (data) => balls.update_data(data));
@@ -72,7 +76,7 @@ export const startup = new p5((sketch) => {
 
     sketch.show = () => {
         sketch.clear();
-        
+    
         //SETUP
         sketch.stroke(255);
         sketch.fill(255);
@@ -92,6 +96,57 @@ export const startup = new p5((sketch) => {
         sketch.rotate(PI);
         sketch.text("Menu", 0, 0);
         sketch.pop();
+
+        if (hands_sign != undefined && hands_sign.length != 0) {
+            current_hand_sign = hands_sign[0][0];
+            // sketch.text(current_hand_sign, 100, 100);
+            // if (hands_sign.length > 1) {
+            //     sketch.text(hands_sign[1][0], 100, 200);
+            // }
+
+            if (menu_state == false) {
+                if (current_hand_sign == "FIST" || current_hand_sign == "THUMB_UP" || current_hand_sign == "PINCH") {
+                    trigger_menu = true;
+                    counter_menu_trigger = 0;
+                }
+                if (trigger_menu == true) {
+                    counter_menu_trigger++;
+                    if (counter_menu_trigger > 15) {
+                        trigger_menu = false;
+                        counter_menu_trigger = 0;
+                    }
+                    if (current_hand_sign == "OPEN_HAND") {
+                        menu_is_opening = true;
+                        menu_is_closing = false;
+                        menu_state = true;
+                        trigger_menu = false;
+                        counter_menu_trigger = 0;
+                    }
+                }   
+            }
+            else
+            {
+                if (current_hand_sign == "OPEN_HAND") {
+                    trigger_menu = true;
+                    counter_menu_trigger = 0;
+                }
+                if (trigger_menu == true) {
+                    counter_menu_trigger++;
+                    if (counter_menu_trigger > 15) {
+                        trigger_menu = false;
+                        counter_menu_trigger = 0;
+                    }
+                    if (current_hand_sign == "FIST" || current_hand_sign == "THUMB_UP" || current_hand_sign == "THUMB_UP") {
+                        menu_is_opening = false;
+                        menu_is_closing = true;
+                        menu_state = false;
+                        trigger_menu = false;
+                        counter_menu_trigger = 0;
+                    }
+                }   
+            }
+
+        }
         
         //Rounded rectangle for menu
         //sketch.rect(960, 540, 400, 400, 20); //x, y, width, height, radius //DOESN'T WORK with projection.js
@@ -145,7 +200,7 @@ export const startup = new p5((sketch) => {
             // console.log("index is in the pool");
             sketch.fill(255, 0, 0);
             sketch.circle(index_x, index_y, 40);
-            sketch.line(0,menu_translate_y-30,0, menu_translate_y+30)
+            // sketch.line(0,menu_translate_y-30,0, menu_translate_y+30)
             
             // sketch.rect(-120, menu_translate_y + rounded_corners_size, count, 40);
             // -120 < x < 120

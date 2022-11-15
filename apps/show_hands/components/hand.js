@@ -36,7 +36,7 @@ let hand_junctions = [
     ]
 ]
 
-export function display_hand(sketch, hand_pose, handedness, sign, show_hands_points, show_hands_lines) {
+export function display_hand(sketch, hand_pose, handedness, show_hands_points, show_hands_lines) {
     if (hand_pose == undefined) return;
     if (hand_pose.length != 21) return;
     sketch.push();
@@ -83,14 +83,14 @@ export function display_hand(sketch, hand_pose, handedness, sign, show_hands_poi
         sketch.text(handedness[2], hand_pose[0][0] * sketch.width, 65 + hand_pose[0][1] * sketch.height);
     }
 
-    if (
-        sign != undefined && sign.length > 0
-    ) {
-        sketch.textSize(32);
-        sketch.text(sign[0], hand_pose[0][0] * sketch.width, 120 + hand_pose[0][1] * sketch.height);
-        sketch.textSize(16);
-        sketch.text(sign[1], hand_pose[0][0] * sketch.width, 145 + hand_pose[0][1] * sketch.height);
-    }
+    // if (
+    //     sign != undefined && sign.length > 0
+    // ) {
+    //     sketch.textSize(32);
+    //     sketch.text(sign[0], hand_pose[0][0] * sketch.width, 120 + hand_pose[0][1] * sketch.height);
+    //     sketch.textSize(16);
+    //     sketch.text(sign[1], hand_pose[0][0] * sketch.width, 145 + hand_pose[0][1] * sketch.height);
+    // }
 
     sketch.pop();
 }

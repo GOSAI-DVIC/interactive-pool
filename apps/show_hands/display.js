@@ -9,7 +9,7 @@ export const show_hands = new p5((sketch) => {
 
     let hands_position = [];
     let hands_handedness = [];
-    let hands_sign = [];
+    // let hands_sign = [];
 
     sketch.set = (width, height, socket) => {
         sketch.selfCanvas = sketch
@@ -41,7 +41,7 @@ export const show_hands = new p5((sketch) => {
         sketch.clear();
         for (let i = 0; i < hands_position.length; i++) {
             // console.log(hands_position[i]);
-            display_hand(sketch, hands_position[i], hands_handedness[i], hands_sign[i], true, true);
+            display_hand(sketch, hands_position[i], hands_handedness[i], true, true);
         }
     };
 });
