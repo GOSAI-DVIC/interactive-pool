@@ -4,10 +4,11 @@
         "number":0,
         "type" : "standard",
         "width": 1920,
-        "height": 1080
+        "height": 1080,
+        "flip": false
     },
     "applications": {
-        "startup": ["triangles"],
+        "startup": ["startup", "show_hands"],
         "disabled": []
     },
     "calibrate": true
