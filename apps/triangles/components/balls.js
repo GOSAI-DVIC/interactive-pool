@@ -1,4 +1,4 @@
-import {Ball} from "./ball.js"
+import { Ball } from "./ball.js";
 import {Triangle} from "./triangle.js"
 
 // let rectangle_box1 = [360, 850, 55, 55]
@@ -72,10 +72,6 @@ export class Balls {
             {
                 this.triangles[i].showPerpendicularBisector(sketch)
             }
-        }
-        for (let ball of this.balls)
-        {
-            ball.show(sketch)
         }
         this.show_menu(sketch)
         sketch.pop();

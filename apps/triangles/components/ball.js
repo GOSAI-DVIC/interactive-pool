@@ -25,30 +25,4 @@ export class Ball {
         return false;
       }
     }
-
-  //   update_data(data) {
-  //     if (data != undefined) {
-  //         for (let b of data){
-  //             this.x = b[0]
-  //             this.y = b[1]
-  //         }
-  //     }
-  // }
-
-    show(sketch) {
-      // sketch.push();
-      sketch.stroke(255)
-      sketch.strokeWeight(8)
-      sketch.noFill()
-      // sketch.fill(0)
-
-      //TEST
-      // circle(0,0, this.r)
-      // circle(1920,0, this.r)
-      // circle(0,1080, this.r)
-      // circle(1920,1080, this.r)
-      // circle(960,540, this.r)
-      sketch.circle(this.x,this.y,this.r)
-      // sketch.pop();
-    }
 }
