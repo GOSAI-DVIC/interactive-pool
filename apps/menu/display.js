@@ -4,28 +4,37 @@ export const menu = new p5((sketch) => {
     sketch.name = "menu";
     sketch.activated = false;
 
-    let f;
-    let count = 0;
-    let menu_translate_y = 80;
-    let count_for_opening_menu = 0;
-    let menu_larger = 700;
-    let app_button_height = 200;
-    let app_button_width = 250;
-    let rounded_corners_size = 40; //radius
+    let font;
     let menu_state = false;
     let menu_is_opening = false;
     let menu_is_closing = false;
-    let apps;
+    let menu_app = 0;
+    let number_of_apps = 2;
+    
+    let index_x = 0;
+    let index_y = 0;
+    let menu_position_x = 0;
+    let menu_position_y = height/2;
+    let set_menu_position = true;
+    let menu_width = 300;
+    let menu_height = 600;
+    let opening_menu_percentage = 0;
+    let actual_width = 0;
+    let actual_height = 0;
+    let left_arrow_button_fill = 0
+    let right_arrow_button_fill = 0
+    let app_button_fill = 0
+
 
     let hands_position = [];
-    // let hands_handedness = [];
     let hands_sign = [];
+
     let counter_menu_trigger = 0;
     let trigger_menu = false;
     let current_hand_sign = "";
 
     sketch.preload = () => {
-        f = loadFont("/gosai/pool/core/server/assets/FallingSky-JKwK.otf");
+        font = loadFont("/gosai/pool/core/server/assets/FallingSky-JKwK.otf");
     };
 
     sketch.set = (width, height, socket) => {
@@ -35,37 +44,14 @@ export const menu = new p5((sketch) => {
         sketch.activated = true;
 
         socket.on(sketch.name, (data) => {
-            // console.log(data);
             if (data == undefined || data.length == 0) return;
             hands_position = data["hands_landmarks"];
-            // console.log(hands_position);
-            // hands_handedness = data["hands_handedness"];
             hands_sign = data["hands_sign"];
-            // console.log(hands_sign);
         });
-        // Set up your app here
-        // socket.on("ball", (data) => balls.update_data(data));
 
-        // socket.on("core-app_manager-available_applications", (data) => {
-        //     apps = data["applications"];
-        //     console.log(apps.length); // 7
-        //     console.log(apps[0]["name"]); // affine
-        //     // let app_names = Object.keys(apps);
-        //     // let app_names_length = app_names.length;
-        //     // let app_names_length_half = app_names_length / 2;
-        //     // let app_names_length_half_rounded = Math.round(app_names_length_half);
-        //     // console.log(app_names);
-        //     // console.log(apps);
-        // });
-
-        // socket.emit("core-app_manager-get_available_applications")
-
-        // socket.on("core-app_manager-started_applications", (data) => {
-        //     let started_apps = data["applications"];
-        //     console.log(started_apps);
-        // });
-
-        // socket.emit("core-app_manager-get_started_applications")
+        sketch.emit = (name, data) => {
+            socket.emit(name, data);
+        };
     };
 
     sketch.resume = () => {};
@@ -76,33 +62,45 @@ export const menu = new p5((sketch) => {
 
     sketch.show = () => {
         sketch.clear();
-    
-        //SETUP
+
+        //DRAWING SETUP
         sketch.stroke(255);
         sketch.fill(255);
-        sketch.textFont(f);
-        sketch.textSize(40);
+        sketch.textFont(font);
 
-        //DEBUG : Pool borders
+        //DEBUG : Draw Pool borders
         sketch.line(0, 0, 1920, 0);
         sketch.line(0, 0, 0, 1080);
         sketch.line(0, 1080, 1920, 1080);
         sketch.line(1920, 0, 1920, 1080);
-        
-        //WRITE "MENU"
-        sketch.push();
-        sketch.translate(960, menu_translate_y);
-        sketch.textAlign(CENTER, CENTER);
-        sketch.rotate(PI);
-        sketch.text("Menu", 0, 0);
-        sketch.pop();
+        // sketch.rect(50,50 , 1820, 980);
 
+        //PROCESSING
+        if (hands_position.length != 0)
+        {
+            index_x = hands_position[0][8][0]*width;
+            index_y = hands_position[0][8][1]*height;
+            sketch.circle(index_x, index_y, 20);
+        }
+        else
+        {
+            index_x = 0;
+            index_y = 0;
+        }
+        check_menu_trigger();
+        draw_menu(sketch);
+        sketch.push()
+        sketch.translate(width/2 - 400, -50)
+        sketch.rotate(PI)
+        sketch.textSize(40)
+        sketch.text("Interactive Pool Project", 0,0)
+        sketch.pop()
+    };
+
+    function check_menu_trigger() {
+        current_hand_sign =""
         if (hands_sign != undefined && hands_sign.length != 0) {
             current_hand_sign = hands_sign[0][0];
-            // sketch.text(current_hand_sign, 100, 100);
-            // if (hands_sign.length > 1) {
-            //     sketch.text(hands_sign[1][0], 100, 200);
-            // }
 
             if (menu_state == false) {
                 if (current_hand_sign == "FIST" || current_hand_sign == "THUMB_UP" || current_hand_sign == "PINCH") {
@@ -111,7 +109,7 @@ export const menu = new p5((sketch) => {
                 }
                 if (trigger_menu == true) {
                     counter_menu_trigger++;
-                    if (counter_menu_trigger > 15) {
+                    if (counter_menu_trigger > 25) {
                         trigger_menu = false;
                         counter_menu_trigger = 0;
                     }
@@ -132,7 +130,7 @@ export const menu = new p5((sketch) => {
                 }
                 if (trigger_menu == true) {
                     counter_menu_trigger++;
-                    if (counter_menu_trigger > 15) {
+                    if (counter_menu_trigger > 25) {
                         trigger_menu = false;
                         counter_menu_trigger = 0;
                     }
@@ -145,121 +143,153 @@ export const menu = new p5((sketch) => {
                     }
                 }   
             }
-
-        }
-        
-        //Rounded rectangle for menu
-        //sketch.rect(960, 540, 400, 400, 20); //x, y, width, height, radius //DOESN'T WORK with projection.js
-        sketch.noFill();
-        sketch.translate(960, 0);
-        sketch.line(-menu_larger/2, menu_translate_y + rounded_corners_size, menu_larger/2, menu_translate_y + rounded_corners_size);
-        
-        //Big arcs
-        sketch.push();
-        sketch.translate(-menu_larger/2, menu_translate_y);
-        sketch.rotate(HALF_PI)
-        sketch.arc(0,0, rounded_corners_size*2, rounded_corners_size*2, 0, HALF_PI);
-        sketch.pop()
-        sketch.arc(menu_larger/2, menu_translate_y, rounded_corners_size*2, rounded_corners_size*2, 0, HALF_PI);
-
-        sketch.line(-menu_larger/2 - rounded_corners_size, 0, -menu_larger/2 - rounded_corners_size, menu_translate_y);
-        sketch.line(menu_larger/2 + rounded_corners_size, 0, menu_larger/2 + rounded_corners_size, menu_translate_y);
-
-        sketch.rect(-120, menu_translate_y + rounded_corners_size, 240, 40);
-        sketch.push();
-        sketch.fill(255);
-        sketch.translate(0, menu_translate_y + rounded_corners_size +10);
-        sketch.triangle(-10, 0, 10, 0, 0, 20);
-        sketch.pop();
-
-        //BUTTON activation
-        sketch.push();
-        sketch.fill(100)
-        sketch.noStroke();
-        count+=2;
-        if(count>=240) count = 0;
-        // sketch.rect(845, menu_translate_y + rounded_corners_size, count, 40);
-        // sketch.rect(-120, menu_translate_y + rounded_corners_size, count, 40);
-        sketch.pop();
-
-        open_close_menu();
-        display_apps_on_menu();
-        check_index_position(sketch);
-        // sketch.circle(960, menu_translate_y, 60);
-    };
-
-    function check_index_position(sketch) {
-        if (hands_position.length == 0) return;
-        let index_position = hands_position[0][8];
-        // console.log(index_position);
-        let index_x = index_position[0]*width - width/2;
-        let index_y = index_position[1]*height;
-        // let index_z = index_position[2];
-        // console.log(index_x, index_y, index_z);
-        if (index_x > 0 && index_x < 1920 && index_y > 0 && index_y < 1080) { //&& index_z > 0 && index_z < 1000) {
-            // console.log("index is in the pool");
-            sketch.fill(255, 0, 0);
-            sketch.circle(index_x, index_y, 40);
-            // sketch.line(0,menu_translate_y-30,0, menu_translate_y+30)
-            
-            // sketch.rect(-120, menu_translate_y + rounded_corners_size, count, 40);
-            // -120 < x < 120
-            // menu_translate_y + rounded_corners_size < y < menu_translate_y + rounded_corners_size + 40
-            if (index_y > menu_translate_y + rounded_corners_size && index_y < menu_translate_y + rounded_corners_size + 40) {
-                // console.log("index is in the menu");
-                if (index_x > -120 && index_x < 120) {
-                    // console.log("index is in the menu");
-                    if (menu_state == false) {
-                        menu_is_opening = true;
-                        menu_is_closing = false;
-                    }
-                    if (menu_state == true) {
-                        menu_is_opening = false;
-                        menu_is_closing = true;
-                    }
-                }
-            }
         }
     }
-        // console.log(hands_position[0]);
 
-    function display_apps_on_menu() {
-        if(menu_state && menu_is_closing == false) {
-            sketch.push();
-            sketch.translate(-menu_larger/2 - rounded_corners_size/2, menu_translate_y / 2 + 10);
-            sketch.rectMode(CENTER);
-            for (let i = 0; i < 3; i++) {
-                sketch.rect(i * app_button_width + app_button_width/2, 0, app_button_height, app_button_width);
-            }
-
-            sketch.pop();
-        }
-    };
-
-    function open_close_menu() {
-        if (sketch.mouseIsPressed && menu_state == false) {
-            count_for_opening_menu = 0;
-            menu_is_opening = true;
-        }
-        if (sketch.mouseIsPressed && menu_state == true) {
-            count_for_opening_menu = 300;
-            menu_is_closing = true;
-        }
+    function draw_menu(sketch) {
         if (menu_is_opening) { //OPEN MENU
-            menu_translate_y = 80 + count_for_opening_menu;
-            count_for_opening_menu += 5;
-            if (count_for_opening_menu >= 300) {
-                menu_state = true;
+            if(set_menu_position) {
+                menu_position_x = index_x;
+                set_menu_position = false;
+                // menu_position_y = index_y;
+                if(menu_position_x < menu_width/2 + 50)
+                {
+                    menu_position_x = menu_width/2 + 50;
+                }
+                if(menu_position_x > width - menu_width/2 - 50)
+                {
+                    menu_position_x = width - menu_width/2 - 50;
+                }
+            }
+            opening_menu_percentage += 5;
+            actual_width = opening_menu_percentage * menu_width/100;
+            actual_height = opening_menu_percentage * menu_height/100;
+            if (opening_menu_percentage == 100) {
                 menu_is_opening = false;
+                menu_state = true;
             }
         }
         if (menu_is_closing) { //CLOSE MENU
-            menu_translate_y = 80 + count_for_opening_menu;
-            count_for_opening_menu -= 5;
-            if (count_for_opening_menu <= 0) {
+            opening_menu_percentage -= 5;
+            actual_width = opening_menu_percentage * menu_width/100;
+            actual_height = opening_menu_percentage * menu_height/100;
+            if (opening_menu_percentage == 0) {
                 menu_state = false;
                 menu_is_closing = false;
+                set_menu_position = true;
             }
         }
+
+        sketch.push()
+        sketch.translate(menu_position_x, menu_position_y)
+        sketch.rotate(PI)
+        sketch.rectMode(CENTER);
+        sketch.noFill()
+        sketch.rect(0, 0, actual_width, actual_height);
+        
+        if (menu_state) {
+            sketch.stroke(255);
+            sketch.fill(255)
+            sketch.textAlign(CENTER, CENTER);
+            sketch.textSize(40);
+            sketch.text("- MENU -", 0, -(menu_height/2)*0.8);
+            sketch.textSize(28);
+            sketch.text("Keep your index on\nan app to launch it", 0, -(menu_height/2)*0.6);
+            
+            drawApp(sketch)
+            
+            // Draw arrow buttons
+            sketch.noFill()
+            sketch.push()
+            sketch.translate(0, (menu_height/2)*0.75)
+            sketch.rectMode(CORNER)
+            sketch.rect(-menu_width*0.35, -menu_height*0.05, menu_width*0.35, menu_height*0.1)
+            sketch.rect(0, -menu_height*0.05, menu_width*0.35, menu_height*0.1)
+            sketch.fill(255)
+            sketch.triangle(-menu_width*0.150, -menu_height*0.03, -menu_width*0.150, menu_height*0.03, -menu_width*0.225, 0)
+            sketch.triangle(menu_width*0.150, -menu_height*0.03, menu_width*0.150, menu_height*0.03, menu_width*0.225, 0)
+            
+            // Fill arrow buttons on selection
+            sketch.fill(125)
+            if (index_x > menu_position_x - menu_width*0.35 && index_x < menu_position_x 
+                && index_y < menu_position_y - menu_height*0.325 
+                && index_y > menu_position_y - menu_height*0.425) 
+            {
+                right_arrow_button_fill += 0.75;
+            }
+            else
+            {
+                right_arrow_button_fill = 0;
+            }
+            sketch.rect(-menu_width*0.35, -menu_height*0.05, left_arrow_button_fill, menu_height*0.1)
+            if (index_x > menu_position_x && index_x < menu_position_x + menu_width*0.35 
+                && index_y < menu_position_y - menu_height*0.325 
+                && index_y > menu_position_y - menu_height*0.425) 
+            {
+                left_arrow_button_fill += 0.75;
+            }
+            else
+            {
+                left_arrow_button_fill = 0;
+            }
+            sketch.rect(0, -menu_height*0.05, right_arrow_button_fill, menu_height*0.1)
+
+            // Trigger if arrow buttons are selected
+            if(left_arrow_button_fill > menu_width*0.35) {
+                left_arrow_button_fill = 0;
+                menu_app += 1;
+            }
+            if(right_arrow_button_fill > menu_width*0.35) {
+                right_arrow_button_fill = 0;
+                menu_app -= 1;
+            }
+            if(menu_app == number_of_apps) {
+                menu_app = 0;
+            }
+            else if(menu_app == -1) {
+                menu_app = number_of_apps - 1;
+            }
+            sketch.pop()
+        }
+        sketch.pop()
+        // sketch.circle(menu_position_x - menu_width*0.35, menu_position_y - menu_height*0.25, 50)
+        // sketch.circle(menu_position_x + menu_width*0.35, menu_position_y + menu_height*0.15, 50)
     };
+
+    function drawApp(sketch) {
+        sketch.rectMode(CORNER);
+        sketch.noFill()
+        sketch.rect(-menu_width*0.35, -menu_height*0.15, menu_width*0.7, menu_height*0.4)
+        sketch.fill(125)
+        //Fill app button on selection
+        if(index_x > menu_position_x - menu_width*0.35 && index_x < menu_position_x + menu_width*0.35   
+            && index_y > menu_position_y - menu_height*0.25
+            && index_y < menu_position_y + menu_height*0.15)
+        {
+            app_button_fill += 1.5;
+            sketch.rect(-menu_width*0.35, -menu_height*0.15, app_button_fill, menu_height*0.4)
+        }
+        else
+        {
+            app_button_fill = 0;
+        }
+        
+        //Draw app icon
+        sketch.fill(255)
+        sketch.textSize(20);
+        sketch.text("App "+(menu_app+1), -menu_width*0.35, -menu_height*0.15, menu_width*0.7, menu_height*0.4)
+        
+        
+        //Trigger if app button is selected
+        if(app_button_fill > menu_width*0.7) {
+            app_button_fill = 0;
+            // Launch app
+            sketch.emit("core-app_manager-start_application", {
+                application_name: "triangles",
+            });
+            sketch.emit("core-app_manager-start_application", {
+                application_name: "balls",
+            });
+        }
+    }
 });
