@@ -24,7 +24,8 @@ export const menu = new p5((sketch) => {
     let left_arrow_button_fill = 0
     let right_arrow_button_fill = 0
     let app_button_fill = 0
-
+    let app_control_menu = []
+    let started_apps = []
 
     let hands_position = [];
     let hands_sign = [];
@@ -32,9 +33,21 @@ export const menu = new p5((sketch) => {
     let counter_menu_trigger = 0;
     let trigger_menu = false;
     let current_hand_sign = "";
+    let first_run = true;
 
     sketch.preload = () => {
         font = loadFont("/gosai/pool/core/server/assets/FallingSky-JKwK.otf");
+        
+        let url = getURLPath();
+        url.splice(-1);
+        url = url.join("/");
+        config = loadJSON("/" + url + "/platform/home/config.json",
+            (data) => {
+                if (data.applications.menu_control) {
+                    app_control_menu = data.applications.menu_control;
+                    number_of_apps = app_control_menu.length;
+                }
+        });
     };
 
     sketch.set = (width, height, socket) => {
@@ -52,6 +65,17 @@ export const menu = new p5((sketch) => {
         sketch.emit = (name, data) => {
             socket.emit(name, data);
         };
+
+        socket.on("core-app_manager-started_applications", async (data) => {
+            started_apps = [];
+            data.applications.forEach(app => {
+                started_apps.push(app["name"])
+            });
+        });
+
+        sketch.reload_started_apps = () => {
+            sketch.emit("core-app_manager-started_applications")
+        }
     };
 
     sketch.resume = () => {};
@@ -61,6 +85,12 @@ export const menu = new p5((sketch) => {
     sketch.windowResized = () => resizeCanvas(windowWidth, windowHeight);
 
     sketch.show = () => {
+        //First run
+        if(first_run)
+        {
+            first_run = false
+            sketch.reload_started_apps()
+        }
         sketch.clear();
 
         //DRAWING SETUP
@@ -90,10 +120,17 @@ export const menu = new p5((sketch) => {
         check_menu_trigger();
         draw_menu(sketch);
         sketch.push()
-        sketch.translate(width/2 - 400, -50)
+        // sketch.translate(width/2 - 200, -150)
+        sketch.translate(width/2 - 200, height + 10)
         sketch.rotate(PI)
-        sketch.textSize(40)
+        sketch.textSize(60)
         sketch.text("Interactive Pool Project", 0,0)
+        sketch.pop()
+        sketch.push()
+        sketch.translate(width/2 + 800, height + 10)
+        sketch.rotate(PI)
+        sketch.textSize(32)
+        sketch.text(`Display : ${Math.round(frameRate())} FPS`, 0, 0);
         sketch.pop()
     };
 
@@ -215,7 +252,7 @@ export const menu = new p5((sketch) => {
                 && index_y < menu_position_y - menu_height*0.325 
                 && index_y > menu_position_y - menu_height*0.425) 
             {
-                right_arrow_button_fill += 0.75;
+                right_arrow_button_fill += 1.5;
             }
             else
             {
@@ -226,7 +263,7 @@ export const menu = new p5((sketch) => {
                 && index_y < menu_position_y - menu_height*0.325 
                 && index_y > menu_position_y - menu_height*0.425) 
             {
-                left_arrow_button_fill += 0.75;
+                left_arrow_button_fill += 1.5;
             }
             else
             {
@@ -257,16 +294,28 @@ export const menu = new p5((sketch) => {
     };
 
     function drawApp(sketch) {
+        //App rectangle
         sketch.rectMode(CORNER);
         sketch.noFill()
+        sketch.strokeWeight(5)
+        sketch.stroke(216, 191, 216)
+
+        // console.log(started_apps)
+        // console.log(app_control_menu[menu_app])
+        if(started_apps.includes(app_control_menu[menu_app])) {
+            sketch.stroke(0, 255, 127)
+        }
+
         sketch.rect(-menu_width*0.35, -menu_height*0.15, menu_width*0.7, menu_height*0.4)
+
         sketch.fill(125)
+        sketch.noStroke()
         //Fill app button on selection
         if(index_x > menu_position_x - menu_width*0.35 && index_x < menu_position_x + menu_width*0.35   
             && index_y > menu_position_y - menu_height*0.25
             && index_y < menu_position_y + menu_height*0.15)
-        {
-            app_button_fill += 1.5;
+            {
+            app_button_fill += 2.5;
             sketch.rect(-menu_width*0.35, -menu_height*0.15, app_button_fill, menu_height*0.4)
         }
         else
@@ -274,22 +323,31 @@ export const menu = new p5((sketch) => {
             app_button_fill = 0;
         }
         
+        sketch.stroke(255)
+        sketch.strokeWeight(1)
         //Draw app icon
         sketch.fill(255)
         sketch.textSize(20);
-        sketch.text("App "+(menu_app+1), -menu_width*0.35, -menu_height*0.15, menu_width*0.7, menu_height*0.4)
+        sketch.text(app_control_menu[menu_app].charAt(0).toUpperCase() + app_control_menu[menu_app].slice(1), -menu_width*0.35, -menu_height*0.15, menu_width*0.7, menu_height*0.4)
         
         
         //Trigger if app button is selected
         if(app_button_fill > menu_width*0.7) {
             app_button_fill = 0;
-            // Launch app
-            sketch.emit("core-app_manager-start_application", {
-                application_name: "triangles",
-            });
-            sketch.emit("core-app_manager-start_application", {
-                application_name: "balls",
-            });
+
+            if(started_apps.includes(app_control_menu[menu_app])) {
+                //stop app
+                sketch.emit("core-app_manager-stop_application", {
+                    application_name: app_control_menu[menu_app],
+                });
+            }
+            else {
+                // Launch app
+                sketch.emit("core-app_manager-start_application", {
+                    application_name: app_control_menu[menu_app],
+                });           
+            }
+            sketch.reload_started_apps()
         }
     }
 });
