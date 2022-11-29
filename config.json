@@ -1,7 +1,7 @@
 {
     "name" : "Interactive Pool",
     "camera": {
-        "number":2,
+        "number":0,
         "type" : "standard",
         "width": 1920,
         "height": 1080,
