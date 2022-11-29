@@ -59,8 +59,11 @@ export class Balls {
         this.ball_nb = 0
         for (let b of this.data){
             if (this.ball_nb >= max_ball) break
-            this.balls[this.ball_nb].x = b[0]
-            this.balls[this.ball_nb].y = b[1]
+            // this.balls[this.ball_nb].x = b[0]
+            // this.balls[this.ball_nb].y = b[1]
+            // Must apply central symmetry because of 180° rotation
+            this.balls[this.ball_nb].x = -(b[0] - 960) + 960
+            this.balls[this.ball_nb].y = -(b[1] - 540) + 540
             this.ball_nb += 1
         }
         for (let i = this.ball_nb; i<this.previous_ball_nb; i++)

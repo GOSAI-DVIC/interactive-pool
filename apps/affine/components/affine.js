@@ -57,10 +57,10 @@ export class Affine {
         //         sketch.line(0, y, width, y);
         //     }
         // }
+        sketch.stroke(200,200,200);
+        sketch.strokeWeight(5)
 
         //Draw origin and X - Y axes
-        sketch.stroke(0,0,200);
-        sketch.strokeWeight(5)
         sketch.line(0,540,width-70,540)
         sketch.line(960,70,960,height)
         sketch.circle(960,540, 20)
@@ -76,7 +76,7 @@ export class Affine {
         sketch.pop()
         sketch.textFont(f);
         sketch.textSize(40);
-        sketch.fill(0, 0, 255);
+        sketch.fill(200, 200, 200);
         sketch.text("O", 960 - 35, 540 + 35)
         sketch.text("x", 1920 - 30 - 70, 540+65)
         sketch.text("y", 960 + 55, 45 + 70)

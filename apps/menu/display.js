@@ -113,7 +113,7 @@ export const menu = new p5((sketch) => {
             });
 
         }
-        open_gif.position(600, 500);
+        open_gif.position(690, 500); //Increase X to move left on the pool
         close_gif.hide()
         open_gif.hide()
 
@@ -412,7 +412,7 @@ export const menu = new p5((sketch) => {
         sketch.strokeWeight(1)
         //Draw app icon
         sketch.fill(255)
-        sketch.textSize(20);
+        sketch.textSize(40);
         sketch.text(app_control_menu[menu_app].charAt(0).toUpperCase() + app_control_menu[menu_app].slice(1), -menu_width*0.35, -menu_height*0.15, menu_width*0.7, menu_height*0.4)
         
         
