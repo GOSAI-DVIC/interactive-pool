@@ -1,5 +1,5 @@
 export class Affine {
-    constructor(b1, b2, color="#ff007f")
+    constructor(b1, b2, color="#009dff")
     {
         this.b1 = b1
         this.b2 = b2
