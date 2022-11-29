@@ -14,5 +14,5 @@ class Application(BaseApplication):
         
         if source == "ball" and data is not None:
             if event == "balls": self.server.send_data("ball", data)
-            if event == "fps"  : self.server.send_data("fps",  data)
+            # if event == "fps"  : self.server.send_data("fps",  data)
             # if event == "cue_data": self.server.send_data("cue", data)

@@ -42,10 +42,12 @@ export const balls = new p5((sketch) => {
         balls.show(sketch);
 
         sketch.push();
+        sketch.translate(width/2 + 400, height + 10)
+        sketch.rotate(PI)
         sketch.textFont(f);
         sketch.textSize(32);
         sketch.fill(255, 255, 255);
-        sketch.text(`Ball Detection: ${fps} FPS`, -150, -150);
+        sketch.text(`Ball detection : ${Math.round(fps)} FPS`, 0, 0);
         sketch.pop();
     };
 });
