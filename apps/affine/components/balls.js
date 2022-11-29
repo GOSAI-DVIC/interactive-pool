@@ -18,7 +18,7 @@ export class Balls {
         this.grid = []
         this.grid.push(new Affine(this.balls[0],this.balls[1], "#009dff"))
         this.grid.push(new Affine(this.balls[2],this.balls[3], "#38ff15"));
-        this.grid.push(new Affine(this.balls[4],this.balls[5], "#ff8c40"));
+        // this.grid.push(new Affine(this.balls[4],this.balls[5], "#ff8c40"));
 
     }
 

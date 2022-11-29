@@ -28,6 +28,7 @@ export const menu = new p5((sketch) => {
     let right_arrow_button_fill = 0
     let app_button_fill = 0
     let app_control_menu = []
+    let no_menu_tutorial_apps = []
     let started_apps = []
 
     let cooldown_left_arrow = 0;
@@ -35,15 +36,16 @@ export const menu = new p5((sketch) => {
     let cooldown_app_button = 0;
 
     let hands_position = [];
-    let hands_sign = [];
 
     let counter_menu_trigger = 0;
     let trigger_menu = false;
-    let current_hand_sign = "";
     let first_run = true;
 
     let fps
     let speed_regulator = 0;
+
+    let menu_opening_time = 0;
+    let automatic_closing_time = 10000; // 10 seconds
 
     var audio_opening = new Audio("./platform/home/apps/menu/components/opening_menu.mp3");
     var closing_audio = new Audio("./platform/home/apps/menu/components/closing_menu.mp3");
@@ -67,6 +69,9 @@ export const menu = new p5((sketch) => {
                     app_control_menu = data.applications.menu_control;
                     number_of_apps = app_control_menu.length;
                 }
+                if (data.applications.no_menu_tutorial_gif) {
+                    no_menu_tutorial_apps = data.applications.no_menu_tutorial_gif;
+                }
         });
     };
 
@@ -79,7 +84,7 @@ export const menu = new p5((sketch) => {
         socket.on(sketch.name, (data) => {
             if (data == undefined || data.length == 0) return;
             hands_position = data["hands_landmarks"];
-            hands_sign = data["hands_sign"];
+            // hands_sign = data["hands_sign"];
         });
 
         sketch.emit = (name, data) => {
@@ -117,7 +122,8 @@ export const menu = new p5((sketch) => {
         close_gif.hide()
         open_gif.hide()
 
-        if (started_apps.includes("balls", "menu", "show_hands") && started_apps.length == 3) {
+        if (!no_menu_tutorial_apps.some(a_no_gif_app=> started_apps.includes(a_no_gif_app))) 
+        {
             open_gif.show()
         }
         
@@ -213,6 +219,7 @@ export const menu = new p5((sketch) => {
                         trigger_menu = false;
                         counter_menu_trigger = 0;
                         audio_opening.play();
+                        menu_opening_time = millis();
                     }
                 }
             }
@@ -239,8 +246,21 @@ export const menu = new p5((sketch) => {
     function draw_menu(sketch) {
         if(menu_state == true) {
             open_gif.hide()
-            close_gif.position(menu_position_x - 185, 400);
+            close_gif.position(menu_position_x - 98, 400);
+            // sketch.circle(menu_position_x - 210, 400, 20);
             close_gif.show()
+            if(index_x_a != 0){
+                menu_opening_time = millis();
+            }
+            if (millis()- menu_opening_time > automatic_closing_time) {
+                menu_is_opening = false;
+                menu_is_closing = true;
+                menu_state = false;
+                trigger_menu = false;
+                counter_menu_trigger = 0;
+                closing_audio.play();
+                menu_opening_time = 0;
+            }
         }
         // sketch.textSize(32);
         // sketch.text(cooldown_app_button, 150, 100)
