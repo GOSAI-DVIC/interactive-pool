@@ -21,11 +21,6 @@ export const affine = new p5((sketch) => {
         sketch.activated = true;
 
         socket.on("ball", (data) => balls.update_data(data));
-        // socket.on("fps", (data) => (fps = data));
-        // sketch.emit = (name, data = undefined) => {
-        //     if (data == undefined) socket.emit(name);
-        //     else socket.emit(name, data);
-        // };
     };
 
     sketch.resume = () => {};
@@ -40,14 +35,5 @@ export const affine = new p5((sketch) => {
         sketch.clear();
         sketch.fill(0);
         balls.show(sketch, f);
-
-    
-
-        // sketch.push();
-        // sketch.textFont(f);
-        // sketch.textSize(32);
-        // sketch.fill(255, 255, 255);
-        // sketch.text(`Ball Detection: ${fps} FPS`, -150, -150);
-        // sketch.pop();
     };
 });

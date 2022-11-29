@@ -24,6 +24,9 @@ export class Balls {
 
     show(sketch, f) {
         sketch.push();
+        sketch.translate(width,height)
+        sketch.mode = sketch.CENTER
+        sketch.rotate(sketch.PI)
         if(this.grid.length != 0) {
             this.grid[0].draw_grid(sketch, f)
         }

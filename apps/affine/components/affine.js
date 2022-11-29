@@ -35,57 +35,68 @@ export class Affine {
             // sketch.text(`y = ${this.slope} x + ${this.intercept}`, 960, -100)
 
             // this.draw_grid(sketch, f)
-            this.draw_affine_line(sketch) 
-            this.draw_line_equations(sketch,f)
+            if(this.b1.x >= 0 && this.b2.x >= 0) {
+                this.draw_affine_line(sketch) 
+                this.draw_line_equations(sketch,f)
+            }
         }
     }
     
     draw_grid(sketch, f) {
+        //Rotate the grid
+        
         let case_width = width / this.number_of_x
         let case_height = height / this.number_of_y
         
         //Draw a grid
-        for (var x = 0; x < width + 1; x += case_width) {
-            for (var y = 0; y < height + 1; y += case_height) {
-                sketch.stroke(100, 100, 100);
-                sketch.strokeWeight(1);
-                sketch.line(x, 0, x, height);
-                sketch.line(0, y, width, y);
-            }
-        }
+        // for (var x = 0; x < width + 1; x += case_width) {
+        //     for (var y = 0; y < height + 1; y += case_height) {
+        //         sketch.stroke(100, 100, 100);
+        //         sketch.strokeWeight(1);
+        //         sketch.line(x, 0, x, height);
+        //         sketch.line(0, y, width, y);
+        //     }
+        // }
+
         //Draw origin and X - Y axes
         sketch.stroke(0,0,200);
         sketch.strokeWeight(5)
-        sketch.line(0,540,width,540)
-        sketch.line(960,0,960,height)
+        sketch.line(0,540,width-70,540)
+        sketch.line(960,70,960,height)
         sketch.circle(960,540, 20)
+        sketch.push()
+        sketch.translate(0,70)
         sketch.line(960 - case_width/2, case_height/2, 960, 0)
         sketch.line(960 + case_width/2, case_height/2, 960, 0)
+        sketch.pop()
+        sketch.push()
+        sketch.translate(-70,0)
         sketch.line(1920 - case_width/2, 540 - case_height/2, width,540)
         sketch.line(1920 - case_width/2, 540 + case_height/2, width,540)
+        sketch.pop()
         sketch.textFont(f);
         sketch.textSize(40);
         sketch.fill(0, 0, 255);
         sketch.text("O", 960 - 35, 540 + 35)
-        sketch.text("x", 1920 - 30, 540+65)
-        sketch.text("y", 960 + 55, 45)
+        sketch.text("x", 1920 - 30 - 70, 540+65)
+        sketch.text("y", 960 + 55, 45 + 70)
         
         //Draw graduations
-        for (var x = 0; x < width+1 - case_width; x += case_width) {
+        for (var x = 0; x < width+1 - 2*case_width; x += case_width) {
             sketch.line(x, 540 - 20, x, 540+20)
         }
-        for (var y = case_height; y < height + 1; y += case_height) {
+        for (var y = 2*case_height; y < height + 1; y += case_height) {
             sketch.line(960 - 20, y, 960 +20, y)
         }
         let i = -1;
-        for (var x = 960-case_width-10; x < width - case_width ; x += case_width) {
+        for (var x = 960-case_width-10; x < width - 2*case_width ; x += case_width) {
             if (i != 0) {
                 sketch.text(`${i}`, x, 600)
             }
             i++;
         }
         let j = -1;
-        for (var y = 540+case_height+10; y>case_height ; y -= case_height) {
+        for (var y = 540+case_height+10; y>case_height*2 ; y -= case_height) {
             if (j != 0) {
                 sketch.text(`${j}`, 900, y)
             }
@@ -94,6 +105,7 @@ export class Affine {
     }
     
     draw_affine_line(sketch) {
+        
         this.x_left  = 0;
         this.y_left  = 0;
         this.x_right = 0;
@@ -159,7 +171,7 @@ export class Affine {
         }
         //Compute display position of the equation text
         let x_text = this.convert_screen_to_grid_x(this.x_right - 300)
-        console.log(x_text)
+        // console.log(x_text)
         let y_text = this.slope * x_text + this.intercept //-3.40
         if(this.slope > 0) {
             y_text = y_text - 0.5
@@ -169,7 +181,7 @@ export class Affine {
         }
         x_text = this.convert_grid_to_screen_x(x_text)
         y_text = this.convert_grid_to_screen_y(y_text)
-        console.log(x_text, y_text)
+        // console.log(x_text, y_text)
         sketch.text(`y = ${a_rounded} ${b_rounded}`, x_text, y_text)
         
     }
