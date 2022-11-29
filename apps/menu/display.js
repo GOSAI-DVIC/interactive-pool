@@ -11,10 +11,13 @@ export const menu = new p5((sketch) => {
     let menu_app = 0;
     let number_of_apps = 2;
     
-    let index_x = 0;
-    let index_y = 0;
+    let index_x_a = 0;
+    let index_y_a = 0;
+    let index_x_b = 0;
+    let index_y_b = 0;
     let menu_position_x = 0;
     let menu_position_y = height/2;
+    let y_trigger = 0;
     let set_menu_position = true;
     let menu_width = 300;
     let menu_height = 600;
@@ -27,6 +30,10 @@ export const menu = new p5((sketch) => {
     let app_control_menu = []
     let started_apps = []
 
+    let cooldown_left_arrow = 0;
+    let cooldown_right_arrow = 0;
+    let cooldown_app_button = 0;
+
     let hands_position = [];
     let hands_sign = [];
 
@@ -35,8 +42,21 @@ export const menu = new p5((sketch) => {
     let current_hand_sign = "";
     let first_run = true;
 
+    let fps
+    let speed_regulator = 0;
+
+    var audio_opening = new Audio("./platform/home/apps/menu/components/opening_menu.mp3");
+    var closing_audio = new Audio("./platform/home/apps/menu/components/closing_menu.mp3");
+    var click_audio = new Audio("./platform/home/apps/menu/components/click.mp3");
+
+    let open_gif
+    let close_gif
+
     sketch.preload = () => {
         font = loadFont("/gosai/pool/core/server/assets/FallingSky-JKwK.otf");
+
+        open_gif = sketch.createImg("./platform/home/apps/menu/components/hand_opening.gif");
+        close_gif = sketch.createImg("./platform/home/apps/menu/components/hand_closing.gif");
         
         let url = getURLPath();
         url.splice(-1);
@@ -72,10 +92,6 @@ export const menu = new p5((sketch) => {
                 started_apps.push(app["name"])
             });
         });
-
-        sketch.reload_started_apps = () => {
-            sketch.emit("core-app_manager-started_applications")
-        }
     };
 
     sketch.resume = () => {};
@@ -89,9 +105,33 @@ export const menu = new p5((sketch) => {
         if(first_run)
         {
             first_run = false
-            sketch.reload_started_apps()
+            sketch.emit("core-app_manager-stop_application", {
+                application_name: "balls",
+            });
+            sketch.emit("core-app_manager-start_application", {
+                application_name: "balls",
+            });
+
         }
+        open_gif.position(600, 500);
+        close_gif.hide()
+        open_gif.hide()
+
+        if (started_apps.includes("balls", "menu", "show_hands") && started_apps.length == 3) {
+            open_gif.show()
+        }
+        
+        fps = Math.round(frameRate());
+        speed_regulator = 50 / fps;
         sketch.clear();
+        
+        //DEBUG MENU OPENING DISTANCE & trigger
+        // if(trigger_menu) {sketch.stroke(255, 0, 0);}
+        // else {sketch.stroke(0,255,0);}
+        // sketch.strokeWeight(5);
+        // sketch.line(width/2 - 45, height/2, width/2 + 45, height/2);
+        // sketch.line(width/2 - 125, height/2+10, width/2 + 125, height/2+10);
+        // sketch.line(width/2 - 250, height/2+20, width/2 + 250, height/2+20);
 
         //DRAWING SETUP
         sketch.stroke(255);
@@ -99,23 +139,34 @@ export const menu = new p5((sketch) => {
         sketch.textFont(font);
 
         //DEBUG : Draw Pool borders
-        sketch.line(0, 0, 1920, 0);
-        sketch.line(0, 0, 0, 1080);
-        sketch.line(0, 1080, 1920, 1080);
-        sketch.line(1920, 0, 1920, 1080);
+        // sketch.line(0, 0, 1920, 0);
+        // sketch.line(0, 0, 0, 1080);
+        // sketch.line(0, 1080, 1920, 1080);
+        // sketch.line(1920, 0, 1920, 1080);
         // sketch.rect(50,50 , 1820, 980);
 
         //PROCESSING
         if (hands_position.length != 0)
         {
-            index_x = hands_position[0][8][0]*width;
-            index_y = hands_position[0][8][1]*height;
-            sketch.circle(index_x, index_y, 20);
+            index_x_a = hands_position[0][8][0]*width;
+            index_y_a = hands_position[0][8][1]*height;
+            sketch.circle(index_x_a, index_y_a, 20);
         }
         else
         {
-            index_x = 0;
-            index_y = 0;
+            index_x_a = 0;
+            index_y_a = 0;
+        }
+        if (hands_position.length > 1)
+        {
+            index_x_b = hands_position[1][8][0]*width;
+            index_y_b = hands_position[1][8][1]*height;
+            // sketch.circle(index_x_b, index_y_b, 20);
+        }
+        else
+        {
+            index_x_b = 0;
+            index_y_b = 0;
         }
         check_menu_trigger();
         draw_menu(sketch);
@@ -130,65 +181,93 @@ export const menu = new p5((sketch) => {
         sketch.translate(width/2 + 800, height + 10)
         sketch.rotate(PI)
         sketch.textSize(32)
-        sketch.text(`Display : ${Math.round(frameRate())} FPS`, 0, 0);
+        // sketch.text(`Display : ${average_fps} FPS`, 0, 0);
+        sketch.text(`Display : ${fps} FPS`, 0, 0);
         sketch.pop()
     };
 
     function check_menu_trigger() {
-        current_hand_sign =""
-        if (hands_sign != undefined && hands_sign.length != 0) {
-            current_hand_sign = hands_sign[0][0];
-
+        if (trigger_menu == true) {
+            counter_menu_trigger++;
+            if (counter_menu_trigger > 35) {
+                trigger_menu = false;
+                counter_menu_trigger = 0;
+            }
+        }
+        if(index_x_a != 0 && index_y_a != 0 && index_x_b != 0 && index_y_b != 0){
+            let finger_gap_x = Math.abs(index_x_a - index_x_b)
+            let finger_gap_y = Math.abs(index_y_a - index_y_b)
             if (menu_state == false) {
-                if (current_hand_sign == "FIST" || current_hand_sign == "THUMB_UP" || current_hand_sign == "PINCH") {
+                if (finger_gap_x < 90 && finger_gap_y < 100) {
+                    y_trigger = index_y_a;
                     trigger_menu = true;
                     counter_menu_trigger = 0;
+                    
+                    menu_position_x = index_x_a
                 }
                 if (trigger_menu == true) {
-                    counter_menu_trigger++;
-                    if (counter_menu_trigger > 25) {
-                        trigger_menu = false;
-                        counter_menu_trigger = 0;
-                    }
-                    if (current_hand_sign == "OPEN_HAND") {
+                    if (finger_gap_x>250 && finger_gap_x < 500 && Math.abs(y_trigger - index_y_a) < 70) {
                         menu_is_opening = true;
                         menu_is_closing = false;
                         menu_state = true;
                         trigger_menu = false;
                         counter_menu_trigger = 0;
+                        audio_opening.play();
                     }
-                }   
+                }
             }
-            else
-            {
-                if (current_hand_sign == "OPEN_HAND") {
+            else {
+                if (finger_gap_x > 250 && finger_gap_x < 500 && finger_gap_y < 100 && Math.abs(menu_position_x - index_x_a) < 300) {
+                    y_trigger = index_y_a;
                     trigger_menu = true;
                     counter_menu_trigger = 0;
                 }
                 if (trigger_menu == true) {
-                    counter_menu_trigger++;
-                    if (counter_menu_trigger > 25) {
-                        trigger_menu = false;
-                        counter_menu_trigger = 0;
-                    }
-                    if (current_hand_sign == "FIST" || current_hand_sign == "THUMB_UP" || current_hand_sign == "THUMB_UP") {
+                    if (finger_gap_x < 90 && Math.abs(y_trigger - index_y_a) < 70) {
                         menu_is_opening = false;
                         menu_is_closing = true;
                         menu_state = false;
                         trigger_menu = false;
                         counter_menu_trigger = 0;
+                        closing_audio.play();
                     }
-                }   
+                }
             }
         }
     }
 
     function draw_menu(sketch) {
+        if(menu_state == true) {
+            open_gif.hide()
+            close_gif.position(menu_position_x - 185, 400);
+            close_gif.show()
+        }
+        // sketch.textSize(32);
+        // sketch.text(cooldown_app_button, 150, 100)
+        if (cooldown_app_button >= 1) {  
+            cooldown_app_button += speed_regulator;
+        }
+        if(cooldown_app_button > 50) {
+            cooldown_app_button = 0;
+        }
+        if (cooldown_left_arrow >= 1) {  
+            cooldown_left_arrow += speed_regulator;
+        }
+        if(cooldown_left_arrow > 50) {
+            cooldown_left_arrow = 0;
+        }
+        if (cooldown_right_arrow >= 1) {  
+            cooldown_right_arrow += speed_regulator;
+        }
+        if(cooldown_right_arrow > 50) {
+            cooldown_right_arrow = 0;
+        }
+
         if (menu_is_opening) { //OPEN MENU
             if(set_menu_position) {
-                menu_position_x = index_x;
+                // menu_position_x = index_x_a;
                 set_menu_position = false;
-                // menu_position_y = index_y;
+                // menu_position_y = index_y_a;
                 if(menu_position_x < menu_width/2 + 50)
                 {
                     menu_position_x = menu_width/2 + 50;
@@ -248,22 +327,25 @@ export const menu = new p5((sketch) => {
             
             // Fill arrow buttons on selection
             sketch.fill(125)
-            if (index_x > menu_position_x - menu_width*0.35 && index_x < menu_position_x 
-                && index_y < menu_position_y - menu_height*0.325 
-                && index_y > menu_position_y - menu_height*0.425) 
+            if (index_x_a > menu_position_x - menu_width*0.35 && index_x_a < menu_position_x 
+                && index_y_a < menu_position_y - menu_height*0.325 
+                && index_y_a > menu_position_y - menu_height*0.425
+                && cooldown_left_arrow == 0)
             {
-                right_arrow_button_fill += 1.5;
+                right_arrow_button_fill += speed_regulator * 2;
             }
             else
             {
                 right_arrow_button_fill = 0;
             }
             sketch.rect(-menu_width*0.35, -menu_height*0.05, left_arrow_button_fill, menu_height*0.1)
-            if (index_x > menu_position_x && index_x < menu_position_x + menu_width*0.35 
-                && index_y < menu_position_y - menu_height*0.325 
-                && index_y > menu_position_y - menu_height*0.425) 
+            if (index_x_a > menu_position_x && index_x_a < menu_position_x + menu_width*0.35 
+                && index_y_a < menu_position_y - menu_height*0.325 
+                && index_y_a > menu_position_y - menu_height*0.425
+                && cooldown_right_arrow == 0
+                ) 
             {
-                left_arrow_button_fill += 1.5;
+                left_arrow_button_fill += speed_regulator * 2;
             }
             else
             {
@@ -275,10 +357,14 @@ export const menu = new p5((sketch) => {
             if(left_arrow_button_fill > menu_width*0.35) {
                 left_arrow_button_fill = 0;
                 menu_app += 1;
+                cooldown_right_arrow = 1;
+                click_audio.play();
             }
             if(right_arrow_button_fill > menu_width*0.35) {
                 right_arrow_button_fill = 0;
                 menu_app -= 1;
+                cooldown_left_arrow = 1;
+                click_audio.play();
             }
             if(menu_app == number_of_apps) {
                 menu_app = 0;
@@ -300,8 +386,6 @@ export const menu = new p5((sketch) => {
         sketch.strokeWeight(5)
         sketch.stroke(216, 191, 216)
 
-        // console.log(started_apps)
-        // console.log(app_control_menu[menu_app])
         if(started_apps.includes(app_control_menu[menu_app])) {
             sketch.stroke(0, 255, 127)
         }
@@ -311,11 +395,12 @@ export const menu = new p5((sketch) => {
         sketch.fill(125)
         sketch.noStroke()
         //Fill app button on selection
-        if(index_x > menu_position_x - menu_width*0.35 && index_x < menu_position_x + menu_width*0.35   
-            && index_y > menu_position_y - menu_height*0.25
-            && index_y < menu_position_y + menu_height*0.15)
+        if(index_x_a > menu_position_x - menu_width*0.35 && index_x_a < menu_position_x + menu_width*0.35   
+            && index_y_a > menu_position_y - menu_height*0.25
+            && index_y_a < menu_position_y + menu_height*0.15
+            && cooldown_app_button == 0)
             {
-            app_button_fill += 2.5;
+            app_button_fill += speed_regulator * 4;
             sketch.rect(-menu_width*0.35, -menu_height*0.15, app_button_fill, menu_height*0.4)
         }
         else
@@ -334,7 +419,8 @@ export const menu = new p5((sketch) => {
         //Trigger if app button is selected
         if(app_button_fill > menu_width*0.7) {
             app_button_fill = 0;
-
+            cooldown_app_button = 1;
+            click_audio.play();
             if(started_apps.includes(app_control_menu[menu_app])) {
                 //stop app
                 sketch.emit("core-app_manager-stop_application", {
@@ -347,7 +433,6 @@ export const menu = new p5((sketch) => {
                     application_name: app_control_menu[menu_app],
                 });           
             }
-            sketch.reload_started_apps()
         }
     }
 });
