@@ -14,18 +14,27 @@ export const sandtable = new p5(sketch => {
     let max_ball = 20;
     let ball_nb;
     let previous_ball_nb = max_ball;
-    let chrono = 0;
+    let count = 0;
+    let deadcrabs = [];
+    let livecrabs = [];
+    let idead;
 
 
     sketch.preload = () => {
-        sable = loadImage('./platform/home/apps/sandtable/components/sable.jpg');
+        //sable = loadImage('./platform/home/apps/sandtable/components/sable.jpg');
     }
 
     sketch.set = (width, height, socket) => {
         sketch.selfCanvas = sketch.createCanvas(width, height, sketch.WEBGL).position(0, 0);
 
-        topcolor = color(255,222,173);
-        bottomcolor = color(139,69,19);
+        let topcolor = color(255,222,173);
+        let bottomcolor = color(139,69,19);
+        for(let y=0; y<height; y++){
+            let n = map(y,0,height,0,1);
+            let newc = lerpColor(topcolor,bottomcolor,n);
+            sketch.stroke(newc);
+            sketch.line(0,y,width, y);
+          }
 
         for(let i=0; i<max_ball; i++)
         {
@@ -44,6 +53,7 @@ export const sandtable = new p5(sketch => {
             let state = true;
             let crab = new Crab(x, y, r,state);
             crabs.push(crab);
+            livecrabs.push(crab);
         }
 
     }
@@ -85,10 +95,7 @@ export const sandtable = new p5(sketch => {
         for (let d of deaths) {
             d.show(sketch);
         }
-        //for (let crab of crabs) {
-        //    crab.show(sketch);
-        //    crab.move();
-        //}
+        
         for (let ball of balls) {
             ball.show(sketch);
         }
@@ -100,14 +107,38 @@ export const sandtable = new p5(sketch => {
                 if (dist(ball.x, ball.y, crabs[i].x, crabs[i].y)<(crabs[i].getR()/2) + (ball.getR()/2)) {
                     
                     crabs[i].stateLife = false;
-                    
+                    count += 1;
+                    //console.log("crabes morts");
+                    //console.log(count);
+                    //deadcrabs.push(crabs[i]);
+                    //livecrabs.splice(i,1);
+                    //idead = i;
+
                 }  
             }
-            crabs[i].show(sketch);
+            
             if(crabs[i].stateLife == true){
                 crabs[i].move();
             }
-        }                  
+            crabs[i].show(sketch);
+        } 
+        if(count >= 6){
+        
+            /*let x = deadcrabs[0].x;
+            let y = deadcrabs[0].y;
+            let r = deadcrabs[0].r;
+            let state = true;
+            let crab = new Crab(x, y, r,state);
+            crabs.push(crab); */
+            //deadcrabs[0].stateLife = true;
+            //crabs[idead].stateLife = true;
+            for (var i = 0; i<crabs.length; i++){
+                crabs[i].stateLife = true;
+            }
+
+            count = 0;
+        }
+        
         sketch.pop();
     };
 });
