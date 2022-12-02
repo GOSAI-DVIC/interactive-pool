@@ -45,7 +45,11 @@ export const menu = new p5((sketch) => {
     let speed_regulator = 0;
 
     let menu_opening_time = 0;
-    let automatic_closing_time = 10000; // 10 seconds
+    let automatic_menu_closing_time = 10000; // 10 seconds
+    let app_starting_time = 0;
+    let automatic_apps_closing_time = 60000; // 60 seconds
+    let wait_for_closing_apps = false
+
 
     var audio_opening = new Audio("./platform/home/apps/menu/components/opening_menu.mp3");
     var closing_audio = new Audio("./platform/home/apps/menu/components/closing_menu.mp3");
@@ -118,6 +122,23 @@ export const menu = new p5((sketch) => {
             });
 
         }
+        if (index_x_a != 0) {
+            wait_for_closing_apps = false
+            app_starting_time = millis();
+        }
+        else {
+            wait_for_closing_apps = true
+        }
+        if ((wait_for_closing_apps == true) && (millis() - app_starting_time > automatic_apps_closing_time)) {
+            for (let a_no_gif_app of no_menu_tutorial_apps) {
+                if (started_apps.includes(a_no_gif_app)) {
+                    sketch.emit("core-app_manager-stop_application", {
+                        application_name: a_no_gif_app
+                    });
+                };
+            }
+        }
+
         open_gif.position(690, 500); //Increase X to move left on the pool
         close_gif.hide()
         open_gif.hide()
@@ -246,13 +267,13 @@ export const menu = new p5((sketch) => {
     function draw_menu(sketch) {
         if(menu_state == true) {
             open_gif.hide()
-            close_gif.position(menu_position_x - 98, 400);
+            close_gif.position(690, 400);
             // sketch.circle(menu_position_x - 210, 400, 20);
             close_gif.show()
             if(index_x_a != 0){
                 menu_opening_time = millis();
             }
-            if (millis()- menu_opening_time > automatic_closing_time) {
+            if (millis()- menu_opening_time > automatic_menu_closing_time) {
                 menu_is_opening = false;
                 menu_is_closing = true;
                 menu_state = false;
@@ -451,7 +472,8 @@ export const menu = new p5((sketch) => {
                 // Launch app
                 sketch.emit("core-app_manager-start_application", {
                     application_name: app_control_menu[menu_app],
-                });           
+                });
+                app_starting_time = millis();     
             }
         }
     }
