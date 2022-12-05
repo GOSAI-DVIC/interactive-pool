@@ -10,7 +10,7 @@
     "applications": {
         "startup": ["show_hands", "menu", "balls"],
         "disabled": [],
-        "menu_control": ["triangles", "affine", "balls"],
+        "menu_control": ["triangles", "affine", "balls", "sandtable"],
         "no_menu_tutorial_gif" : ["triangles", "affine"]
     },
     "calibrate": true
