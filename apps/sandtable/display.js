@@ -24,15 +24,6 @@ export const sandtable = new p5(sketch => {
     sketch.set = (width, height, socket) => {
         sketch.selfCanvas = sketch.createCanvas(width, height, sketch.WEBGL).position(0, 0);
 
-        let topcolor = color(255,222,173);
-        let bottomcolor = color(139,69,19);
-        for(let y=0; y<height; y++){
-            let n = map(y,0,height,0,1);
-            let newc = lerpColor(topcolor,bottomcolor,n);
-            sketch.stroke(newc);
-            sketch.line(0,y,width, y);
-          }
-
         for(let i=0; i<max_ball; i++)
         {
             let b=new Bubble(-500,- 500)
@@ -50,7 +41,7 @@ export const sandtable = new p5(sketch => {
             let state = true;
             let crab = new Crab(x, y, r,state);
             crabs.push(crab);
-            livecrabs.push(crab);
+           
         }
 
     }
