@@ -4,35 +4,52 @@ export class Crab{
     this.x = x;
     this.y = y;
     this.r = r;
-    //let speed = [-1.5,-1.2,-1,1,1.2,1.5];
     let speed = [-2.5,-2.2,-1,1,2.2,2.5];
 
-    //this.xspeed = random(1,1.5);
-    //this.yspeed = random(speed);
+    this.xspeed1 = random(2,2.5);
+    this.yspeed1 = random(speed);
 
-    this.xspeed = random(2,2.5);
-    this.yspeed = random(speed);
+    this.xspeed2 = 0;
+    this.yspeed2 = 0;
     
     this.image = loadImage('./platform/home/apps/sandtable/components/crabe.png');
     this.stateLife = stateLife;
   }
   
   move(){
-    this.x = this.x + this.xspeed;
-    this.y = this.y + this.yspeed;
-    if(this.x>width){
-      this.x = 0;
+    if(this.stateLife == true){
+      this.x = this.x + this.xspeed1;
+      this.y = this.y + this.yspeed1;
+      if(this.x>width){
+        this.x = 0;
+      }
+      if(this.y>height){
+      this.y = 0;
+      }
+      if(this.y<0){
+      this.y = height;
+      }
+      if(this.x<0){
+        this.x=width;
+      }  
     }
-    if(this.y>height){
-     this.y = 0;
+    else{
+      this.x = this.x + this.xspeed2;
+      this.y = this.y + this.yspeed2;
+      if(this.x>width){
+        this.x = 0;
+      }
+      if(this.y>height){
+      this.y = 0;
+      }
+      if(this.y<0){
+      this.y = height;
+      }
+      if(this.x<0){
+        this.x=width;
+      }  
     }
-    if(this.y<0){
-    this.y = height;
-  }
-  if(this.x<0){
-    this.x=width;
-  }  
-  }
+  } 
   
   getR(){
     return this.r;
