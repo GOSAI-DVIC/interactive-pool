@@ -5,7 +5,6 @@ export class Ball {
         this.y = y;
         this.r = r;
         this.color = color;
-
     }
 
     intersects(other) {
