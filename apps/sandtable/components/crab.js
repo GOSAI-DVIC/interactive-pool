@@ -14,6 +14,7 @@ export class Crab{
     
     this.image = loadImage('./platform/home/apps/sandtable/components/crabe.png');
     this.stateLife = stateLife;
+    this.deathTime = 0;
   }
   
   move(){
