@@ -201,6 +201,7 @@ export class Triangle {
       sketch.stroke(255,0,255)
       sketch.strokeWeight(8)
       sketch.fill(0)
+      sketch.noFill();
       sketch.circle(this.circumcenter.x,this.circumcenter.y,(this.distanceOf2Balls(this.circumcenter,this.triangle[0]))*2)
       sketch.pop();
     }

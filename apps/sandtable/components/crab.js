@@ -59,7 +59,7 @@ export class Crab{
   
   show(sketch){
     if(this.stateLife == true){
-      sketch.fill(255,0,0);
+      sketch.fill(255,0,255);
       sketch.noStroke();
       sketch.push();
       sketch.translate(this.x,this.y);
