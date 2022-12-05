@@ -14,7 +14,8 @@ export const sandtable = new p5(sketch => {
     let max_ball = 20;
     let ball_nb;
     let previous_ball_nb = max_ball;
-    let count = 0;
+    //let count = 0;
+    //let delta = millis();
 
 
     sketch.preload = () => {
@@ -95,21 +96,25 @@ export const sandtable = new p5(sketch => {
                 if (dist(ball.x, ball.y, crabs[i].x, crabs[i].y)<(crabs[i].getR()/2) + (ball.getR()/2)) {
                     
                     crabs[i].stateLife = false;
-                    count += 1;
+                    crabs[i].deathTime = millis();
                 }  
             } 
-            if(i==1){
-                console.log(crabs[i].xspeed1);
-                console.log(crabs[i].stateLife);
-                
-            }   
-        } 
-        if(count >= 6){
-            for (var i = 0; i<crabs.length; i++){
+            //if(i==1){
+            //    console.log(crabs[i].xspeed1);
+            //    console.log(crabs[i].stateLife);
+            //    
+            //}   
+            if(crabs[i].stateLife == false && millis()-crabs[i].deathTime >= 10000){
                 crabs[i].stateLife = true;
             }
-            count = 0;
-        }
+        } 
+        
+        //if(count >= 6){
+        //    for (var i = 0; i<crabs.length; i++){
+        //        crabs[i].stateLife = true;
+        //    }
+        //    count = 0;
+        //}
         
         for(let i=0; i<crabs.length; i++){
             crabs[i].move();
