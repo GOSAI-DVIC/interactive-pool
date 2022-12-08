@@ -14,6 +14,7 @@ export const sandtable = new p5(sketch => {
     let max_ball = 20;
     let ball_nb;
     let previous_ball_nb = max_ball;
+
     //let count = 0;
     //let delta = millis();
 
@@ -44,6 +45,7 @@ export const sandtable = new p5(sketch => {
             crabs.push(crab);
            
         }
+        
 
     }
 
@@ -105,6 +107,7 @@ export const sandtable = new p5(sketch => {
             //    
             //}   
             if(crabs[i].stateLife == false && millis()-crabs[i].deathTime >= 10000){
+                
                 crabs[i].stateLife = true;
             }
         } 
