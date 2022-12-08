@@ -1,4 +1,7 @@
 //var death = loadImage('./platform/home/apps/sandtable/components/death.png');
+import {Fireworks} from "./Firework.js"
+
+
 export class Crab{
   constructor(x,y,r,stateLife){
     this.x = x;
@@ -15,6 +18,9 @@ export class Crab{
     this.image = loadImage('./platform/home/apps/sandtable/components/crabe.png');
     this.stateLife = stateLife;
     this.deathTime = 0;
+    let firework;
+    console.log(this.firework);
+    this.angle = 0;
   }
   
   move(){
@@ -59,47 +65,88 @@ export class Crab{
   
   show(sketch){
     if(this.stateLife == true){
-      sketch.fill(255,0,0);
-      sketch.noStroke();
+      
+      this.firework = undefined;
       sketch.push();
       sketch.translate(this.x,this.y);
-      sketch.circle(0,0,30);
+      sketch.rotate(this.angle);
+      sketch.fill(173,255,47);
+      sketch.noStroke();
+      //head
+      sketch.circle(0,0,70);
+      sketch.ellipse(0,8,82,50)
       sketch.push();
-      sketch.rotate(PI/6);
-      sketch.ellipse(-20,-3,30,15);
-      sketch.fill(0);
-      sketch.circle(-23,-7,7);
+      //ears
+      sketch.rotate(PI/2.5);
+      sketch.ellipse(-35,0,72,25);
+      sketch.fill(80,200,120);
+      sketch.ellipse(-45,0,32,15);
       sketch.pop();
       sketch.push();
-      sketch.rotate(-PI/6);
-      sketch.ellipse(+20,-3,30,15);
-      sketch.fill(0);
-      sketch.circle(23,-7,7);
+      sketch.rotate(-PI/2.5);
+      sketch.ellipse(35,0,72,25);
+      sketch.fill(80,200,120);
+      sketch.ellipse(45,0,32,15);
       sketch.pop();
-      sketch.fill(0);
-      sketch.rect(-3,-5,2,7);
-      sketch.rect(3,-5,2,7);
-      sketch.noFill();
+      //teeth
+      sketch.fill(255);
+      sketch.rect(-6,23,5,15);
+      sketch.rect(1,23,5,15);
+      //eyes
       sketch.stroke(0);
-      sketch.arc(1, 5, .6*10, .6*10, .1*PI, .9*PI);
-      sketch.fill(255,0,0);
+      sketch.ellipse(-7,-10,10,20);
+      sketch.ellipse(7,-10,10,20);
+      sketch.fill(0);
+      sketch.ellipse(-7,-5,8,10);
+      sketch.ellipse(7,-5,8,10);
+      //nose
+      sketch.ellipse(0,8,8,5);
+      sketch.line(0,8,0,18);
+      
+      sketch.fill(255);
+      sketch.stroke(255);
+      sketch.circle(-9,-8,2);
+      sketch.circle(5,-8,2);
+      //smile
+      sketch.stroke(0);
+      sketch.noFill();
+      sketch.arc(0, 15, 0.6*30, 0.6*20, 0.1*PI, 0.9*PI);
+      //steuch
+      sketch.stroke(0);
+      sketch.noFill();
+      sketch.line(-45, -3, -22, 5);
+      sketch.line(-45, 10, -22, 10);
+      sketch.line(-45, 25, -22, 15);
+      sketch.line(45, -3, 22, 5);
+      sketch.line(45, 10, 22, 10);
+      sketch.line(45, 25, 22, 15);
       sketch.pop();
+      this.angle +=0.025;
 
     }
     else{
+      if (this.firework == undefined){
+      this.firework = new Fireworks(this.x,this.y);
+      }
+      //this.firework = new Fireworks(this.x,this.y);
+      this.firework.showFirework(sketch);
       sketch.fill(211,211,211);
-      sketch.noStroke();
-      sketch.rect(this.x-10,this.y+11,20,15);
-      sketch.circle(this.x, this.y, 40);
+      sketch.noStroke();  
+      sketch.push();
+      sketch.translate(this.x,this.y);
+      sketch.scale(2);
+      sketch.rect(-10,+11,20,15);
+      sketch.circle(0, 0, 40);
       sketch.fill(0);
-      sketch.circle(this.x - 7, this.y - 1, this.w/6);
-      sketch.circle(this.x + 7, this.y - 1, this.w/6);
-      
+      sketch.circle(- 7,- 1, 10);
+      sketch.circle(7, - 1, 10);     
       sketch.fill(0);
-      sketch.rect(this.x-4,this.y+18,3,9);
-      sketch.rect(this.x+2,this.y+18,3,9);
+      sketch.rect(-4,18,3,9);
+      sketch.rect(2,18,3,9);
+      sketch.pop();
       this.xspeed = 0; 
       this.yspeed = 0;
+
     }
   }
   
