@@ -61,15 +61,13 @@ export class Balls {
         for(let i = 0; i < this.ball_nb; i++){
             for(let j = 0; j < this.ball_nb; j++){
                 if(i!=j){
-                    if(120>sqrt(sq(this.balls[i].x-this.balls[j].x)+sq(this.balls[i].y-this.balls[j].y))){
- 
+                    if(80>sqrt(sq(this.balls[i].x-this.balls[j].x)+sq(this.balls[i].y-this.balls[j].y))){
+                        
                         sketch.fill(200,0,0)
                         sketch.circle(260,300,100)
                         sketch.circle(this.balls[i].x,this.balls[i].y, 30)
                         pianoA4.play()
-   
-                        
-                        
+             
                     }
                 }
             }
