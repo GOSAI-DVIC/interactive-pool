@@ -21,6 +21,7 @@ export class Crab{
     let firework;
     console.log(this.firework);
     this.angle = 0;
+    this.alpha = 255;
   }
   
   move(){
@@ -64,6 +65,7 @@ export class Crab{
 
   
   show(sketch){
+    //this.alpha = 255;
     if(this.stateLife == true){
       
       this.firework = undefined;
@@ -126,11 +128,11 @@ export class Crab{
     }
     else{
       if (this.firework == undefined){
+        
       this.firework = new Fireworks(this.x,this.y);
       }
-      //this.firework = new Fireworks(this.x,this.y);
       this.firework.showFirework(sketch);
-      sketch.fill(211,211,211);
+      sketch.fill(211,211,211,this.alpha);
       sketch.noStroke();  
       sketch.push();
       sketch.translate(this.x,this.y);
@@ -146,6 +148,7 @@ export class Crab{
       sketch.pop();
       this.xspeed = 0; 
       this.yspeed = 0;
+      this.alpha = this.alpha * 0.99;
 
     }
   }

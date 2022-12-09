@@ -106,9 +106,11 @@ export const sandtable = new p5(sketch => {
             //    console.log(crabs[i].stateLife);
             //    
             //}   
-            if(crabs[i].stateLife == false && millis()-crabs[i].deathTime >= 10000){
-                
+            if(crabs[i].stateLife == false && millis()-crabs[i].deathTime >= 3000){
+                crabs[i].x = 0;
+                crabs[i].y = random(height);
                 crabs[i].stateLife = true;
+                crabs[i].alpha = 255;
             }
         } 
         
