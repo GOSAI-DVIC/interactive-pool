@@ -267,7 +267,7 @@ export const menu = new p5((sketch) => {
     function draw_menu(sketch) {
         if(menu_state == true) {
             open_gif.hide()
-            close_gif.position(690, 400);
+            close_gif.position(840, 400);
             // sketch.circle(menu_position_x - 210, 400, 20);
             close_gif.show()
             if(index_x_a != 0){
