@@ -148,7 +148,7 @@ export class Crab{
       sketch.pop();
       this.xspeed = 0; 
       this.yspeed = 0;
-      this.alpha = this.alpha * 0.99;
+      this.alpha = this.alpha -0.5;
 
     }
   }

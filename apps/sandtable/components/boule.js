@@ -50,13 +50,13 @@ export class Bubble{
   
   
   show(sketch){
-    sketch.push();
-    sketch.stroke(0,0,255)
-      sketch.strokeWeight(8)
-      sketch.noFill()
-      // sketch.fill(0)
-      sketch.circle(this.x,this.y,this.r)
-    sketch.pop();
+    // sketch.push();
+    // sketch.stroke(0,0,255)
+    //   sketch.strokeWeight(8)
+    //   sketch.noFill()
+    //   // sketch.fill(0)
+    //   sketch.circle(this.x,this.y,this.r)
+    // sketch.pop();
   }
   
   

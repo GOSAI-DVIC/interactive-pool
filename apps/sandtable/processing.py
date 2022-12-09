@@ -9,8 +9,8 @@ class Application(BaseApplication):
         self.requires["ball"] = ["balls", "fps"]
         self.time = 0
         self.is_exclusive = True
-        self.applications_allowed = ["menu", "show_hands"]
-        self.applications_required = []
+        self.applications_allowed = ["menu", "show_hands", "balls"]
+        self.applications_required = ["balls"]
 
     def listener(self, source, event, data):
         super().listener(source, event, data)
