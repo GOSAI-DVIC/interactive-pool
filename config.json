@@ -8,7 +8,7 @@
         "flip": false
     },
     "applications": {
-        "startup": ["show_hands", "menu", "balls"],
+        "startup": ["voice_command"],
         "disabled": [],
         "menu_control": ["triangles", "affine", "balls", "sandtable"],
         "no_menu_tutorial_gif" : ["triangles", "affine"]
