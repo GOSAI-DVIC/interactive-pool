@@ -32,10 +32,10 @@ export class Crab{
         this.x = 0;
       }
       if(this.y>height){
-      this.y = 0;
+      this.yspeed1 = -(this.yspeed1);
       }
       if(this.y<0){
-      this.y = height;
+        this.yspeed1 = -(this.yspeed1);
       }
       if(this.x<0){
         this.x=width;

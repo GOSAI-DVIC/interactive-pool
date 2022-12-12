@@ -96,36 +96,30 @@ export const sandtable = new p5(sketch => {
 
             for (let ball of balls) {
                 if (dist(ball.x, ball.y, crabs[i].x, crabs[i].y)<(crabs[i].getR()/2) + (ball.getR()/2)) {
-                    
+                    if(crabs[i].stateLife == true ){
+                        crabs[i].deathTime = millis();
+                    }
                     crabs[i].stateLife = false;
-                    crabs[i].deathTime = millis();
+                    
                 }  
             } 
-            //if(i==1){
-            //    console.log(crabs[i].xspeed1);
-            //    console.log(crabs[i].stateLife);
-            //    
-            //}   
+        } 
+        
+        for(let i=0; i<crabs.length; i++){
             if(crabs[i].stateLife == false && millis()-crabs[i].deathTime >= 3000){
                 crabs[i].x = 0;
                 crabs[i].y = random(height);
                 crabs[i].stateLife = true;
                 crabs[i].alpha = 255;
+
             }
-        } 
-        
-        //if(count >= 6){
-        //    for (var i = 0; i<crabs.length; i++){
-        //        crabs[i].stateLife = true;
-        //    }
-        //    count = 0;
-        //}
-        
+
+        }
         for(let i=0; i<crabs.length; i++){
             crabs[i].move();
             crabs[i].show(sketch);
         }
-        
+
         
         sketch.pop();
     };
