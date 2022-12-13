@@ -64,7 +64,7 @@ export class Balls {
     }
 
     isstopped(){
-        if(this.frame > 0){
+        if(this.frame > 10){
             for(let a = 0; a < this.ball_nb; a++){
                 if(this.balls[a].x == this.XBallFrameBefore[a] && this.balls[a].y == this.YBallFrameBefore[a]){
                     this.ballmoving[a] = 'false';
@@ -73,10 +73,11 @@ export class Balls {
                     this.ballmoving[a] = 'true';
                 }
             }
-            for(let a = 0; a < this.ball_nb; a++){
-                this.XBallFrameBefore[a] = this.balls[a].x
-                this.YBallFrameBefore[a] = this.balls[a].y
-            }
+
+        }
+        for(let a = 0; a < this.ball_nb; a++){
+            this.XBallFrameBefore[a] = this.balls[a].x
+            this.YBallFrameBefore[a] = this.balls[a].y
         }
         this.frame++
     }
@@ -86,11 +87,13 @@ export class Balls {
         for(let i = 0; i < this.ball_nb; i++){
             for(let j = 0; j < this.ball_nb; j++){
                 if(i!=j){
-                    if(80>sqrt(sq(this.balls[i].x-this.balls[j].x)+sq(this.balls[i].y-this.balls[j].y))){
-                        sketch.fill(200,0,0)
-                        sketch.circle(260,300,100)
-                        sketch.circle(this.balls[i].x,this.balls[i].y, 30)
-                        pianoA4.play()
+                    if(this.ballmoving[i] == "true" && this.ballmoving[j] == "true"){
+                        if(80>sqrt(sq(this.balls[i].x-this.balls[j].x)+sq(this.balls[i].y-this.balls[j].y))){
+                            sketch.fill(200,0,0)
+                            sketch.circle(260,300,100)
+                            sketch.circle(this.balls[i].x,this.balls[i].y, 30)
+                            pianoA4.play()
+                        }
                     }
                 }
             }
