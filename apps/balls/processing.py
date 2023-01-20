@@ -13,6 +13,6 @@ class Application(BaseApplication):
         super().listener(source, event, data)
         
         if source == "ball" and data is not None:
-            if event == "balls": self.server.send_data("ball", data)
+            if event == "balls": self.server.send_data("applications_balls_positions", data)
             if event == "fps"  : self.server.send_data("fps",  data)
             # if event == "cue_data": self.server.send_data("cue", data)
