@@ -2,6 +2,12 @@ import {
     audioMedia,
     navBar
 } from "../display.js"
+import {
+    Triangle
+} from "../components/triangle.js"
+import {
+    Ball
+} from "../components/ball.js"
 
 let goDefaultNextStep = false;
 let firstRun = true;
@@ -12,6 +18,7 @@ let pauseTrigger = false;
 let repeatTrigger = false;
 
 let startTime = 0;
+let firstAudio = true;
 let helpTrigger = false;
 let solutionTrigger = false;
 let mediatriceFound = false;
@@ -23,7 +30,7 @@ let By = 7 * height / 8
 
 let point1_x, point1_y, point2_x, point2_y, H1, H2, I1, I2, J1, J2, K1, K2, A1, A2, A3, helpPoint
 
-export function mediatricePracticeShow(sketch, f, balls) {
+export function mediatricePracticeTriangleShow(sketch, f, balls) {
     if (firstRun) {
         onEnter(balls)
     }
@@ -35,43 +42,51 @@ export function mediatricePracticeShow(sketch, f, balls) {
     sketch.textFont(f, 48);
     sketch.text("Mediatrice - Pratique :", 145, 95);
 
-    // console.log(millis() - startTime)
-    if ((helpTrigger == false) && (millis() - startTime > 20000)) {
-        helpTrigger = true;
-        audioMedia.stopSound();
-        audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/4_aide_mediatrice.wav")
-    }
-    if (helpTrigger==true && solutionTrigger==false && mediatriceFound==false) {
-        sketch.noStroke()
-        sketch.fill(255, 255, 0)
-        sketch.circle(helpPoint.x, helpPoint.y, 90)
-    }
-    
-    if ((solutionTrigger == false) && (millis() - startTime > 40000)) {
-        solutionTrigger = true;
-        audioMedia.stopSound();
-        audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/6_solution_mediatrice_de_AB.wav")
+    if(firstAudio && audioMedia.checkIfAudioEnded()) {
+        firstAudio = false;
+        audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/9_mediatrices_triangle_practice.wav")
     }
 
+    triangle.show(sketch)
+    triangle.showLetter(sketch, f)
+
+    //REPRENDRE ICI
+
+    // if ((helpTrigger == false) && (millis() - startTime > 20000)) {
+    //     helpTrigger = true;
+    //     audioMedia.stopSound();
+    //     audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/4_aide_mediatrice.wav")
+    // }
+    // if (helpTrigger==true && solutionTrigger==false && mediatriceFound==false) {
+    //     sketch.noStroke()
+    //     sketch.fill(255, 255, 0)
+    //     sketch.circle(helpPoint.x, helpPoint.y, 90)
+    // }
+    // if ((solutionTrigger == false) && (millis() - startTime > 40000)) {
+    //     solutionTrigger = true;
+    //     audioMedia.stopSound();
+    //     audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/6_solution_mediatrice_de_AB.wav")
+    // }
+
     sketch.push()
-    draw_segment(sketch, f)
-    if(!solutionTrigger) {
-        place_mediatrice(sketch, balls)
-    }
-    if (mediatriceFound == true || solutionTrigger == true) {
-        showSolution(sketch)
-        if(audioMedia.checkIfAudioEnded()) {
-            goDefaultNextStep = true;
-        }
-    }
+    
+    // if(!solutionTrigger) {
+    //     place_mediatrice(sketch, balls)
+    // }
+    // if (mediatriceFound == true || solutionTrigger == true) {
+    //     showSolution(sketch)
+    //     if(audioMedia.checkIfAudioEnded()) {
+    //         goDefaultNextStep = true;
+    //     }
+    // }
     sketch.pop()
     
 
     if (goDefaultNextStep == true) {
         onExit()
-        return "mediatricePracticeTriangle"
+        return "start"
     }
-    return "mediatricePractice"
+    return "mediatricePracticeTriangle"
 }
 
 function sleep(delay) {
@@ -79,9 +94,14 @@ function sleep(delay) {
     while (new Date().getTime() < start + delay);
 }
 
+let triangle
 function onEnter(balls) {
+    let b1 = new Ball(width / 3 + 80, 3 * height / 4 + 70)
+    let b2 = new Ball(2 * width / 3 + 74, 3.2 * height / 4)
+    let b3 = new Ball(width / 2 - 80, 74+ height / 4)
+    triangle = new Triangle(b1, b2, b3)
     firstRun = false;
-    audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/3_mediatrices_segment_practice.wav")
+    audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/8_Tres_bien_maintenant.wav")
     computeSolution(balls)
     startTime = millis()
 }
@@ -153,7 +173,7 @@ function place_mediatrice(sketch, balls) {
         // console.log(mediatriceFound)
 
         if (mediatriceFound == false && Math.abs(dist(A_balls_ref.x, A_balls_ref.y, balls.balls[0].x, balls.balls[0].y) - dist(B_balls_ref.x, B_balls_ref.y, balls.balls[0].x, balls.balls[0].y)) < tolerance && Math.abs(dist(A_balls_ref.x, A_balls_ref.y, balls.balls[1].x, balls.balls[1].y) - dist(B_balls_ref.x, B_balls_ref.y, balls.balls[1].x, balls.balls[1].y)) < tolerance) {
-            // sketch.text("Bravo !", 150, 250);
+            sketch.text("Bravo !", 150, 250);
             mediatriceFound = true
             audioMedia.stopSound()
             audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/7_Bravo_tu_as_trouve.wav")

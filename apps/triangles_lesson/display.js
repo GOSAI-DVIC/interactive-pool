@@ -1,9 +1,25 @@
-import {Balls} from "./components/balls.js";
-import {startShow} from "./states/start.js"
-import {introductionShow} from "./states/introduction.js";
-import {mediatriceLessonSegmentShow} from "./states/mediatriceLessonSegment.js"
-import {mediatriceLessonTriangleShow} from "./states/mediatriceLessonTriangle.js"
-import {mediatricePracticeShow} from "./states/mediatricePractice.js"
+import {
+    Balls
+} from "./components/balls.js";
+import {
+    startShow
+} from "./states/start.js"
+import {
+    introductionShow
+} from "./states/introduction.js";
+import {
+    mediatriceLessonSegmentShow
+} from "./states/mediatriceLessonSegment.js"
+import {
+    mediatriceLessonTriangleShow
+} from "./states/mediatriceLessonTriangle.js"
+import {
+    mediatricePracticeShow
+} from "./states/mediatricePractice.js"
+import {
+    mediatricePracticeTriangleShow
+} from "./states/mediatricePracticeTriangle.js"
+
 
 let audio
 let balls = new Balls();
@@ -14,10 +30,8 @@ export const triangles_lesson = new p5((sketch) => {
     sketch.name = "triangles_lesson";
     sketch.activated = false;
 
-    
     let f;
-    // let fps = "30.00";
-    let state="start" //"start"
+    let state = "start" //"start"
 
     sketch.preload = () => {
         f = loadFont("/gosai/pool/core/server/assets/FallingSky-JKwK.otf");
@@ -50,9 +64,9 @@ export const triangles_lesson = new p5((sketch) => {
 
         sketch.push();
 
-        sketch.translate(width,height)
+        sketch.translate(width, height)
         sketch.rotate(sketch.PI);
-    
+
         //debug: show table boundaries
         sketch.stroke(255)
         sketch.line(0, 0, sketch.width, 0)
@@ -61,8 +75,8 @@ export const triangles_lesson = new p5((sketch) => {
         sketch.line(sketch.width, 0, sketch.width, sketch.height)
 
         // state machine
-        
-        switch(state) {
+
+        switch (state) {
             case "start":
                 state = startShow(sketch, f, balls);
                 break;
@@ -78,6 +92,9 @@ export const triangles_lesson = new p5((sketch) => {
             case "mediatricePractice":
                 state = mediatricePracticeShow(sketch, f, balls);
                 break;
+            case "mediatricePracticeTriangle":
+                state = mediatricePracticeTriangleShow(sketch, f, balls);
+                break;
             default:
                 break;
         }
@@ -86,74 +103,71 @@ export const triangles_lesson = new p5((sketch) => {
 });
 
 export let navBar = {
-    showPlayPauseButton: function(sketch, pause){
+    showPlayPauseButton: function (sketch, pause) {
         sketch.push()
-        sketch.translate(115, 80)
+        sketch.translate(145, 900)
 
         sketch.stroke(255)
         sketch.strokeWeight(3)
-        
-        if(pause == true)
-        {
+
+        if (pause == true) {
             sketch.noFill()
             sketch.triangle(2, 0, 2, 30, 32, 15)
             sketch.fill(255, 200, 0);
-        }
-        else
-        {
+        } else {
             sketch.fill(255)
             sketch.rect(0, 0, 11, 30)
             sketch.rect(19, 0, 11, 30)
             sketch.noFill()
         }
-        sketch.circle(15,15,70)
+        sketch.circle(15, 15, 70)
         sketch.pop()
     },
-    showRepeatButton: function(sketch, repeat){
+    showRepeatButton: function (sketch, repeat) {
         sketch.push()
-        sketch.translate(245, 80)
+        sketch.translate(275, 900)
         sketch.scale(-1, 1)
 
         sketch.stroke(255)
         sketch.strokeWeight(3)
         sketch.noFill()
-        sketch.circle(15,15,70)
+        sketch.circle(15, 15, 70)
 
-        if(repeat == true && refreshCircleTrigger >= 0) {
-            sketch.fill(255, 200, 0);
-            sketch.circle(15,15,70+refreshCircleTrigger)
+        if (repeat == true && refreshCircleTrigger >= 0) {
+            sketch.fill(255, 200, 0); // yellow
+            sketch.circle(15, 15, 70 + refreshCircleTrigger)
             refreshCircleTrigger += 1
         }
         if (refreshCircleTrigger > 50) {
             refreshCircleTrigger = -1
         }
-        if(repeat == false) {
+        if (repeat == false) {
             refreshCircleTrigger = 0
         }
         sketch.noFill()
-        sketch.arc(15,15,33,33,0, radians(295))
-        
+        sketch.arc(15, 15, 33, 33, 0, radians(295))
+
         sketch.strokeWeight(0)
         sketch.fill(255)
         sketch.push()
-        sketch.translate(15,10)
+        sketch.translate(15, 10)
         sketch.rotate(radians(-15))
-        sketch.triangle(0,0, 15,-15, 15, 0)
+        sketch.triangle(0, 0, 15, -15, 15, 0)
         sketch.pop()
         sketch.pop()
     },
-    checkPauseButtons: function(){
+    checkPauseButtons: function () {
         for (let i = 0; i < balls.balls.length; i++) {
-            if (balls.balls[i].x < (width - 115) && balls.balls[i].x > (width- 185) && balls.balls[i].y < (height - 70) && balls.balls[i].y > (height-140)) {
-                    return true
+            if (balls.balls[i].x < (width - 125) && balls.balls[i].x > (width - 195) && balls.balls[i].y < (height - 890) && balls.balls[i].y > (height - 960)) {
+                return true
             }
         }
         return false
     },
-    checkRepeatButtons: function(){
+    checkRepeatButtons: function () {
         for (let i = 0; i < balls.balls.length; i++) {
-            if (balls.balls[i].x < (width - 205) && balls.balls[i].x > (width- 255) && balls.balls[i].y < (height - 70) && balls.balls[i].y > (height-140)) {
-                return true    
+            if (balls.balls[i].x < (width - 220) && balls.balls[i].x > (width - 270) && balls.balls[i].y < (height - 890) && balls.balls[i].y > (height - 960)) {
+                return true
             }
         }
         return false
@@ -161,32 +175,34 @@ export let navBar = {
 }
 
 export let audioMedia = {
-    playSound: function(sound) {
+    playSound: function (sound) {
         audio = new Audio(sound);
         audio.play();
     },
-    pauseSound: function() {
+    pauseSound: function () {
         audio.pause();
     },
-    stopSound: function() {
+    stopSound: function () {
         audio.pause();
         audio.currentTime = 0;
     },
-    resumeSound: function() {
+    resumeSound: function () {
         audio.play();
     },
-    restartSound: function() {
+    restartSound: function () {
         audio.currentTime = 0;
         audio.play();
     },
-    checkIfAudioEnded: function() {
-        audio.onended = function() {
+    checkIfAudioEnded: function () {
+        audio.onended = function () {
             audioEnded = true;
         }
         if (audioEnded == true) {
             audioEnded = false;
             return true
         }
+    },
+    getAudioTime: function () {
+        return audio.currentTime
     }
 }
-

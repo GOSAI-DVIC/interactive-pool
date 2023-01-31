@@ -64,4 +64,21 @@ export class Balls {
         return round(acos(this.distanceOf2Balls(index_ball_2,index_ball_3)
                         / this.distanceOf2Balls(index_ball_1,index_ball_2)) * 180 / PI)
     }
+
+    intersectPoint(point1, point2, point3, point4) {
+        let ua = ((point4.x - point3.x) * (point1.y - point3.y) -
+                (point4.y - point3.y) * (point1.x - point3.x)) /
+            ((point4.y - point3.y) * (point2.x - point1.x) -
+                (point4.x - point3.x) * (point2.y - point1.y));
+
+        let ub = ((point2.x - point1.x) * (point1.y - point3.y) -
+                (point2.y - point1.y) * (point1.x - point3.x)) /
+            ((point4.y - point3.y) * (point2.x - point1.x) -
+                (point4.x - point3.x) * (point2.y - point1.y));
+
+        let x = point1.x + ua * (point2.x - point1.x);
+        let y = point1.y + ua * (point2.y - point1.y);
+
+        return createVector(x, y)
+    }
 }

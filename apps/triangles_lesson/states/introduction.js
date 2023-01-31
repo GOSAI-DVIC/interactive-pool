@@ -1,8 +1,13 @@
-import {audioMedia, navBar} from "../display.js"
+import {
+  audioMedia,
+  navBar
+} from "../display.js"
 
 let goDefaultNextStep = false;
-let firstRun= true;
+let firstRun = true;
 
+let pause = false;
+let repeat = false;
 let pauseTrigger = false;
 let repeatTrigger = false;
 
@@ -10,71 +15,53 @@ let size = 200;
 let angle_triangle_perpendicular_bijector = 0;
 let angle_segment = 10;
 let angle_triangle_altitude = 0;
-let x_triangle_perpendicular_bijector=1200
-let x_segment=-size
-let x_triangle_altitude=400
+let x_triangle_perpendicular_bijector = 1200
+let x_segment = -size
+let x_triangle_altitude = 400
 
-// audio_intro.onended = function() {
-//   goDefaultNextStep = true;
-// };
 
 export function introductionShow(sketch, f) {
-    if(firstRun) {onEnter()}
+  if (firstRun) {
+    onEnter()
+  }
 
-    let pause = navBar.checkPauseButtons()
-    let repeat = navBar.checkRepeatButtons()
-    navBar.showPlayPauseButton(sketch, pause)
-    navBar.showRepeatButton(sketch, repeat)
-    if(audioMedia.checkIfAudioEnded()) {
-      goDefaultNextStep = true;
-    }
-    if(pause == true) {
-      audioMedia.pauseSound()
-      pauseTrigger = true;
-    }
-    if(pause == false && pauseTrigger == true) {
-      audioMedia.resumeSound()
-      pauseTrigger = false;
-    }
-    if(repeat == true) {
-      audioMedia.restartSound()
-      repeatTrigger = true;
-    }
-    if(repeat == false && repeatTrigger == true) {
-      repeatTrigger = false;
-    }
+  showAudioButtons(sketch)
 
+  sketch.angleMode(RADIANS)
+  rotating_triangle_perpendicular_bijector(sketch)
+  rotating_triangle_altitude(sketch)
+  rotating_segment(sketch)
 
-    sketch.angleMode(RADIANS)
-    rotating_triangle_perpendicular_bijector(sketch)
-    rotating_triangle_altitude(sketch)
-    rotating_segment(sketch)
+  angle_triangle_altitude += 0.002;
+  angle_triangle_perpendicular_bijector += 0.003;
+  angle_segment -= 0.005;
+  x_triangle_perpendicular_bijector += 1;
+  x_segment += 1;
+  x_triangle_altitude += 1;
 
-    angle_triangle_altitude += 0.002;
-    angle_triangle_perpendicular_bijector += 0.003;
-    angle_segment -= 0.005;
-    x_triangle_perpendicular_bijector += 1;
-    x_segment += 1;
-    x_triangle_altitude += 1;
-    
-    if(x_triangle_perpendicular_bijector>width + size) {x_triangle_perpendicular_bijector=-size}
-    if(x_segment>width + size) {x_segment=-size}
-    if(x_triangle_altitude>width + size) {x_triangle_altitude=-size}
+  if (x_triangle_perpendicular_bijector > width + size) {
+    x_triangle_perpendicular_bijector = -size
+  }
+  if (x_segment > width + size) {
+    x_segment = -size
+  }
+  if (x_triangle_altitude > width + size) {
+    x_triangle_altitude = -size
+  }
 
-    sketch.textFont(f, 48);
-    sketch.textAlign(CENTER, CENTER);
-    sketch.fill(255);
-    sketch.text("Introduction!", 425, 85); 
+  sketch.textFont(f, 48);
+  sketch.textAlign(LEFT, CENTER);
+  sketch.fill(255);
+  sketch.text("Introduction!", 145, 95);
 
-    if (goDefaultNextStep == true) {
-      onExit()
-      return "mediatriceLessonSegment"
-    }
-    return "introduction"
+  if (goDefaultNextStep == true) {
+    onExit()
+    return "mediatriceLessonSegment"
+  }
+  return "introduction"
 }
 
 function onEnter() {
-  // audio_intro.play();
   audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/0_intro.wav")
   firstRun = false;
 }
@@ -82,6 +69,32 @@ function onEnter() {
 function onExit() {
   firstRun = true;
   goDefaultNextStep = false;
+  audioMedia.stopSound()
+}
+
+function showAudioButtons(sketch) {
+  pause = navBar.checkPauseButtons()
+  repeat = navBar.checkRepeatButtons()
+  navBar.showPlayPauseButton(sketch, pause)
+  navBar.showRepeatButton(sketch, repeat)
+  if (audioMedia.checkIfAudioEnded()) {
+    goDefaultNextStep = true;
+  }
+  if (pause == true && pauseTrigger == false) {
+    audioMedia.pauseSound()
+    pauseTrigger = true;
+  }
+  if (pause == false && pauseTrigger == true) {
+      audioMedia.resumeSound()
+      pauseTrigger = false;
+  }
+  if (repeat == true && repeatTrigger == false) {
+      audioMedia.restartSound()
+      repeatTrigger = true;
+  }
+  if (repeat == false) {
+      repeatTrigger = false;
+  }
 }
 
 function rotating_triangle_perpendicular_bijector(sketch) {
@@ -89,28 +102,28 @@ function rotating_triangle_perpendicular_bijector(sketch) {
   sketch.translate(x_triangle_perpendicular_bijector, 500)
   sketch.rotate(angle_triangle_perpendicular_bijector);
   sketch.noFill();
-  
+
   //Triangle
   sketch.stroke(255)
   sketch.strokeWeight(5)
   sketch.triangle(0, 0, size, 0, 0, size);
-  
+
   //Perpendicular bisector
-  sketch.stroke(255,0,255)
+  sketch.stroke(255, 0, 255)
   sketch.strokeWeight(3)
-  sketch.line(-20,-20,size*2/3,size*2/3)
-  
+  sketch.line(-20, -20, size * 2 / 3, size * 2 / 3)
+
   // equidistance markers
   sketch.strokeWeight(3)
   //circle(1/4 * size, 3/4 * size, 10)
-  
+
   //line(3/4 * size-10, 1/4 * size-10, 3/4 * size+10, 1/4 * size+10)
-  sketch.line(3/4 * size-10-2, 1/4 * size-10+2, 3/4 * size+10-2, 1/4 * size+10+2)
-  sketch.line(3/4 * size-10+2, 1/4 * size-10-2, 3/4 * size+10+2, 1/4 * size+10-2)
-  
-  sketch.line(1/4 * size-10-2, 3/4 * size-10+2, 1/4 * size+10-2, 3/4 * size+10+2)
-  sketch.line(1/4 * size-10+2, 3/4 * size-10-2, 1/4 * size+10+2, 3/4 * size+10-2)
-  
+  sketch.line(3 / 4 * size - 10 - 2, 1 / 4 * size - 10 + 2, 3 / 4 * size + 10 - 2, 1 / 4 * size + 10 + 2)
+  sketch.line(3 / 4 * size - 10 + 2, 1 / 4 * size - 10 - 2, 3 / 4 * size + 10 + 2, 1 / 4 * size + 10 - 2)
+
+  sketch.line(1 / 4 * size - 10 - 2, 3 / 4 * size - 10 + 2, 1 / 4 * size + 10 - 2, 3 / 4 * size + 10 + 2)
+  sketch.line(1 / 4 * size - 10 + 2, 3 / 4 * size - 10 - 2, 1 / 4 * size + 10 + 2, 3 / 4 * size + 10 - 2)
+
   sketch.pop();
 }
 
@@ -121,7 +134,7 @@ function rotating_triangle_perpendicular_bijector(sketch) {
 // let Cx = random(500)
 // let Cy = random(500)
 
-function rotating_triangle_altitude (sketch) {
+function rotating_triangle_altitude(sketch) {
   let Ax = 307
   let Ay = 459
   let Bx = 247
@@ -136,14 +149,14 @@ function rotating_triangle_altitude (sketch) {
   sketch.rotate(angle_triangle_perpendicular_bijector);
   //translate(300,200)
   sketch.noFill();
-  
+
   //Triangle
   sketch.stroke(255)
   sketch.strokeWeight(3)
   sketch.triangle(Ax, Ay, Bx, By, Cx, Cy);
 
   //altitudes
-  sketch.stroke(0,255,0)
+  sketch.stroke(0, 255, 0)
   sketch.strokeWeight(3)
   let [Hx, Hy, Ix, Iy, Jx, Jy] = get_triangle_altitudes_coordinates(Ax, Ay, Bx, By, Cx, Cy)
 
@@ -177,7 +190,7 @@ function rotating_triangle_altitude (sketch) {
   // sketch.circle(point1_x, point1_y, 10)
   // sketch.circle(Ix-(1/10)*(Ix_prime-Bx), Iy-(1/10)*(Iy_prime-By), 10)
   // sketch.circle(Jx-(1/10)*(Jx_prime-Cx), Jy-(1/10)*(Jy_prime-Cy), 10)
-  
+
   // B est point1 et A est H
   // sketch.circle(Hx, Hy, 10)
   // let m = (point1_y - Hy) / (point1_x - Hx)
@@ -192,20 +205,19 @@ function rotating_triangle_altitude (sketch) {
 
   // Draw dotted lines if required
   // sketch.drawingContext.setLineDash([5, 15]); //Doesn't work
-  if(calculateAngle(Bx, By, Ax, Ay,  Cx, Cy)>90){ //BÂC is optus, draw dashlines is required
+  if (calculateAngle(Bx, By, Ax, Ay, Cx, Cy) > 90) { //BÂC is optus, draw dashlines is required
     let Lx = (k * (Ix - Ax)) + Ax
     let Ly = (k * (Iy - Ay)) + Ay
-  
+
     let Mx = (k * (Jx - Ax)) + Ax
     let My = (k * (Jy - Ay)) + Ay
-    
+
     //Draw dashlines
-    sketch.stroke(10,200,10)
+    sketch.stroke(10, 200, 10)
     sketch.strokeWeight(1)
     linedash(sketch, Ax, Ay, Lx, Ly, 10, '-')
     linedash(sketch, Ax, Ay, Mx, My, 10, '-')
-  }
-  else if(calculateAngle(Cx, Cy, Bx, By, Ax, Ay)>90){ //BĈY is optus, draw dashlines is required
+  } else if (calculateAngle(Cx, Cy, Bx, By, Ax, Ay) > 90) { //BĈY is optus, draw dashlines is required
     let Lx = (k * (Hx - Bx)) + Bx
     let Ly = (k * (Hy - By)) + By
 
@@ -213,12 +225,11 @@ function rotating_triangle_altitude (sketch) {
     let My = (k * (Jy - By)) + By
 
     //Draw dashlines
-    sketch.stroke(10,200,10)
+    sketch.stroke(10, 200, 10)
     sketch.strokeWeight(1)
     linedash(sketch, Bx, By, Lx, Ly, 10, '-')
     linedash(sketch, Bx, By, Mx, My, 10, '-')
-  }
-  else if(calculateAngle(Bx, By,  Cx, Cy, Ax, Ay)>90){ //CBY is optus, draw dashlines is required
+  } else if (calculateAngle(Bx, By, Cx, Cy, Ax, Ay) > 90) { //CBY is optus, draw dashlines is required
     let Lx = (k * (Hx - Cx)) + Cx
     let Ly = (k * (Hy - Cy)) + Cy
 
@@ -226,7 +237,7 @@ function rotating_triangle_altitude (sketch) {
     let My = (k * (Iy - Cy)) + Cy
 
     //Draw dashlines
-    sketch.stroke(10,200,10)
+    sketch.stroke(10, 200, 10)
     sketch.strokeWeight(1)
     linedash(sketch, Cx, Cy, Lx, Ly, 10, '-')
     linedash(sketch, Cx, Cy, Mx, My, 10, '-')
@@ -236,34 +247,37 @@ function rotating_triangle_altitude (sketch) {
 
 function linedash(sketch, x1, y1, x2, y2, delta, style = '-') {
   // delta is both the length of a dash, the distance between 2 dots/dashes, and the diameter of a round
-  let distance = dist(x1,y1,x2,y2);
-  let dashNumber = distance/delta;
-  let xDelta = (x2-x1)/dashNumber;
-  let yDelta = (y2-y1)/dashNumber;
+  let distance = dist(x1, y1, x2, y2);
+  let dashNumber = distance / delta;
+  let xDelta = (x2 - x1) / dashNumber;
+  let yDelta = (y2 - y1) / dashNumber;
 
-  for (let i = 0; i < dashNumber; i+= 2) {
-    let xi1 = i*xDelta + x1;
-    let yi1 = i*yDelta + y1;
-    let xi2 = (i+1)*xDelta + x1;
-    let yi2 = (i+1)*yDelta + y1;
+  for (let i = 0; i < dashNumber; i += 2) {
+    let xi1 = i * xDelta + x1;
+    let yi1 = i * yDelta + y1;
+    let xi2 = (i + 1) * xDelta + x1;
+    let yi2 = (i + 1) * yDelta + y1;
 
-    if (style == '-') { sketch.line(xi1, yi1, xi2, yi2); }
-    else if (style == '.') { sketch.point(xi1, yi1); }
-    else if (style == 'o') { sketch.ellipse(xi1, yi1, delta/2); }
+    if (style == '-') {
+      sketch.line(xi1, yi1, xi2, yi2);
+    } else if (style == '.') {
+      sketch.point(xi1, yi1);
+    } else if (style == 'o') {
+      sketch.ellipse(xi1, yi1, delta / 2);
+    }
   }
 }
 
-function rotating_segment(sketch)
-{
+function rotating_segment(sketch) {
   // //ROTATING SEGMENT
   sketch.push();
   sketch.translate(x_segment, 750)
   sketch.rotate(angle_segment);
-  
+
   sketch.stroke(255)
   sketch.strokeWeight(3)
-  sketch.line(0,0,size,0)
-  sketch.line(0,-15,0,15)
+  sketch.line(0, 0, size, 0)
+  sketch.line(0, -15, 0, 15)
   sketch.line(size, -15, size, 15)
   sketch.pop();
 }
@@ -310,7 +324,7 @@ function get_triangle_altitudes_coordinates(Ax, Ay, Bx, By, Cx, Cy) {
   //intersection (AB) with (CH)
   let Jx = (bCH - bAB) / (mAB - mCJ)
   let Jy = mAB * Jx + bAB
- 
+
   // let AB = get_distance(Ax, Ay, Bx, By)
   // let BC = get_distance(Bx, By, Cx, Cy)
   // let AC = get_distance(Ax, Ay, Cx, Cy)
@@ -333,7 +347,7 @@ function get_triangle_altitudes_coordinates(Ax, Ay, Bx, By, Cx, Cy) {
   //   console.log("Hx,Hy,Ix,Iy, Jx, Jy", Hx,Hy,Ix,Iy, Jx, Jy)
   // }
 
-  return [Hx,Hy,Ix,Iy, Jx, Jy]
+  return [Hx, Hy, Ix, Iy, Jx, Jy]
 }
 
 // function calculateAngle(p1,p2,p3) {
@@ -351,10 +365,9 @@ function calculateAngle(Ax, Ay, Bx, By, Cx, Cy) {
   let AB = get_distance(Ax, Ay, Bx, By)
   let BC = get_distance(Bx, By, Cx, Cy)
   let AC = get_distance(Ax, Ay, Cx, Cy)
-  return round(acos((BC**2 + AB**2 - AC**2)/(2*BC*AB)) * 180 / PI)
+  return round(acos((BC ** 2 + AB ** 2 - AC ** 2) / (2 * BC * AB)) * 180 / PI)
 }
 
 function get_distance(Ax, Ay, Bx, By) {
-  return sqrt((Bx - Ax)**2 + (By - Ay)**2)
+  return sqrt((Bx - Ax) ** 2 + (By - Ay) ** 2)
 }
-
