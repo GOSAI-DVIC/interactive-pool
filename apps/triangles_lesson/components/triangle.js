@@ -29,8 +29,13 @@ export class Triangle {
 
         this.circumcenter = this.intersectPoint(this.extremity1_1, this.extremity1_2, this.extremity2_1, this.extremity2_2)
 
-        this.calculateEqualSymbols()
         this.calculateRightSymbols()
+        this.calculateEqualSymbols()
+
+        //FOR ALTITUDES
+        this.k = 0.1
+        this.computeAltitudesCoordonates()
+        this.computeAltitudesEqualSymbols()
     }
 
     updateTriangleInfos(color = 255) {
@@ -150,7 +155,6 @@ export class Triangle {
 
     calculateEqualSymbols() {
 
-        let k = 0.1
         //COMPUTE | coordinnates between this.triangle[0] and this.triangle[2] (middle3)
         let D1 = createVector((this.triangle[0].x + this.middle3.x) / 2, (this.triangle[0].y + this.middle3.y) / 2)
         let D2 = createVector((this.triangle[2].x + this.middle3.x) / 2, (this.triangle[2].y + this.middle3.y) / 2)
@@ -161,19 +165,19 @@ export class Triangle {
         let extremityD2_1 = this.calculatePerpendicularBisector(D2, 2)
         let extremityD2_2 = createVector(D2.x - (extremityD2_1.x - D2.x), D2.y - (extremityD2_1.y - D2.y))
 
-        this.M1 = createVector(D1.x + k * (extremityD1_1.x - D1.x), D1.y + k * (extremityD1_1.y - D1.y))
-        this.M2 = createVector(D1.x + k * (extremityD1_2.x - D1.x), D1.y + k * (extremityD1_2.y - D1.y))
+        this.M1 = createVector(D1.x + this.k * (extremityD1_1.x - D1.x), D1.y + this.k * (extremityD1_1.y - D1.y))
+        this.M2 = createVector(D1.x + this.k * (extremityD1_2.x - D1.x), D1.y + this.k * (extremityD1_2.y - D1.y))
 
-        this.N1 = createVector(D2.x + k * (extremityD2_1.x - D2.x), D2.y + k * (extremityD2_1.y - D2.y))
-        this.N2 = createVector(D2.x + k * (extremityD2_2.x - D2.x), D2.y + k * (extremityD2_2.y - D2.y))
+        this.N1 = createVector(D2.x + this.k * (extremityD2_1.x - D2.x), D2.y + this.k * (extremityD2_1.y - D2.y))
+        this.N2 = createVector(D2.x + this.k * (extremityD2_2.x - D2.x), D2.y + this.k * (extremityD2_2.y - D2.y))
 
         //COMPUTE || coordinnates between this.triangle[0] and this.triangle[2] (middle3)
 
         // 1st double line
         let E1 = createVector((this.triangle[2].x + this.middle2.x) / 2, (this.triangle[2].y + this.middle2.y) / 2)
 
-        let F1 = createVector(E1.x + k * (this.triangle[2].x - E1.x), E1.y + k * (this.triangle[2].y - E1.y))
-        let G1 = createVector(E1.x - k * (this.triangle[2].x - E1.x), E1.y - k * (this.triangle[2].y - E1.y))
+        let F1 = createVector(E1.x + this.k * (this.triangle[2].x - E1.x), E1.y + this.k * (this.triangle[2].y - E1.y))
+        let G1 = createVector(E1.x - this.k * (this.triangle[2].x - E1.x), E1.y - this.k * (this.triangle[2].y - E1.y))
 
         let extremityF1_1 = this.calculatePerpendicularBisector(F1, 2)
         let extremityF1_2 = createVector(F1.x - (extremityF1_1.x - F1.x), F1.y - (extremityF1_1.y - F1.y))
@@ -181,17 +185,17 @@ export class Triangle {
         let extremityG1_1 = this.calculatePerpendicularBisector2(G1, this.middle2)
         let extremityG1_2 = createVector(G1.x - (extremityG1_1.x - G1.x), G1.y - (extremityG1_1.y - G1.y))
 
-        this.H1 = createVector(F1.x + k * (extremityF1_1.x - F1.x), F1.y + k * (extremityF1_1.y - F1.y))
-        this.H2 = createVector(F1.x + k * (extremityF1_2.x - F1.x), F1.y + k * (extremityF1_2.y - F1.y))
+        this.H1 = createVector(F1.x + this.k * (extremityF1_1.x - F1.x), F1.y + this.k * (extremityF1_1.y - F1.y))
+        this.H2 = createVector(F1.x + this.k * (extremityF1_2.x - F1.x), F1.y + this.k * (extremityF1_2.y - F1.y))
 
-        this.I1 = createVector(G1.x + k * (extremityG1_1.x - G1.x), G1.y + k * (extremityG1_1.y - G1.y))
-        this.I2 = createVector(G1.x + k * (extremityG1_2.x - G1.x), G1.y + k * (extremityG1_2.y - G1.y))
+        this.I1 = createVector(G1.x + this.k * (extremityG1_1.x - G1.x), G1.y + this.k * (extremityG1_1.y - G1.y))
+        this.I2 = createVector(G1.x + this.k * (extremityG1_2.x - G1.x), G1.y + this.k * (extremityG1_2.y - G1.y))
 
         // 2nd double line
         let E2 = createVector((this.triangle[1].x + this.middle2.x) / 2, (this.triangle[1].y + this.middle2.y) / 2)
-        
-        let F2 = createVector(E2.x + k * (this.triangle[1].x - E2.x), E2.y + k * (this.triangle[1].y - E2.y))
-        let G2 = createVector(E2.x - k * (this.triangle[1].x - E2.x), E2.y - k * (this.triangle[1].y - E2.y))
+
+        let F2 = createVector(E2.x + this.k * (this.triangle[1].x - E2.x), E2.y + this.k * (this.triangle[1].y - E2.y))
+        let G2 = createVector(E2.x - this.k * (this.triangle[1].x - E2.x), E2.y - this.k * (this.triangle[1].y - E2.y))
 
         let extremityF2_1 = this.calculatePerpendicularBisector(F2, 1)
         let extremityF2_2 = createVector(F2.x - (extremityF2_1.x - F2.x), F2.y - (extremityF2_1.y - F2.y))
@@ -199,11 +203,11 @@ export class Triangle {
         let extremityG2_1 = this.calculatePerpendicularBisector2(G2, this.middle2)
         let extremityG2_2 = createVector(G2.x - (extremityG2_1.x - G2.x), G2.y - (extremityG2_1.y - G2.y))
 
-        this.J1 = createVector(F2.x + k * (extremityF2_1.x - F2.x), F2.y + k * (extremityF2_1.y - F2.y))
-        this.J2 = createVector(F2.x + k * (extremityF2_2.x - F2.x), F2.y + k * (extremityF2_2.y - F2.y))
+        this.J1 = createVector(F2.x + this.k * (extremityF2_1.x - F2.x), F2.y + this.k * (extremityF2_1.y - F2.y))
+        this.J2 = createVector(F2.x + this.k * (extremityF2_2.x - F2.x), F2.y + this.k * (extremityF2_2.y - F2.y))
 
-        this.K1 = createVector(G2.x + k * (extremityG2_1.x - G2.x), G2.y + k * (extremityG2_1.y - G2.y))
-        this.K2 = createVector(G2.x + k * (extremityG2_2.x - G2.x), G2.y + k * (extremityG2_2.y - G2.y))
+        this.K1 = createVector(G2.x + this.k * (extremityG2_1.x - G2.x), G2.y + this.k * (extremityG2_1.y - G2.y))
+        this.K2 = createVector(G2.x + this.k * (extremityG2_2.x - G2.x), G2.y + this.k * (extremityG2_2.y - G2.y))
     }
 
     showLetter(sketch, f) {
@@ -250,34 +254,68 @@ export class Triangle {
     }
 
     calculateRightSymbols() {
-        let k = 0.07
-        // let A1 = createVector(this.triangle[0].x + k * (this.middle1.x - this.triangle[0].x), this.triangle[0].y + k * (this.middle1.y - this.triangle[0].y))
-        this.A1 = createVector(this.middle1.x + k * (this.triangle[0].x - this.middle1.x), this.middle1.y + k * (this.triangle[0].y - this.middle1.y))
-        this.A2 = createVector(this.middle1.x + k * (this.extremity1_2.x - this.middle1.x), this.middle1.y + k * (this.extremity1_2.y - this.middle1.y))
+        this.k = 0.07
+        // let A1 = createVector(this.triangle[0].x + this.k * (this.middle1.x - this.triangle[0].x), this.triangle[0].y + this.k * (this.middle1.y - this.triangle[0].y))
+        this.A1 = createVector(this.middle1.x + this.k * (this.triangle[0].x - this.middle1.x), this.middle1.y + this.k * (this.triangle[0].y - this.middle1.y))
+        this.A2 = createVector(this.middle1.x + this.k * (this.extremity1_2.x - this.middle1.x), this.middle1.y + this.k * (this.extremity1_2.y - this.middle1.y))
         this.A3 = createVector(this.A2.x + (this.A1.x - this.middle1.x), this.A2.y + (this.A1.y - this.middle1.y))
 
-        this.B1 = createVector(this.middle2.x + k * (this.triangle[1].x - this.middle2.x), this.middle2.y + k * (this.triangle[1].y - this.middle2.y))
-        this.B2 = createVector(this.middle2.x + k * (this.extremity2_2.x - this.middle2.x), this.middle2.y + k * (this.extremity2_2.y - this.middle2.y))
+        this.B1 = createVector(this.middle2.x + this.k * (this.triangle[1].x - this.middle2.x), this.middle2.y + this.k * (this.triangle[1].y - this.middle2.y))
+        this.B2 = createVector(this.middle2.x + this.k * (this.extremity2_2.x - this.middle2.x), this.middle2.y + this.k * (this.extremity2_2.y - this.middle2.y))
         this.B3 = createVector(this.B2.x + (this.B1.x - this.middle2.x), this.B2.y + (this.B1.y - this.middle2.y))
-        
-        this.C1 = createVector(this.middle3.x + k * (this.triangle[2].x - this.middle3.x), this.middle3.y + k * (this.triangle[2].y - this.middle3.y))
-        this.C2 = createVector(this.middle3.x + k * (this.extremity3_2.x - this.middle3.x), this.middle3.y + k * (this.extremity3_2.y - this.middle3.y))
-        this.C3 = createVector(this.C2.x + (this.C1.x - this.middle3.x), this.C2.y + (this.C1.y - this.middle3.y))
 
+        this.C1 = createVector(this.middle3.x + this.k * (this.triangle[2].x - this.middle3.x), this.middle3.y + this.k * (this.triangle[2].y - this.middle3.y))
+        this.C2 = createVector(this.middle3.x + this.k * (this.extremity3_2.x - this.middle3.x), this.middle3.y + this.k * (this.extremity3_2.y - this.middle3.y))
+        this.C3 = createVector(this.C2.x + (this.C1.x - this.middle3.x), this.C2.y + (this.C1.y - this.middle3.y))
+        this.k = 0.1
     }
 
     showRightSymbols(sketch) {
-        // show right symbols
+        this.showRightSymbolsAB(sketch)
+        this.showRightSymbolsBC(sketch)
+        this.showRightSymbolsAC(sketch)
+    }
+    showRightSymbolsAB(sketch) {
         sketch.stroke(255, 0, 255)
         sketch.fill(0, 0, 255)
         sketch.strokeWeight(5)
-        
         sketch.line(this.A2.x, this.A2.y, this.A3.x, this.A3.y)
         sketch.line(this.A3.x, this.A3.y, this.A1.x, this.A1.y)
+    }
+    showRightSymbolsBC(sketch) {
+        sketch.stroke(255, 0, 255)
+        sketch.fill(0, 0, 255)
+        sketch.strokeWeight(5)
         sketch.line(this.B2.x, this.B2.y, this.B3.x, this.B3.y)
         sketch.line(this.B3.x, this.B3.y, this.B1.x, this.B1.y)
+    }
+    showRightSymbolsAC(sketch) {
+        sketch.stroke(255, 0, 255)
+        sketch.fill(0, 0, 255)
+        sketch.strokeWeight(5)
         sketch.line(this.C2.x, this.C2.y, this.C3.x, this.C3.y)
         sketch.line(this.C3.x, this.C3.y, this.C1.x, this.C1.y)
+    }
+
+    showAllMediatrice(sketch) {
+        this.showAllMediatriceAB(sketch)
+        this.showAllMediatriceBC(sketch)
+        this.showAllMediatriceAC(sketch)
+    }
+    showAllMediatriceAB(sketch) {
+        this.showPerpendicularBisectorAB(sketch)
+        this.showEqualSymbolsAB(sketch)
+        this.showRightSymbolsAB(sketch)
+    }
+    showAllMediatriceBC(sketch) {
+        this.showPerpendicularBisectorBC(sketch)
+        this.showEqualSymbolsBC(sketch)
+        this.showRightSymbolsBC(sketch)
+    }
+    showAllMediatriceAC(sketch) {
+        this.showPerpendicularBisectorAC(sketch)
+        this.showEqualSymbolsAC(sketch)
+        this.showRightSymbolsAC(sketch)
     }
 
     intersectPoint(point1, point2, point3, point4) {
@@ -325,36 +363,79 @@ export class Triangle {
     }
 
     showPerpendicularBisector(sketch) {
+        this.showPerpendicularBisectorAB(sketch)
+        this.showPerpendicularBisectorBC(sketch)
+        this.showPerpendicularBisectorAC(sketch)
+    }
+
+    showPerpendicularBisectorAB(sketch) {
         sketch.push();
         sketch.strokeWeight(5)
         sketch.stroke(255, 0, 255)
-        sketch.fill(255, 0, 255);
-        sketch.circle(this.circumcenter.x, this.circumcenter.y, 15);
-        sketch.noFill();
         sketch.line(this.extremity1_1.x, this.extremity1_1.y, this.extremity1_2.x, this.extremity1_2.y)
+        // sketch.line(this.extremity2_1.x, this.extremity2_1.y, this.extremity2_2.x, this.extremity2_2.y)
+        // sketch.line(this.extremity3_1.x, this.extremity3_1.y, this.extremity3_2.x, this.extremity3_2.y)
+        sketch.pop();
+    }
+
+    showPerpendicularBisectorBC(sketch) {
+        sketch.push();
+        sketch.strokeWeight(5)
+        sketch.stroke(255, 0, 255)
+        // sketch.line(this.extremity1_1.x, this.extremity1_1.y, this.extremity1_2.x, this.extremity1_2.y)
         sketch.line(this.extremity2_1.x, this.extremity2_1.y, this.extremity2_2.x, this.extremity2_2.y)
+        // sketch.line(this.extremity3_1.x, this.extremity3_1.y, this.extremity3_2.x, this.extremity3_2.y)
+        sketch.pop();
+    }
+    showPerpendicularBisectorAC(sketch) {
+        sketch.push();
+        sketch.strokeWeight(5)
+        sketch.stroke(255, 0, 255)
+        sketch.noFill();
+        // sketch.line(this.extremity1_1.x, this.extremity1_1.y, this.extremity1_2.x, this.extremity1_2.y)
+        // sketch.line(this.extremity2_1.x, this.extremity2_1.y, this.extremity2_2.x, this.extremity2_2.y)
         sketch.line(this.extremity3_1.x, this.extremity3_1.y, this.extremity3_2.x, this.extremity3_2.y)
         sketch.pop();
     }
 
     showEqualSymbols(sketch) {
-        sketch.push();
+        this.showEqualSymbolsAB(sketch)
+        this.showEqualSymbolsBC(sketch)
+        this.showEqualSymbolsAC(sketch)
+    }
 
-        //DRAW EQUAL SYMBOLS
+    showEqualSymbolsAB(sketch) {
+        sketch.push();
+        sketch.stroke(255, 0, 255)
+        sketch.strokeWeight(5)
+        sketch.noFill()
+        // Equal symbol : Circles
+        sketch.circle((this.triangle[0].x + this.middle1.x) / 2, (this.triangle[0].y + this.middle1.y) / 2, 30);
+        sketch.circle((this.triangle[1].x + this.middle1.x) / 2, (this.triangle[1].y + this.middle1.y) / 2, 30);
+        sketch.pop();
+    }
+
+    showEqualSymbolsBC(sketch) {
+        sketch.push();
+        sketch.stroke(255, 0, 255)
+        sketch.strokeWeight(5)
+        sketch.noFill()
+        // Equal symbol : Double Lines
+        sketch.line(this.H1.x, this.H1.y, this.H2.x, this.H2.y)
+        sketch.line(this.I1.x, this.I1.y, this.I2.x, this.I2.y)
+        sketch.line(this.J1.x, this.J1.y, this.J2.x, this.J2.y)
+        sketch.line(this.K1.x, this.K1.y, this.K2.x, this.K2.y)
+        sketch.pop();
+    }
+
+    showEqualSymbolsAC(sketch) {
+        sketch.push();
         sketch.stroke(255, 0, 255)
         sketch.strokeWeight(5)
         sketch.noFill()
         // Equal symbol : Single Line
         sketch.line(this.M1.x, this.M1.y, this.M2.x, this.M2.y)
         sketch.line(this.N1.x, this.N1.y, this.N2.x, this.N2.y)
-        // Equal symbol : Double Lines
-        sketch.line(this.H1.x, this.H1.y, this.H2.x, this.H2.y)
-        sketch.line(this.I1.x, this.I1.y, this.I2.x, this.I2.y)
-        sketch.line(this.J1.x, this.J1.y, this.J2.x, this.J2.y)
-        sketch.line(this.K1.x, this.K1.y, this.K2.x, this.K2.y)
-        // Equal symbol : Circles
-        sketch.circle((this.triangle[0].x + this.middle1.x) / 2, (this.triangle[0].y + this.middle1.y) / 2, 30);
-        sketch.circle((this.triangle[1].x + this.middle1.x) / 2, (this.triangle[1].y + this.middle1.y) / 2, 30);
         sketch.pop();
     }
 
@@ -366,5 +447,316 @@ export class Triangle {
         sketch.noFill();
         sketch.circle(this.circumcenter.x, this.circumcenter.y, (this.distanceOf2Balls(this.circumcenter, this.triangle[0])) * 2)
         sketch.pop();
+    }
+
+    placeMediatriceAB(balls, tolerance = 50) {
+        if (balls.ball_nb >= 2) {
+            let A_balls_ref = createVector(-(this.triangle[0].x - width), -(this.triangle[0].y - height))
+            let B_balls_ref = createVector(-(this.triangle[1].x - width), -(this.triangle[1].y - height))
+
+            if (Math.abs(dist(A_balls_ref.x, A_balls_ref.y, balls.balls[0].x, balls.balls[0].y) - dist(B_balls_ref.x, B_balls_ref.y, balls.balls[0].x, balls.balls[0].y)) < tolerance && Math.abs(dist(A_balls_ref.x, A_balls_ref.y, balls.balls[1].x, balls.balls[1].y) - dist(B_balls_ref.x, B_balls_ref.y, balls.balls[1].x, balls.balls[1].y)) < tolerance) {
+                return true
+            }
+        }
+        return false
+    }
+
+    placeMediatriceBC(balls, tolerance = 50) {
+        if (balls.ball_nb >= 2) {
+            let B_balls_ref = createVector(-(this.triangle[1].x - width), -(this.triangle[1].y - height))
+            let C_balls_ref = createVector(-(this.triangle[2].x - width), -(this.triangle[2].y - height))
+
+            if (Math.abs(dist(C_balls_ref.x, C_balls_ref.y, balls.balls[0].x, balls.balls[0].y) - dist(B_balls_ref.x, B_balls_ref.y, balls.balls[0].x, balls.balls[0].y)) < tolerance && Math.abs(dist(C_balls_ref.x, C_balls_ref.y, balls.balls[1].x, balls.balls[1].y) - dist(B_balls_ref.x, B_balls_ref.y, balls.balls[1].x, balls.balls[1].y)) < tolerance) {
+                return true
+            }
+        }
+        return false
+    }
+
+    placeMediatriceAC(balls, tolerance = 50) {
+        if (balls.ball_nb >= 2) {
+            let A_balls_ref = createVector(-(this.triangle[0].x - width), -(this.triangle[0].y - height))
+            let C_balls_ref = createVector(-(this.triangle[2].x - width), -(this.triangle[2].y - height))
+
+            if (Math.abs(dist(A_balls_ref.x, A_balls_ref.y, balls.balls[0].x, balls.balls[0].y) - dist(C_balls_ref.x, C_balls_ref.y, balls.balls[0].x, balls.balls[0].y)) < tolerance && Math.abs(dist(A_balls_ref.x, A_balls_ref.y, balls.balls[1].x, balls.balls[1].y) - dist(C_balls_ref.x, C_balls_ref.y, balls.balls[1].x, balls.balls[1].y)) < tolerance) {
+                return true
+            }
+        }
+        return false
+    }
+    //REPRENDRE ICI : place Altitude A and C
+    placeAltitudeB(balls, tolerance = 40) {
+        if (balls.ball_nb >= 2) {
+            let B_ball_ref = createVector(-(this.triangle[1].x - width), -(this.triangle[1].y - height))
+            let I_ball_ref = createVector(-(this.Ix - width), -(this.Iy - height))
+            if((Math.abs((balls.balls[0].x-I_ball_ref.x)*(B_ball_ref.y-I_ball_ref.y) - (balls.balls[0].y-I_ball_ref.y)*(B_ball_ref.x-I_ball_ref.x)) / Math.sqrt(Math.pow(B_ball_ref.x-I_ball_ref.x, 2) + Math.pow(B_ball_ref.y-I_ball_ref.y, 2)))<tolerance){
+                if((Math.abs((balls.balls[1].x-I_ball_ref.x)*(B_ball_ref.y-I_ball_ref.y) - (balls.balls[1].y-I_ball_ref.y)*(B_ball_ref.x-I_ball_ref.x)) / Math.sqrt(Math.pow(B_ball_ref.x-I_ball_ref.x, 2) + Math.pow(B_ball_ref.y-I_ball_ref.y, 2)))<tolerance){
+                    return true
+                }
+            }
+        }
+        return false
+        // DEBUG
+        // sketch.stroke(255);
+        // sketch.fill(255);
+        // sketch.textFont(f, 48);
+        // sketch.text(d, 345, 195);
+        // sketch.text(e, 345, 295);
+    }
+
+    showHelpMediatricePoint(sketch) {
+        sketch.push();
+        sketch.noStroke()
+        sketch.fill(255, 255, 0)
+        sketch.circle(this.extremity3_1.x, this.extremity3_1.y, 90);
+        sketch.pop();
+    }
+
+    computeAltitudesCoordonates() {
+        this.getTriangleAltitudesCoordinates()
+        //Extend altitudes lines for better visualization
+        this.k = 1.4 //extension coefficient
+        this.Hx_prime = (this.k * (this.Hx - this.triangle[0].x)) + this.triangle[0].x
+        this.Hy_prime = (this.k * (this.Hy - this.triangle[0].y)) + this.triangle[0].y
+        this.Ax_prime = (this.k * (this.triangle[0].x - this.Hx)) + this.Hx
+        this.Ay_prime = (this.k * (this.triangle[0].y - this.Hy)) + this.Hy
+
+        this.Ix_prime = (this.k * (this.Ix - this.triangle[1].x)) + this.triangle[1].x
+        this.Iy_prime = (this.k * (this.Iy - this.triangle[1].y)) + this.triangle[1].y
+        this.Bx_prime = (this.k * (this.triangle[1].x - this.Ix)) + this.Ix
+        this.By_prime = (this.k * (this.triangle[1].y - this.Iy)) + this.Iy
+
+        this.Jx_prime = (this.k * (this.Jx - this.triangle[2].x)) + this.triangle[2].x
+        this.Jy_prime = (this.k * (this.Jy - this.triangle[2].y)) + this.triangle[2].y
+        this.Cx_prime = (this.k * (this.triangle[2].x - this.Jx)) + this.Jx
+        this.Cy_prime = (this.k * (this.triangle[2].y - this.Jy)) + this.Jy
+        this.k = 0.1
+    }
+
+    // ALTITUDES
+    showAllAltitudes(sketch) {
+        this.showAllAltitudeA(sketch)
+        this.showAllAltitudeB(sketch)
+        this.showAllAltitudeC(sketch)
+    }
+    showAllAltitudeA(sketch) {
+        this.showAltitudeA(sketch)
+        this.showRightSymbolsAltitudeA(sketch)
+        this.showDottedLineA(sketch)
+    }
+    showAllAltitudeB(sketch) {
+        this.showAltitudeB(sketch)
+        this.showRightSymbolsAltitudeB(sketch)
+        this.showDottedLineB(sketch)
+    }
+    showAllAltitudeC(sketch) {
+        this.showAltitudeC(sketch)
+        this.showRightSymbolsAltitudeC(sketch)
+        this.showDottedLineC(sketch)
+    }
+
+    showAltitudes(sketch) {
+        this.showAltitudeA(sketch)
+        this.showAltitudeB(sketch)
+        this.showAltitudeC(sketch)
+    }
+    showAltitudeA(sketch) {
+        sketch.stroke(0, 255, 0)
+        sketch.strokeWeight(3)
+
+        // Draw altitude
+        sketch.line(this.Hx_prime, this.Hy_prime, this.Ax_prime, this.Ay_prime)
+    }
+    showAltitudeB(sketch) {
+        sketch.stroke(0, 255, 0)
+        sketch.strokeWeight(3)
+
+        // Draw altitude
+        sketch.line(this.Ix_prime, this.Iy_prime, this.Bx_prime, this.By_prime)
+    }
+    showAltitudeC(sketch) {
+        sketch.stroke(0, 255, 0)
+        sketch.strokeWeight(3)
+        // this.linedash(sketch, 0, 0, 1920, 1080, 10) //test
+        // Draw altitude
+        sketch.line(this.Jx_prime, this.Jy_prime, this.Cx_prime, this.Cy_prime)
+    }
+
+    getTriangleAltitudesCoordinates() {
+        let mAB = (this.triangle[1].y - this.triangle[0].y) / (this.triangle[1].x - this.triangle[0].x)
+        let mBC = (this.triangle[2].y - this.triangle[1].y) / (this.triangle[2].x - this.triangle[1].x)
+        let mAC = (this.triangle[2].y - this.triangle[0].y) / (this.triangle[2].x - this.triangle[0].x)
+
+        let bAB = this.triangle[0].y - mAB * this.triangle[0].x
+        let bBC = this.triangle[1].y - mBC * this.triangle[1].x
+        let bAC = this.triangle[0].y - mAC * this.triangle[0].x
+
+        let mAH = -1 / mBC
+        let mBI = -1 / mAC
+        let mCJ = -1 / mAB
+
+        let bAH = this.triangle[0].y - mAH * this.triangle[0].x
+        let bBH = this.triangle[1].y - mBI * this.triangle[1].x
+        let bCH = this.triangle[2].y - mCJ * this.triangle[2].x
+
+        //intersection (BC) with (AH)
+        this.Hx = (bAH - bBC) / (mBC - mAH)
+        this.Hy = mBC * this.Hx + bBC
+
+        //intersection (AC) with (BH)
+        this.Ix = (bBH - bAC) / (mAC - mBI)
+        this.Iy = mAC * this.Ix + bAC
+
+        //intersection (AB) with (CH)
+        this.Jx = (bCH - bAB) / (mAB - mCJ)
+        this.Jy = mAB * this.Jx + bAB
+    }
+
+    showDottedLines(sketch) {
+        this.showDottedLineA(sketch)
+        this.showDottedLineB(sketch)
+        this.showDottedLineC(sketch)
+    }
+    showDottedLineA(sketch) {
+        this.k = 1.4
+        if (this.angle_b > 90) { //BĈY is optus, draw dashlines is required
+            let Lx = (this.k * (this.Hx - this.triangle[1].x)) + this.triangle[1].x
+            let Ly = (this.k * (this.Hy - this.triangle[1].y)) + this.triangle[1].y
+
+            let Mx = (this.k * (this.Jx - this.triangle[1].x)) + this.triangle[1].x
+            let My = (this.k * (this.Jy - this.triangle[1].y)) + this.triangle[1].y
+
+            //Draw dashlines
+            sketch.stroke(10, 200, 10)
+            sketch.strokeWeight(4)
+            this.linedash(sketch, this.triangle[1].x, this.triangle[1].y, Lx, Ly, 10, '-') // A
+        } else if (this.angle_c > 90) { //CBY is optus, draw dashlines is required
+            let Lx = (this.k * (this.Hx - this.triangle[2].x)) + this.triangle[2].x
+            let Ly = (this.k * (this.Hy - this.triangle[2].y)) + this.triangle[2].y
+
+            let Mx = (this.k * (this.Ix - this.triangle[2].x)) + this.triangle[2].x
+            let My = (this.k * (this.Iy - this.triangle[2].y)) + this.triangle[2].y
+
+            //Draw dashlines
+            sketch.stroke(10, 200, 10)
+            sketch.strokeWeight(4)
+            this.linedash(sketch, this.triangle[2].x, this.triangle[2].y, Lx, Ly, 10) // A
+        }
+    }
+    
+    showDottedLineB(sketch) {
+        this.k = 1.4
+        if (this.angle_a > 90) { //BÂC is optus, draw dashlines is required
+            let Lx = (this.k * (this.Ix - this.triangle[0].x)) + this.triangle[0].x
+            let Ly = (this.k * (this.Iy - this.triangle[0].y)) + this.triangle[0].y
+
+            let Mx = (this.k * (this.Jx - this.triangle[0].x)) + this.triangle[0].x
+            let My = (this.k * (this.Jy - this.triangle[0].y)) + this.triangle[0].y
+
+            //Draw dashlines
+            sketch.stroke(10, 200, 10)
+            sketch.strokeWeight(4)
+            this.linedash(sketch, this.triangle[0].x, this.triangle[0].y, Lx, Ly, 10, '-') // B
+        }  else if (this.angle_c > 90) { //CBY is optus, draw dashlines is required
+            let Lx = (this.k * (this.Hx - this.triangle[2].x)) + this.triangle[2].x
+            let Ly = (this.k * (this.Hy - this.triangle[2].y)) + this.triangle[2].y
+
+            let Mx = (this.k * (this.Ix - this.triangle[2].x)) + this.triangle[2].x
+            let My = (this.k * (this.Iy - this.triangle[2].y)) + this.triangle[2].y
+
+            //Draw dashlines
+            sketch.stroke(10, 200, 10)
+            sketch.strokeWeight(4)
+            this.linedash(sketch, this.triangle[2].x, this.triangle[2].y, Mx, My, 10) // B
+        }
+    }
+
+    showDottedLineC(sketch) {
+        this.k = 1.4
+        if (this.angle_a > 90) { //BÂC is optus, draw dashlines is required
+            let Lx = (this.k * (this.Ix - this.triangle[0].x)) + this.triangle[0].x
+            let Ly = (this.k * (this.Iy - this.triangle[0].y)) + this.triangle[0].y
+
+            let Mx = (this.k * (this.Jx - this.triangle[0].x)) + this.triangle[0].x
+            let My = (this.k * (this.Jy - this.triangle[0].y)) + this.triangle[0].y
+
+            //Draw dashlines
+            sketch.stroke(10, 200, 10)
+            sketch.strokeWeight(4)
+            this.linedash(sketch, this.triangle[0].x, this.triangle[0].y, Mx, My, 10, '-') // C
+        } else if (this.angle_b > 90) { //BĈY is optus, draw dashlines is required
+            let Lx = (this.k * (this.Hx - this.triangle[1].x)) + this.triangle[1].x
+            let Ly = (this.k * (this.Hy - this.triangle[1].y)) + this.triangle[1].y
+
+            let Mx = (this.k * (this.Jx - this.triangle[1].x)) + this.triangle[1].x
+            let My = (this.k * (this.Jy - this.triangle[1].y)) + this.triangle[1].y
+
+            //Draw dashlines
+            sketch.stroke(10, 200, 10)
+            sketch.strokeWeight(4)
+            this.linedash(sketch, this.triangle[1].x, this.triangle[1].y, Mx, My, 10, '-') // C
+        }
+    }
+
+    linedash(sketch, x1, y1, x2, y2, delta, style = '-') {
+        // delta is both the length of a dash, the distance between 2 dots/dashes, and the diameter of a round
+        let distance = dist(x1, y1, x2, y2);
+        let dashNumber = distance / delta;
+        let xDelta = (x2 - x1) / dashNumber;
+        let yDelta = (y2 - y1) / dashNumber;
+
+        for (let i = 0; i < dashNumber; i += 2) {
+            let xi1 = i * xDelta + x1;
+            let yi1 = i * yDelta + y1;
+            let xi2 = (i + 1) * xDelta + x1;
+            let yi2 = (i + 1) * yDelta + y1;
+
+            if (style == '-') {
+                sketch.line(xi1, yi1, xi2, yi2);
+            } else if (style == '.') {
+                sketch.point(xi1, yi1);
+            } else if (style == 'o') {
+                sketch.ellipse(xi1, yi1, delta / 2);
+            }
+        }
+    }
+
+    computeAltitudesEqualSymbols() {
+        this.k = 0.1
+        this.H1 = createVector(this.Hx + this.k * (this.triangle[2].x - this.Hx), this.Hy + this.k * (this.triangle[2].y - this.Hy))
+        this.H2 = createVector(this.Hx + this.k * (this.triangle[0].x - this.Hx), this.Hy + this.k * (this.triangle[0].y - this.Hy))
+        this.H3 = createVector(this.H2.x + (this.H1.x - this.Hx), this.H2.y + (this.H1.y - this.Hy))
+
+        this.I1 = createVector(this.Ix + this.k * (this.triangle[1].x - this.Ix), this.Iy + this.k * (this.triangle[1].y - this.Iy))
+        this.I2 = createVector(this.Ix + this.k * (this.triangle[0].x - this.Ix), this.Iy + this.k * (this.triangle[0].y - this.Iy))
+        this.I3 = createVector(this.I2.x + (this.I1.x - this.Ix), this.I2.y + (this.I1.y - this.Iy))
+
+        this.J1 = createVector(this.Jx + this.k * (this.triangle[1].x - this.Jx), this.Jy + this.k * (this.triangle[1].y - this.Jy))
+        this.J2 = createVector(this.Jx + this.k * (this.triangle[2].x - this.Jx), this.Jy + this.k * (this.triangle[2].y - this.Jy))
+        this.J3 = createVector(this.J2.x + (this.J1.x - this.Jx), this.J2.y + (this.J1.y - this.Jy))
+    }
+
+    showRightSymbolsAltitudes(sketch) {
+        this.showRightSymbolsAltitudeA(sketch)
+        this.showRightSymbolsAltitudeB(sketch)
+        this.showRightSymbolsAltitudeC(sketch)
+    }
+    showRightSymbolsAltitudeA(sketch) {
+        sketch.stroke(0, 255, 0)
+        sketch.strokeWeight(3)
+        sketch.line(this.H2.x, this.H2.y, this.H3.x, this.H3.y)
+        sketch.line(this.H3.x, this.H3.y, this.H1.x, this.H1.y)
+    }
+    showRightSymbolsAltitudeB(sketch) {
+        sketch.stroke(0, 255, 0)
+        sketch.strokeWeight(3)
+        sketch.line(this.I2.x, this.I2.y, this.I3.x, this.I3.y)
+        sketch.line(this.I3.x, this.I3.y, this.I1.x, this.I1.y)
+    }
+    showRightSymbolsAltitudeC(sketch) {
+        sketch.stroke(0, 255, 0)
+        sketch.strokeWeight(3)
+        sketch.line(this.J2.x, this.J2.y, this.J3.x, this.J3.y)
+        sketch.line(this.J3.x, this.J3.y, this.J1.x, this.J1.y)
     }
 }

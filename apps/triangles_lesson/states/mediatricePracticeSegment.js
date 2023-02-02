@@ -12,6 +12,7 @@ let pauseTrigger = false;
 let repeatTrigger = false;
 
 let startTime = 0;
+let firstHelpAudio = false;
 let helpTrigger = false;
 let solutionTrigger = false;
 let mediatriceFound = false;
@@ -23,7 +24,7 @@ let By = 7 * height / 8
 
 let point1_x, point1_y, point2_x, point2_y, H1, H2, I1, I2, J1, J2, K1, K2, A1, A2, A3, helpPoint
 
-export function mediatricePracticeShow(sketch, f, balls) {
+export function mediatricePracticeSegmentShow(sketch, f, balls) {
     if (firstRun) {
         onEnter(balls)
     }
@@ -40,11 +41,16 @@ export function mediatricePracticeShow(sketch, f, balls) {
         helpTrigger = true;
         audioMedia.stopSound();
         audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/4_aide_mediatrice.wav")
+        firstHelpAudio = true;
     }
     if (helpTrigger==true && solutionTrigger==false && mediatriceFound==false) {
         sketch.noStroke()
         sketch.fill(255, 255, 0)
         sketch.circle(helpPoint.x, helpPoint.y, 90)
+    }
+    if (firstHelpAudio && audioMedia.checkIfAudioEnded()) {
+        firstHelpAudio = false;
+        audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/5_new_consignes_apres_aide.wav")
     }
     
     if ((solutionTrigger == false) && (millis() - startTime > 40000)) {
@@ -56,7 +62,7 @@ export function mediatricePracticeShow(sketch, f, balls) {
     sketch.push()
     draw_segment(sketch, f)
     if(!solutionTrigger) {
-        place_mediatrice(sketch, balls)
+        placeMediatrice(sketch, balls)
     }
     if (mediatriceFound == true || solutionTrigger == true) {
         showSolution(sketch)
@@ -71,7 +77,7 @@ export function mediatricePracticeShow(sketch, f, balls) {
         onExit()
         return "mediatricePracticeTriangle"
     }
-    return "mediatricePractice"
+    return "mediatricePracticeSegment"
 }
 
 function sleep(delay) {
@@ -135,7 +141,7 @@ function draw_segment(sketch, f) {
 }
 
 
-function place_mediatrice(sketch, balls) {
+function placeMediatrice(sketch, balls) {
     if (balls.ball_nb >= 2) {
         sketch.push()
         sketch.translate(width, height)
@@ -146,7 +152,7 @@ function place_mediatrice(sketch, balls) {
 
         let A_balls_ref = createVector(-(Ax - width), -(Ay - height))
         let B_balls_ref = createVector(-(Bx - width), -(By - height))
-        let tolerance = 50
+        let tolerance = 70
 
         // sketch.text(Math.abs(dist(A_balls_ref.x, A_balls_ref.y, balls.balls[0].x, balls.balls[0].y) - dist(B_balls_ref.x, B_balls_ref.y, balls.balls[0].x, balls.balls[0].y)), 150, 250);
         // sketch.text(Math.abs(dist(A_balls_ref.x, A_balls_ref.y, balls.balls[1].x, balls.balls[1].y) - dist(B_balls_ref.x, B_balls_ref.y, balls.balls[1].x, balls.balls[1].y)), 150, 300);

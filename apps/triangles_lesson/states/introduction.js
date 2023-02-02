@@ -205,6 +205,7 @@ function rotating_triangle_altitude(sketch) {
 
   // Draw dotted lines if required
   // sketch.drawingContext.setLineDash([5, 15]); //Doesn't work
+  
   if (calculateAngle(Bx, By, Ax, Ay, Cx, Cy) > 90) { //BÂC is optus, draw dashlines is required
     let Lx = (k * (Ix - Ax)) + Ax
     let Ly = (k * (Iy - Ay)) + Ay

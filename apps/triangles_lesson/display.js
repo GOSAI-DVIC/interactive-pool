@@ -14,12 +14,23 @@ import {
     mediatriceLessonTriangleShow
 } from "./states/mediatriceLessonTriangle.js"
 import {
-    mediatricePracticeShow
-} from "./states/mediatricePractice.js"
+    mediatricePracticeSegmentShow
+} from "./states/mediatricePracticeSegment.js"
 import {
     mediatricePracticeTriangleShow
 } from "./states/mediatricePracticeTriangle.js"
-
+import {
+    hauteurLessonInsideShow
+} from "./states/hauteurLessonInside.js"
+import {
+    hauteurLessonOutsideShow
+} from "./states/hauteurLessonOutside.js"
+import {
+    hauteurPracticeBShow
+} from "./states/hauteurPracticeB.js"
+import {
+    hauteurPracticeCShow
+} from "./states/hauteurPracticeC.js"
 
 let audio
 let balls = new Balls();
@@ -31,8 +42,8 @@ export const triangles_lesson = new p5((sketch) => {
     sketch.activated = false;
 
     let f;
-    let state = "start" //"start"
-
+    let state = "hauteurPracticeC" //"start"
+    
     sketch.preload = () => {
         f = loadFont("/gosai/pool/core/server/assets/FallingSky-JKwK.otf");
     };
@@ -89,11 +100,23 @@ export const triangles_lesson = new p5((sketch) => {
             case "mediatriceLessonTriangle":
                 state = mediatriceLessonTriangleShow(sketch, f);
                 break;
-            case "mediatricePractice":
-                state = mediatricePracticeShow(sketch, f, balls);
+            case "mediatricePracticeSegment":
+                state = mediatricePracticeSegmentShow(sketch, f, balls);
                 break;
             case "mediatricePracticeTriangle":
                 state = mediatricePracticeTriangleShow(sketch, f, balls);
+                break;
+            case "hauteurLessonInside":
+                state = hauteurLessonInsideShow(sketch, f);
+                break;
+            case "hauteurLessonOutside":
+                state = hauteurLessonOutsideShow(sketch, f, balls);
+                break;
+            case "hauteurPracticeB":
+                state = hauteurPracticeBShow(sketch, f, balls);
+                break;
+            case "hauteurPracticeC":
+                state = hauteurPracticeCShow(sketch, f, balls);
                 break;
             default:
                 break;
@@ -201,6 +224,7 @@ export let audioMedia = {
             audioEnded = false;
             return true
         }
+        return false
     },
     getAudioTime: function () {
         return audio.currentTime
