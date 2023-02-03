@@ -49,10 +49,11 @@ export function introductionShow(sketch, f) {
     x_triangle_altitude = -size
   }
 
-  sketch.textFont(f, 48);
-  sketch.textAlign(LEFT, CENTER);
+  sketch.stroke(255)
   sketch.fill(255);
-  sketch.text("Introduction!", 145, 95);
+  sketch.textFont(f, 70);
+  sketch.textAlign(sketch.CENTER)
+  sketch.text("Introduction", width / 2, 150);
 
   if (goDefaultNextStep == true) {
     onExit()
@@ -85,15 +86,15 @@ function showAudioButtons(sketch) {
     pauseTrigger = true;
   }
   if (pause == false && pauseTrigger == true) {
-      audioMedia.resumeSound()
-      pauseTrigger = false;
+    audioMedia.resumeSound()
+    pauseTrigger = false;
   }
   if (repeat == true && repeatTrigger == false) {
-      audioMedia.restartSound()
-      repeatTrigger = true;
+    audioMedia.restartSound()
+    repeatTrigger = true;
   }
   if (repeat == false) {
-      repeatTrigger = false;
+    repeatTrigger = false;
   }
 }
 
@@ -205,7 +206,7 @@ function rotating_triangle_altitude(sketch) {
 
   // Draw dotted lines if required
   // sketch.drawingContext.setLineDash([5, 15]); //Doesn't work
-  
+
   if (calculateAngle(Bx, By, Ax, Ay, Cx, Cy) > 90) { //BÂC is optus, draw dashlines is required
     let Lx = (k * (Ix - Ax)) + Ax
     let Ly = (k * (Iy - Ay)) + Ay

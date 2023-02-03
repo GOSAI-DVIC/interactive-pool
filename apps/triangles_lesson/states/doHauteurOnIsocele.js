@@ -3,14 +3,16 @@ import {
     navBar
 } from "../display.js"
 import {
-    Triangle
-} from "../components/triangle.js"
-import {
     Ball
 } from "../components/ball.js"
+import {
+    Triangle
+} from "../components/triangle.js"
 
 let goDefaultNextStep = false;
 let firstRun = true;
+
+let triangleIsocele;
 
 let pause = false;
 let repeat = false;
@@ -19,63 +21,74 @@ let repeatTrigger = false;
 
 let startTime = 0;
 let firstAudio = true;
-let solutionTrigger = false;
 let solutionFound = false;
-let once = false;
+let solutionTrigger = false;
+let remarqueTrigger = false;
+let once=true;
 
-let triangle
-
-export function hauteurPracticeCShow(sketch, f, balls) {
+export function doHauteurOnIsoceleShow(sketch, f, balls) {
     if (firstRun) {
-        onEnter()
+        onEnter(balls)
     }
     showAudioButtons(sketch)
-
+    
     //DRAWING SETUP
     sketch.stroke(255)
     sketch.fill(255);
     sketch.textFont(f, 70);
     sketch.textAlign(sketch.CENTER)
-    sketch.text("Hauteur", width/2, 150);
+    sketch.text("Triangle Isocèle", width/2, 150);
 
-    if (solutionTrigger == true || solutionFound == true) {
-        triangle.showAllAltitudeC(sketch)
-        if(audioMedia.checkIfAudioEnded()) {
-            goDefaultNextStep = true;
-        }
-    }
+    triangleIsocele.show(sketch)
+    triangleIsocele.showLetter(sketch, f)
+    triangleIsocele.showIsoceleEqualSymbols(sketch)
 
-    if (firstAudio && audioMedia.checkIfAudioEnded() && solutionFound == false) {
+    if(firstAudio && audioMedia.checkIfAudioEnded()) {
         firstAudio = false;
         audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/15_hauteurs_consigne_C.wav")
     }
-
-    triangle.show(sketch)
-    triangle.showLetter(sketch, f)
-
     
-    if (!solutionFound && !solutionTrigger) {
+    if(!solutionTrigger && !solutionFound) {
         showAttempLine(sketch, balls)
-        solutionFound = triangle.placeAltitudeC(balls)
+        solutionFound = triangleIsocele.placeAltitudeC(balls)
+        if(solutionFound) {
+            audioMedia.stopSound();
+            audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/7_Bravo_tu_as_trouve.wav")
+        }
+    }
+    if (solutionFound == true || solutionTrigger == true) {
+        triangleIsocele.showAllAltitudeC(sketch)
     }
 
-    if (solutionFound == true && !once) {
-        once = true;
-        audioMedia.stopSound();
-        audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/7_Bravo_tu_as_trouve.wav")
-    }
-
-    if ((solutionTrigger == false) && (millis() - startTime > 25000) && (solutionFound == false)) {
+    if ((solutionTrigger == false) && (solutionFound == false) && (millis() - startTime > 20000)) {
         solutionTrigger = true;
         audioMedia.stopSound();
         audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/16_solution_hauteur_de_C.wav")
     }
+    if((!remarqueTrigger) && (solutionTrigger == true) && (audioMedia.checkIfAudioEnded())) {
+        remarqueTrigger = true;
+    }
+    if((!remarqueTrigger) && (solutionFound == true) && (audioMedia.checkIfAudioEnded())) {
+        remarqueTrigger = true;
+    }
 
+    if(remarqueTrigger) {
+        triangleIsocele.showAllMediatriceAB(sketch)
+    }    
+    if(remarqueTrigger && once) {
+        once = false;
+        audioMedia.stopSound();
+        audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/23_remarque_2_isocele.wav")
+    }
+    if(remarqueTrigger && audioMedia.checkIfAudioEnded()) {
+        goDefaultNextStep = true;
+    }
+    
     if (goDefaultNextStep == true) {
         onExit()
-        return "rappelTrianglesIsocelesEquilateraux"
+        return "mediatriceHauteurEquilateral"
     }
-    return "hauteurPracticeC"
+    return "doHauteurOnIsocele"
 }
 
 function sleep(delay) {
@@ -83,21 +96,21 @@ function sleep(delay) {
     while (new Date().getTime() < start + delay);
 }
 
-function onEnter() {
-    let b1 = new Ball(874, 858)
-    let b2 = new Ball(764, 377)
-    let b3 = new Ball(966, 193)
-    triangle = new Triangle(b1, b2, b3)
+function onEnter(balls) {
     firstRun = false;
+    let b1 = new Ball(1147, 774)
+    let b3 = new Ball(747, 724)
+    let b2 = new Ball(1083, 502)
+    triangleIsocele = new Triangle(b1, b2, b3)
+    console.log(triangleIsocele)
     audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/8_Tres_bien_maintenant.wav")
     startTime = millis()
 }
 
 function onExit() {
-    sleep(1000)
+    sleep(2000)
     startTime = 0;
     solutionTrigger = false;
-    solutionFound = false;
     firstRun = true;
     goDefaultNextStep = false;
     audioMedia.stopSound()
@@ -120,7 +133,7 @@ function showAudioButtons(sketch) {
         audioMedia.restartSound()
         repeatTrigger = true;
     }
-    if (repeat == false) {
+    if (repeat == false ) {
         repeatTrigger = false;
     }
 }

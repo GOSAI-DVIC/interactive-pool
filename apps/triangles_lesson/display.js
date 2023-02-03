@@ -31,6 +31,24 @@ import {
 import {
     hauteurPracticeCShow
 } from "./states/hauteurPracticeC.js"
+import {
+    rappelTrianglesIsocelesEquilaterauxShow
+} from "./states/rappelTrianglesIsocelesEquilateraux.js"
+import {
+    doMediatriceOnIsoceleShow
+} from "./states/doMediatriceOnIsocele.js"
+import {
+    doHauteurOnIsoceleShow
+} from "./states/doHauteurOnIsocele.js"
+import {
+    mediatriceHauteurEquilateralShow
+} from "./states/mediatriceHauteurEquilateral.js"
+import {
+    recapitulatifShow
+} from "./states/recapitulatif.js"
+import {
+    challengeIntroductionShow
+} from "./states/challengeIntroduction.js"
 
 let audio
 let balls = new Balls();
@@ -42,7 +60,7 @@ export const triangles_lesson = new p5((sketch) => {
     sketch.activated = false;
 
     let f;
-    let state = "hauteurPracticeC" //"start"
+    let state = "start";
     
     sketch.preload = () => {
         f = loadFont("/gosai/pool/core/server/assets/FallingSky-JKwK.otf");
@@ -117,6 +135,24 @@ export const triangles_lesson = new p5((sketch) => {
                 break;
             case "hauteurPracticeC":
                 state = hauteurPracticeCShow(sketch, f, balls);
+                break;
+            case "rappelTrianglesIsocelesEquilateraux":
+                state = rappelTrianglesIsocelesEquilaterauxShow(sketch, f, balls);
+                break;
+            case "doMediatriceOnIsocele":
+                state = doMediatriceOnIsoceleShow(sketch, f, balls);
+                break;
+            case "doHauteurOnIsocele":
+                state = doHauteurOnIsoceleShow(sketch, f, balls);
+                break;
+            case "mediatriceHauteurEquilateral":
+                state = mediatriceHauteurEquilateralShow(sketch, f);
+                break;
+            case "recapitulatif":
+                state = recapitulatifShow(sketch, f);
+                break;
+            case "challengeIntroduction":
+                state = challengeIntroductionShow(sketch, f, balls);
                 break;
             default:
                 break;

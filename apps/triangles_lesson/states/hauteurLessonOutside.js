@@ -30,10 +30,11 @@ export function hauteurLessonOutsideShow(sketch, f, balls) {
     }
     showAudioButtons(sketch)
 
-    sketch.textFont(f, 48);
-    sketch.textAlign(LEFT, CENTER);
+    sketch.stroke(255)
     sketch.fill(255);
-    sketch.text("Hauteur - définition :", 145, 95);
+    sketch.textFont(f, 70);
+    sketch.textAlign(sketch.CENTER)
+    sketch.text("Hauteur", width/2, 150);
 
     triangle.show(sketch)
     triangle.showLetter(sketch, f)

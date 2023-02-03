@@ -12,42 +12,60 @@ import {
 let goDefaultNextStep = false;
 let firstRun = true;
 
+let triangleEquilateral;
+
 let pause = false;
 let repeat = false;
 let pauseTrigger = false;
 let repeatTrigger = false;
 
-export function mediatriceLessonTriangleShow(sketch, f) {
+export function mediatriceHauteurEquilateralShow(sketch, f) {
     if (firstRun) {
         onEnter()
     }
     showAudioButtons(sketch)
 
-    //DRAWING SETUP
-    sketch.stroke(255)
+    sketch.stroke(255);
     sketch.fill(255);
     sketch.textFont(f, 70);
     sketch.textAlign(sketch.CENTER)
-    sketch.text("Médiatrice", width/2, 150);
+    sketch.text("Triangle équilatéral", width / 2, 150);
 
-    draw_triangle_with_mediatrice(sketch, f)
+    sketch.push()
+    sketch.translate(-100, 0)
+    triangleEquilateral.show(sketch)
+    triangleEquilateral.showAllMediatrice(sketch)
+    triangleEquilateral.showAllAltitudes(sketch)
+    sketch.pop()
 
     if (goDefaultNextStep == true) {
         onExit()
-        return "mediatricePracticeSegment"
+        return "recapitulatif"
     }
-    return "mediatriceLessonTriangle"
+    return "mediatriceHauteurEquilateral"
 }
 
 function onEnter() {
     firstRun = false;
-    audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/2_mediatrices_triangle_def.wav")
+    //Equilateral triangle
+    let b4 = new Ball(944, 674)
+    let b5 = new Ball(1229, 519)
+    let b6 = new Ball(953, 352)
+    triangleEquilateral = new Triangle(b4, b5, b6)
+
+    audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/24_remarque_3_triangle_equilateral.wav")
 }
 
 function onExit() {
+    sleep(2500)
     firstRun = true;
     goDefaultNextStep = false;
     audioMedia.stopSound()
+}
+
+function sleep(delay) {
+    var start = new Date().getTime();
+    while (new Date().getTime() < start + delay);
 }
 
 function showAudioButtons(sketch) {
@@ -73,16 +91,4 @@ function showAudioButtons(sketch) {
     if (repeat == false) {
         repeatTrigger = false;
     }
-}
-
-function draw_triangle_with_mediatrice(sketch, f) {
-    let b1 = new Ball(width / 3 - 80, 3 * height / 4 + 70)
-    let b2 = new Ball(2 * width / 3 - 40, 3 * height / 4)
-    let b3 = new Ball(width / 2 + 80, height / 4)
-    let t = new Triangle(b1, b2, b3)
-    t.show(sketch, f)
-    t.showPerpendicularBisector(sketch, f)
-    t.showEqualSymbols(sketch)
-    t.showRightSymbols(sketch)
-    // t.showCircumCircle(sketch, f)
 }

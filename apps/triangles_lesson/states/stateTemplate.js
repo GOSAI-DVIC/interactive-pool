@@ -42,9 +42,9 @@ function showAudioButtons(sketch) {
     repeat = navBar.checkRepeatButtons()
     navBar.showPlayPauseButton(sketch, pause)
     navBar.showRepeatButton(sketch, repeat)
-    if (audioMedia.checkIfAudioEnded()) {
-        goDefaultNextStep = true;
-    }
+    // if (audioMedia.checkIfAudioEnded()) {
+    //     goDefaultNextStep = true;
+    // }
     if (pause == true && pauseTrigger == false) {
         audioMedia.pauseSound()
         pauseTrigger = true;

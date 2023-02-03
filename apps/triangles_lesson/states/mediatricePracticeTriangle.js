@@ -38,10 +38,11 @@ export function mediatricePracticeTriangleShow(sketch, f, balls) {
     showAudioButtons(sketch)
 
     //DRAWING SETUP
-    sketch.stroke(255);
+    sketch.stroke(255)
     sketch.fill(255);
-    sketch.textFont(f, 48);
-    sketch.text("Mediatrice - Pratique :", 145, 95);
+    sketch.textFont(f, 70);
+    sketch.textAlign(sketch.CENTER)
+    sketch.text("Médiatrice", width/2, 150);
 
     sketch.text(`Trouvées : ${numberOfmediatriceFound}/3`, 145, 155);
 

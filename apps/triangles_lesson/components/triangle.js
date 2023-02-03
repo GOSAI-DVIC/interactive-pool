@@ -131,7 +131,6 @@ export class Triangle {
     }
 
     calculateAngle(p1, p2, p3) {
-        // console.log(this.triangle[p1])
         let AB = this.distanceOf2Balls(this.triangle[p1], this.triangle[p2]);
         let BC = this.distanceOf2Balls(this.triangle[p2], this.triangle[p3]);
         let AC = this.distanceOf2Balls(this.triangle[p1], this.triangle[p3]);
@@ -336,7 +335,6 @@ export class Triangle {
     }
 
     returnXCenter(p1, p2) {
-        // console.log(this.triangle[p1].x)
         return int((this.triangle[p1].x + this.triangle[p2].x) / 2)
     }
 
@@ -453,7 +451,6 @@ export class Triangle {
         if (balls.ball_nb >= 2) {
             let A_balls_ref = createVector(-(this.triangle[0].x - width), -(this.triangle[0].y - height))
             let B_balls_ref = createVector(-(this.triangle[1].x - width), -(this.triangle[1].y - height))
-
             if (Math.abs(dist(A_balls_ref.x, A_balls_ref.y, balls.balls[0].x, balls.balls[0].y) - dist(B_balls_ref.x, B_balls_ref.y, balls.balls[0].x, balls.balls[0].y)) < tolerance && Math.abs(dist(A_balls_ref.x, A_balls_ref.y, balls.balls[1].x, balls.balls[1].y) - dist(B_balls_ref.x, B_balls_ref.y, balls.balls[1].x, balls.balls[1].y)) < tolerance) {
                 return true
             }
@@ -484,7 +481,19 @@ export class Triangle {
         }
         return false
     }
-    //REPRENDRE ICI : place Altitude A and C
+    
+    placeAltitudeA(balls, tolerance = 40) {
+        if (balls.ball_nb >= 2) {
+            let A_ball_ref = createVector(-(this.triangle[0].x - width), -(this.triangle[0].y - height))
+            let H_ball_ref = createVector(-(this.Hx - width), -(this.Hy - height))
+            if((Math.abs((balls.balls[0].x-H_ball_ref.x)*(A_ball_ref.y-H_ball_ref.y) - (balls.balls[0].y-H_ball_ref.y)*(A_ball_ref.x-H_ball_ref.x)) / Math.sqrt(Math.pow(A_ball_ref.x-H_ball_ref.x, 2) + Math.pow(A_ball_ref.y-H_ball_ref.y, 2)))<tolerance){
+                if((Math.abs((balls.balls[1].x-H_ball_ref.x)*(A_ball_ref.y-H_ball_ref.y) - (balls.balls[1].y-H_ball_ref.y)*(A_ball_ref.x-H_ball_ref.x)) / Math.sqrt(Math.pow(A_ball_ref.x-H_ball_ref.x, 2) + Math.pow(A_ball_ref.y-H_ball_ref.y, 2)))<tolerance){
+                    return true
+                }
+            }
+        }
+        return false
+    }
     placeAltitudeB(balls, tolerance = 40) {
         if (balls.ball_nb >= 2) {
             let B_ball_ref = createVector(-(this.triangle[1].x - width), -(this.triangle[1].y - height))
@@ -496,12 +505,18 @@ export class Triangle {
             }
         }
         return false
-        // DEBUG
-        // sketch.stroke(255);
-        // sketch.fill(255);
-        // sketch.textFont(f, 48);
-        // sketch.text(d, 345, 195);
-        // sketch.text(e, 345, 295);
+    }
+    placeAltitudeC(balls, tolerance = 40) {
+        if (balls.ball_nb >= 2) {
+            let C_ball_ref = createVector(-(this.triangle[2].x - width), -(this.triangle[2].y - height))
+            let J_ball_ref = createVector(-(this.Jx - width), -(this.Jy - height))
+            if((Math.abs((balls.balls[0].x-J_ball_ref.x)*(C_ball_ref.y-J_ball_ref.y) - (balls.balls[0].y-J_ball_ref.y)*(C_ball_ref.x-J_ball_ref.x)) / Math.sqrt(Math.pow(C_ball_ref.x-J_ball_ref.x, 2) + Math.pow(C_ball_ref.y-J_ball_ref.y, 2)))<tolerance){
+                if((Math.abs((balls.balls[1].x-J_ball_ref.x)*(C_ball_ref.y-J_ball_ref.y) - (balls.balls[1].y-J_ball_ref.y)*(C_ball_ref.x-J_ball_ref.x)) / Math.sqrt(Math.pow(C_ball_ref.x-J_ball_ref.x, 2) + Math.pow(C_ball_ref.y-J_ball_ref.y, 2)))<tolerance){
+                    return true
+                }
+            }
+        }
+        return false
     }
 
     showHelpMediatricePoint(sketch) {
@@ -563,7 +578,6 @@ export class Triangle {
     showAltitudeA(sketch) {
         sketch.stroke(0, 255, 0)
         sketch.strokeWeight(3)
-
         // Draw altitude
         sketch.line(this.Hx_prime, this.Hy_prime, this.Ax_prime, this.Ay_prime)
     }
@@ -758,5 +772,46 @@ export class Triangle {
         sketch.strokeWeight(3)
         sketch.line(this.J2.x, this.J2.y, this.J3.x, this.J3.y)
         sketch.line(this.J3.x, this.J3.y, this.J1.x, this.J1.y)
+    }
+
+    showIsoceleEqualSymbols(sketch) {
+        if(this.angle_a == this.angle_b) {
+            sketch.stroke(255, 255, 0)
+            sketch.noFill()
+            sketch.strokeWeight(3)
+            sketch.circle(this.middle3.x, this.middle3.y, 25)
+            sketch.circle(this.middle3.x, this.middle3.y, 45)
+            sketch.circle(this.middle2.x, this.middle2.y, 25)
+            sketch.circle(this.middle2.x, this.middle2.y, 45)
+        }
+        if(this.angle_b == this.angle_c) {
+            sketch.stroke(255, 255, 0)
+            sketch.noFill()
+            sketch.strokeWeight(3)
+            sketch.circle(this.middle3.x, this.middle3.y, 25)
+            sketch.circle(this.middle3.x, this.middle3.y, 45)
+            sketch.circle(this.middle1.x, this.middle1.y, 25)
+            sketch.circle(this.middle1.x, this.middle1.y, 45)
+        }
+        if(this.angle_a == this.angle_c) {
+            sketch.stroke(255, 255, 0)
+            sketch.noFill()
+            sketch.strokeWeight(3)
+            sketch.circle(this.middle1.x, this.middle1.y, 25)
+            sketch.circle(this.middle1.x, this.middle1.y, 45)
+            sketch.circle(this.middle2.x, this.middle2.y, 25)
+            sketch.circle(this.middle2.x, this.middle2.y, 45)
+        }
+    }
+
+    showEquilateralEqualSymbols(sketch) {
+        if(this.angle_a == this.angle_b && this.angle_b == this.angle_c) {
+            sketch.stroke(255, 255, 0)
+            sketch.noFill()
+            sketch.strokeWeight(3)
+            sketch.circle(this.middle1.x, this.middle1.y, 40)
+            sketch.circle(this.middle2.x, this.middle2.y, 40)
+            sketch.circle(this.middle3.x, this.middle3.y, 40)
+        }
     }
 }

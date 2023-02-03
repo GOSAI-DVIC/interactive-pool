@@ -12,36 +12,65 @@ import {
 let goDefaultNextStep = false;
 let firstRun = true;
 
+let triangleMediatrice;
+let triangleHauteur;
+
+let showMediatricesTime = 1;
+let showHauteurTime = 4;
+
 let pause = false;
 let repeat = false;
 let pauseTrigger = false;
 let repeatTrigger = false;
 
-export function mediatriceLessonTriangleShow(sketch, f) {
+export function recapitulatifShow(sketch, f) {
     if (firstRun) {
         onEnter()
     }
     showAudioButtons(sketch)
 
-    //DRAWING SETUP
     sketch.stroke(255)
     sketch.fill(255);
     sketch.textFont(f, 70);
     sketch.textAlign(sketch.CENTER)
-    sketch.text("Médiatrice", width/2, 150);
+    sketch.text("Récapitulatif", width / 2, 150);
 
-    draw_triangle_with_mediatrice(sketch, f)
+    if (audioMedia.getAudioTime() > showMediatricesTime) {
+        sketch.push()
+        sketch.translate(-90, 100)
+        sketch.scale(0.7)
+        triangleMediatrice.show(sketch, f)
+        triangleMediatrice.showAllMediatrice(sketch)
+        sketch.pop()
+    }
+    if (audioMedia.getAudioTime() > showHauteurTime) {
+        sketch.push()
+        sketch.translate(700, 150)
+        sketch.scale(0.7)
+        triangleHauteur.show(sketch)
+        triangleHauteur.showAllAltitudes(sketch)
+        sketch.pop()
+    }
 
     if (goDefaultNextStep == true) {
         onExit()
-        return "mediatricePracticeSegment"
+        return "challengeIntroduction"
     }
-    return "mediatriceLessonTriangle"
+    return "recapitulatif"
 }
 
 function onEnter() {
     firstRun = false;
-    audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/2_mediatrices_triangle_def.wav")
+    audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/24_bis_recapitulatif.wav")
+    let b1 = new Ball(width / 3 - 80, 3 * height / 4 + 70)
+    let b2 = new Ball(2 * width / 3 - 40, 3 * height / 4)
+    let b3 = new Ball(width / 2 + 80, height / 4)
+    triangleMediatrice = new Triangle(b1, b2, b3)
+
+    b1 = new Ball(831, 666)
+    b2 = new Ball(1273, 539)
+    b3 = new Ball(566, 470)
+    triangleHauteur = new Triangle(b1, b2, b3)
 }
 
 function onExit() {
@@ -73,16 +102,4 @@ function showAudioButtons(sketch) {
     if (repeat == false) {
         repeatTrigger = false;
     }
-}
-
-function draw_triangle_with_mediatrice(sketch, f) {
-    let b1 = new Ball(width / 3 - 80, 3 * height / 4 + 70)
-    let b2 = new Ball(2 * width / 3 - 40, 3 * height / 4)
-    let b3 = new Ball(width / 2 + 80, height / 4)
-    let t = new Triangle(b1, b2, b3)
-    t.show(sketch, f)
-    t.showPerpendicularBisector(sketch, f)
-    t.showEqualSymbols(sketch)
-    t.showRightSymbols(sketch)
-    // t.showCircumCircle(sketch, f)
 }

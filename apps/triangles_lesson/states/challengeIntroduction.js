@@ -18,7 +18,7 @@ center.y = height/2;
     6) Sixth variable is the size of points
 */
   
-export function startShow(sketch, f, balls) {
+export function challengeIntroductionShow(sketch, f, balls) {
     if (firstRun == true) {
       // let str="onEnter"
       // eval(str)
@@ -29,12 +29,13 @@ export function startShow(sketch, f, balls) {
     
     sketch.stroke(255)
     sketch.fill(255);
-    sketch.textFont(f, 70);
+    sketch.textFont(f, 100);
     sketch.textAlign(sketch.CENTER)
-    sketch.text("Leçon géométrique : médiatrices et hauteurs d'un triangle", width / 2, 150);
+    sketch.text("Défi!", width / 2, 150);
 
     sketch.textFont(f, 48);
     sketch.text("Place un palet dans le cercle pour démarrer!", sketch.width/2, 3 * sketch.height/4);
+
 
     for(let i=0; i<balls.balls.length; i++) {
       if (dist(balls.balls[i].x, balls.balls[i].y, sketch.width/2, sketch.height/2) < 200 && buttonIsActivated == false) {
@@ -45,9 +46,9 @@ export function startShow(sketch, f, balls) {
 
     if (goDefaultNextStep == true) {
         onExit()
-        return "introduction"
+        return "start"
     }
-    return "start"
+    return "challengeIntroduction"
 }
 
 function onEnter() {

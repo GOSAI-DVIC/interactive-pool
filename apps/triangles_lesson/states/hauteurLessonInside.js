@@ -34,11 +34,11 @@ export function hauteurLessonInsideShow(sketch, f) {
         triangle.showAllAltitudeC(sketch)
     }
 
-
-    sketch.textFont(f, 48);
-    sketch.textAlign(LEFT, CENTER);
+    sketch.stroke(255)
     sketch.fill(255);
-    sketch.text("Hauteur - définition :", 145, 95);
+    sketch.textFont(f, 70);
+    sketch.textAlign(sketch.CENTER)
+    sketch.text("Hauteur", width/2, 150);
 
     // console.log(triangle.triangle[0].x)
     sketch.fill(0, 255, 0)
