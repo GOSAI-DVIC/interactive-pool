@@ -84,15 +84,15 @@ function draw_segment(sketch, f) {
     sketch.line(2 * width / 3, height / 2 + 18, 2 * width / 3, height / 2 - 18)
     sketch.line(width / 3, height / 2 + 18, width / 3, height / 2 - 18)
     sketch.text("A", width / 3 - 45 - 5, height / 2 + 8)
-    sketch.text("B", 2 * width / 3 + 15, height / 2 + 8)
+    sketch.text("B", 2 * width / 3 + 45, height / 2 + 8)
 }
 
 function draw_mediatrice(sketch, f) {
     sketch.textFont(f, 60);
     sketch.stroke(255, 0, 255);
     sketch.fill(255, 0, 255);
-    sketch.line(width / 2, height / 8, width / 2, 7 * height / 8)
-    sketch.text("(D)", width / 2 + 15, 1.5 * height / 8)
+    sketch.line(width / 2, 1.5*height / 8, width / 2, 7 * height / 8)
+    sketch.text("(D)", width / 2 + 50, 1.8 * height / 8)
 
     // sketch.line(7*width/12, height/2 + 20, 7*width/12, height/2-20)
     sketch.line(7 * width / 12 - 8, height / 2 + 20, 7 * width / 12 - 8, height / 2 - 20)

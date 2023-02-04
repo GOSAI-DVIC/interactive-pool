@@ -14,10 +14,10 @@ let firstRun = true;
 
 let triangle;
 
-let prolongerACtime = 7;
-let tracerHauteurBtime = 8;
-let showRightSymbolHauteurBtime = 9;
-let showAllHauteurCtime = 10;
+let prolongerACtime = 14;
+let tracerHauteurBtime = 17.5;
+let showRightSymbolHauteurBtime = 19;
+let showAllHauteurCtime = 22.5;
 
 let pause = false;
 let repeat = false;

@@ -1,12 +1,15 @@
 import {
+    testShow
+} from "./states/test.js"
+import {
     Balls
 } from "./components/balls.js";
 import {
     startShow
 } from "./states/start.js"
 import {
-    introductionShow
-} from "./states/introduction.js";
+    curtainShow
+} from "./states/curtain.js";
 import {
     mediatriceLessonSegmentShow
 } from "./states/mediatriceLessonSegment.js"
@@ -51,9 +54,11 @@ import {
 } from "./states/challengeIntroduction.js"
 
 let audio
+let bgAudio = new Audio("./platform/home/apps/triangles_lesson/assets/bg_music.wav");
 let balls = new Balls();
 let refreshCircleTrigger = 0;
 let audioEnded = false;
+// let bgAudioFirstTrigger = true;
 
 export const triangles_lesson = new p5((sketch) => {
     sketch.name = "triangles_lesson";
@@ -61,7 +66,7 @@ export const triangles_lesson = new p5((sketch) => {
 
     let f;
     let state = "start";
-    
+
     sketch.preload = () => {
         f = loadFont("/gosai/pool/core/server/assets/FallingSky-JKwK.otf");
     };
@@ -103,14 +108,22 @@ export const triangles_lesson = new p5((sketch) => {
         sketch.line(0, sketch.height, sketch.width, sketch.height)
         sketch.line(sketch.width, 0, sketch.width, sketch.height)
 
-        // state machine
+        // Background Audio
+        bgAudio.loop = true;
 
+        // state machine
         switch (state) {
+            case "test":
+                state = testShow(sketch, f, balls);
+                break;
             case "start":
                 state = startShow(sketch, f, balls);
+                bgAudio.volume = 0.2;
+                bgAudio.play();
                 break;
             case "introduction":
-                state = introductionShow(sketch, f);
+                audioSlowlyDecreaseToPause();
+                state = curtainShow(sketch, f, true);
                 break;
             case "mediatriceLessonSegment":
                 state = mediatriceLessonSegmentShow(sketch, f);
@@ -154,12 +167,35 @@ export const triangles_lesson = new p5((sketch) => {
             case "challengeIntroduction":
                 state = challengeIntroductionShow(sketch, f, balls);
                 break;
+            case "countdown":
+                state = countdownShow(sketch, f);
+                break;
+            case "challenge":
+                state = challengeShow(sketch, f, balls);
+                break;
+            case "challengeResult":
+                state = challengeResultShow(sketch, f, balls);
+                break;
+            case "outro":
+                state = curtainShow(sketch, f, false);
+                bgAudio.play();
+                break;
+            case "end":
+                audioSlowlyDecreaseToPause();
             default:
                 break;
         }
         sketch.pop();
     };
 });
+
+function audioSlowlyDecreaseToPause() {
+    if (bgAudio.volume > 0.01) {
+        bgAudio.volume -= 0.005;
+    } else {
+        bgAudio.pause();
+    }
+}
 
 export let navBar = {
     showPlayPauseButton: function (sketch, pause) {

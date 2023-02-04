@@ -15,8 +15,8 @@ let firstRun = true;
 let triangleMediatrice;
 let triangleHauteur;
 
-let showMediatricesTime = 1;
-let showHauteurTime = 4;
+let showMediatricesTime = 3;
+let showHauteurTime = 11.5;
 
 let pause = false;
 let repeat = false;
@@ -37,7 +37,7 @@ export function recapitulatifShow(sketch, f) {
 
     if (audioMedia.getAudioTime() > showMediatricesTime) {
         sketch.push()
-        sketch.translate(-90, 100)
+        sketch.translate(-90, 200)
         sketch.scale(0.7)
         triangleMediatrice.show(sketch, f)
         triangleMediatrice.showAllMediatrice(sketch)
@@ -62,9 +62,9 @@ export function recapitulatifShow(sketch, f) {
 function onEnter() {
     firstRun = false;
     audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/24_bis_recapitulatif.wav")
-    let b1 = new Ball(width / 3 - 80, 3 * height / 4 + 70)
-    let b2 = new Ball(2 * width / 3 - 40, 3 * height / 4)
-    let b3 = new Ball(width / 2 + 80, height / 4)
+    let b1 = new Ball(961, 790)
+    let b2 = new Ball(1162, 462)
+    let b3 = new Ball(528, 233)
     triangleMediatrice = new Triangle(b1, b2, b3)
 
     b1 = new Ball(831, 666)

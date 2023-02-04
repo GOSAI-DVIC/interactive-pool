@@ -98,9 +98,9 @@ function sleep(delay) {
 
 function onEnter(balls) {
     firstRun = false;
-    let b1 = new Ball(1147, 774)
-    let b3 = new Ball(747, 724)
-    let b2 = new Ball(1083, 502)
+    let b1 = new Ball(1042, 411)
+    let b2 = new Ball(787, 340)
+    let b3 = new Ball(813, 746)
     triangleIsocele = new Triangle(b1, b2, b3)
     console.log(triangleIsocele)
     audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/8_Tres_bien_maintenant.wav")

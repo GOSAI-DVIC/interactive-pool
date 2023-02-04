@@ -38,12 +38,12 @@ export function hauteurLessonInsideShow(sketch, f) {
     sketch.fill(255);
     sketch.textFont(f, 70);
     sketch.textAlign(sketch.CENTER)
-    sketch.text("Hauteur", width/2, 150);
+    sketch.text("Hauteur", width/2 + 100, 150);
 
     // console.log(triangle.triangle[0].x)
     sketch.fill(0, 255, 0)
     sketch.textFont(f, 60);
-    sketch.text("(D)", triangle.triangle[0].x + 15, triangle.triangle[0].y - 100)
+    sketch.text("(D)", triangle.triangle[0].x + 40, triangle.triangle[0].y - 100)
 
     if(firstAudio == true && audioMedia.checkIfAudioEnded() == true) {
         firstAudio = false;

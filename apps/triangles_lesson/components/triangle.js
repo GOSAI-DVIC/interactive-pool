@@ -416,13 +416,20 @@ export class Triangle {
     showEqualSymbolsBC(sketch) {
         sketch.push();
         sketch.stroke(255, 0, 255)
-        sketch.strokeWeight(5)
+        sketch.strokeWeight(2)
         sketch.noFill()
         // Equal symbol : Double Lines
-        sketch.line(this.H1.x, this.H1.y, this.H2.x, this.H2.y)
-        sketch.line(this.I1.x, this.I1.y, this.I2.x, this.I2.y)
-        sketch.line(this.J1.x, this.J1.y, this.J2.x, this.J2.y)
-        sketch.line(this.K1.x, this.K1.y, this.K2.x, this.K2.y)
+        // sketch.line(this.H1.x, this.H1.y, this.H2.x, this.H2.y)
+        // sketch.line(this.I1.x, this.I1.y, this.I2.x, this.I2.y)
+        // sketch.line(this.J1.x, this.J1.y, this.J2.x, this.J2.y)
+        // sketch.line(this.K1.x, this.K1.y, this.K2.x, this.K2.y)
+
+        // Equal symbol : Double Circles
+        sketch.circle((this.triangle[2].x + this.middle2.x) / 2, (this.triangle[2].y + this.middle2.y) / 2, 25);
+        sketch.circle((this.triangle[1].x + this.middle2.x) / 2, (this.triangle[1].y + this.middle2.y) / 2, 25);
+        sketch.circle((this.triangle[2].x + this.middle2.x) / 2, (this.triangle[2].y + this.middle2.y) / 2, 50);
+        sketch.circle((this.triangle[1].x + this.middle2.x) / 2, (this.triangle[1].y + this.middle2.y) / 2, 50);
+        
         sketch.pop();
     }
 

@@ -18,7 +18,7 @@ let solutionTrigger = false;
 let mediatriceFound = false;
 
 let Ax = width / 2
-let Ay = height / 8
+let Ay = 2*height / 8
 let Bx = width / 2 - 100
 let By = 7 * height / 8
 
@@ -136,7 +136,7 @@ function draw_segment(sketch, f) {
     sketch.fill(255);
     sketch.line(Ax, Ay, Bx, By)
     sketch.text("A", Ax - 45 - 5, Ay + 8)
-    sketch.text("B", Bx + 15, By + 8)
+    sketch.text("B", Bx + 40, By + 8)
     sketch.circle(Ax, Ay, 10)
     sketch.circle(Bx, By, 10)
 }

@@ -19,13 +19,24 @@ let x_triangle_perpendicular_bijector = 1200
 let x_segment = -size
 let x_triangle_altitude = 400
 
+let waitingTimeAfterAudio = 0; //milliseconds
+let endAudioTime = 0; //milliseconds
+let audioEnded = false;
 
-export function introductionShow(sketch, f) {
+export function curtainShow(sketch, f, beginning = true) {
   if (firstRun) {
-    onEnter()
+    onEnter(beginning)
   }
 
   showAudioButtons(sketch)
+
+  if (audioMedia.checkIfAudioEnded()) {
+    endAudioTime = millis()
+    audioEnded = true;
+  }
+  if (audioEnded && millis() - endAudioTime > waitingTimeAfterAudio) {
+    goDefaultNextStep = true;
+  }
 
   sketch.angleMode(RADIANS)
   rotating_triangle_perpendicular_bijector(sketch)
@@ -53,17 +64,35 @@ export function introductionShow(sketch, f) {
   sketch.fill(255);
   sketch.textFont(f, 70);
   sketch.textAlign(sketch.CENTER)
-  sketch.text("Introduction", width / 2, 150);
+  if(beginning){
+    sketch.text("Introduction", width / 2, 150);
+  } else {
+    sketch.text("Fin", width / 2, 150);
+  }
 
   if (goDefaultNextStep == true) {
     onExit()
-    return "mediatriceLessonSegment"
+    if (beginning) {
+      return "mediatriceLessonSegment"
+    } else {
+      return "end"
+    }
   }
-  return "introduction"
+  if (beginning) {
+    return "introduction"
+  } else {
+    return "outro"
+  }
 }
 
-function onEnter() {
-  audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/0_intro.wav")
+function onEnter(beginning) {
+  if (beginning) {
+    audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/0_intro.wav")
+    waitingTimeAfterAudio = 0; //milliseconds
+  } else {
+    audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/38_leçon_finie.wav")
+    waitingTimeAfterAudio = 10000; //milliseconds
+  }
   firstRun = false;
 }
 
@@ -78,9 +107,6 @@ function showAudioButtons(sketch) {
   repeat = navBar.checkRepeatButtons()
   navBar.showPlayPauseButton(sketch, pause)
   navBar.showRepeatButton(sketch, repeat)
-  if (audioMedia.checkIfAudioEnded()) {
-    goDefaultNextStep = true;
-  }
   if (pause == true && pauseTrigger == false) {
     audioMedia.pauseSound()
     pauseTrigger = true;

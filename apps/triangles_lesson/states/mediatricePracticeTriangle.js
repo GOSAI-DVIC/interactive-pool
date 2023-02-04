@@ -44,7 +44,8 @@ export function mediatricePracticeTriangleShow(sketch, f, balls) {
     sketch.textAlign(sketch.CENTER)
     sketch.text("Médiatrice", width/2, 150);
 
-    sketch.text(`Trouvées : ${numberOfmediatriceFound}/3`, 145, 155);
+    sketch.textFont(f, 42);
+    sketch.text(`Trouvées : ${numberOfmediatriceFound}/3`, width/2, 220);
 
     if (firstAudio && audioMedia.checkIfAudioEnded()) {
         firstAudio = false;
@@ -90,21 +91,21 @@ export function mediatricePracticeTriangleShow(sketch, f, balls) {
     if (endTrigger == true && audioMedia.checkIfAudioEnded()) {
         goDefaultNextStep = true;
     }
-    if ((helpTrigger == false) && (millis() - startTime > 20000)) {
-        helpTrigger = true;
-        audioMedia.stopSound();
-        audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/4_aide_mediatrice.wav")
-        firstHelpAudio = true;
-    }
-    if (firstHelpAudio && audioMedia.checkIfAudioEnded()) {
-        firstHelpAudio = false;
-        audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/9_mediatrices_triangle_practice.wav")
-    }
-    if(helpTrigger && solutionTrigger==false && perpendicularACfound==false) {
-        triangle.showHelpMediatricePoint(sketch)
-    }
+    // if ((helpTrigger == false) && (millis() - startTime > 20000)) {
+    //     helpTrigger = true;
+    //     audioMedia.stopSound();
+    //     audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/4_aide_mediatrice.wav")
+    //     firstHelpAudio = true;
+    // }
+    // if (firstHelpAudio && audioMedia.checkIfAudioEnded()) {
+    //     firstHelpAudio = false;
+    //     audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/9_mediatrices_triangle_practice.wav")
+    // }
+    // if(helpTrigger && solutionTrigger==false && perpendicularACfound==false) {
+    //     triangle.showHelpMediatricePoint(sketch)
+    // }
 
-    if ((solutionTrigger == false) && (millis() - startTime > 40000)) {
+    if ((solutionTrigger == false) && (millis() - startTime > 30000)) {
         solutionTrigger = true;
         audioMedia.stopSound();
         audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/9_bis_solution_mediatrices_ABC.wav")
