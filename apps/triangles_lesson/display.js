@@ -52,6 +52,15 @@ import {
 import {
     challengeIntroductionShow
 } from "./states/challengeIntroduction.js"
+import {
+    countdownShow
+} from "./states/countdown.js"
+import {
+    challengeShow
+} from "./states/challenge.js"
+import {
+    challengeResultShow
+} from "./states/challengeResult.js"
 
 let audio
 let bgAudio = new Audio("./platform/home/apps/triangles_lesson/assets/bg_music.wav");
@@ -65,7 +74,7 @@ export const triangles_lesson = new p5((sketch) => {
     sketch.activated = false;
 
     let f;
-    let state = "start";
+    let state = "challenge";
 
     sketch.preload = () => {
         f = loadFont("/gosai/pool/core/server/assets/FallingSky-JKwK.otf");
@@ -93,6 +102,7 @@ export const triangles_lesson = new p5((sketch) => {
     sketch.windowResized = () => resizeCanvas(windowWidth, windowHeight);
 
     sketch.show = () => {
+        console.log(state)
         sketch.clear();
         sketch.fill(0);
 
@@ -182,6 +192,8 @@ export const triangles_lesson = new p5((sketch) => {
                 break;
             case "end":
                 audioSlowlyDecreaseToPause();
+                // Save (one time) in a file the data of the experience (global time and challenge points)
+                break;
             default:
                 break;
         }
@@ -191,7 +203,7 @@ export const triangles_lesson = new p5((sketch) => {
 
 function audioSlowlyDecreaseToPause() {
     if (bgAudio.volume > 0.01) {
-        bgAudio.volume -= 0.005;
+        bgAudio.volume -= 0.001;
     } else {
         bgAudio.pause();
     }
@@ -272,21 +284,42 @@ export let navBar = {
 export let audioMedia = {
     playSound: function (sound) {
         audio = new Audio(sound);
+        audio.volume = 1;
         audio.play();
     },
     pauseSound: function () {
-        audio.pause();
+        try {
+            audio.pause();
+        }
+        catch (e) {
+            console.log("No audio to pause")
+        }
     },
     stopSound: function () {
-        audio.pause();
-        audio.currentTime = 0;
+        try {
+            audio.pause();
+            audio.currentTime = 0;
+        }
+        catch (e) {
+            console.log("No audio to stop")
+        }
     },
     resumeSound: function () {
-        audio.play();
+        try {
+            audio.play();
+        }
+        catch (e) {
+            console.log("No audio to resume")
+        }
     },
     restartSound: function () {
-        audio.currentTime = 0;
-        audio.play();
+        try {
+            audio.currentTime = 0;
+            audio.play();
+        }
+        catch (e) {
+            console.log("No audio to restart")
+        }
     },
     checkIfAudioEnded: function () {
         audio.onended = function () {
@@ -300,5 +333,8 @@ export let audioMedia = {
     },
     getAudioTime: function () {
         return audio.currentTime
+    },
+    setAudioVolume: function (volume) {
+        audio.volume = volume
     }
 }

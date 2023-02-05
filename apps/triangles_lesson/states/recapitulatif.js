@@ -14,9 +14,11 @@ let firstRun = true;
 
 let triangleMediatrice;
 let triangleHauteur;
+let triangleIsocele;
 
 let showMediatricesTime = 3;
 let showHauteurTime = 11.5;
+let showIsoceleTime = 19;
 
 let pause = false;
 let repeat = false;
@@ -37,18 +39,28 @@ export function recapitulatifShow(sketch, f) {
 
     if (audioMedia.getAudioTime() > showMediatricesTime) {
         sketch.push()
-        sketch.translate(-90, 200)
-        sketch.scale(0.7)
+        sketch.translate(-90, 300)
+        sketch.scale(0.55)
         triangleMediatrice.show(sketch, f)
         triangleMediatrice.showAllMediatrice(sketch)
         sketch.pop()
     }
     if (audioMedia.getAudioTime() > showHauteurTime) {
         sketch.push()
-        sketch.translate(700, 150)
-        sketch.scale(0.7)
+        sketch.translate(500, 300)
+        sketch.scale(0.52)
         triangleHauteur.show(sketch)
         triangleHauteur.showAllAltitudes(sketch)
+        sketch.pop()
+    }
+    if (audioMedia.getAudioTime() > showIsoceleTime) {
+        sketch.push()
+        sketch.translate(width + 160, height - 100)
+        sketch.rotate(PI)
+        sketch.scale(0.8)
+        triangleIsocele.show(sketch)
+        triangleIsocele.showAllAltitudeA(sketch)
+        triangleIsocele.showAllMediatriceBC(sketch)
         sketch.pop()
     }
 
@@ -71,6 +83,11 @@ function onEnter() {
     b2 = new Ball(1273, 539)
     b3 = new Ball(566, 470)
     triangleHauteur = new Triangle(b1, b2, b3)
+
+    b1 = new Ball(613, 646)
+    b2 = new Ball(842, 311)
+    b3 = new Ball(587, 240)
+    triangleIsocele = new Triangle(b1, b2, b3)
 }
 
 function onExit() {
