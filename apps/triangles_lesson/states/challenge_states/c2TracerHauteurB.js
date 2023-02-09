@@ -24,26 +24,21 @@ let once = true;
 let startTime = 0;
 let foundTime = 0;
 let timeToWait = 2000; // in ms
-let solutionTime = 20000; // in ms
+let solutionTime = 3000; // in ms
 let goEndTime = false;
+
+let showSolution = false;
 
 let pause = false;
 let repeat = false;
 let pauseTrigger = false;
 let repeatTrigger = false;
 
-let showSolution = false;
-
-export function c1TracerIsoceleShow(sketch, f, balls, round) {
+export function c2TracerHauteurBShow(sketch, f, balls, round) {
     if (firstRun) {
-        onEnter()
+        onEnter(round)
     }
     showAudioButtons(sketch)
-
-
-    
-    let b1 = createVector(-(width/2 - width), -(height/2 - height))
-    sketch.circle(b1.x, b1.y, 90)
 
     if (!endEnonce && audioMedia.checkIfAudioEnded()) {
         endEnonce = true;
@@ -54,33 +49,24 @@ export function c1TracerIsoceleShow(sketch, f, balls, round) {
         audioMedia.stopSound()
         audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/39_voici_la_solution.wav")
     }
-    if(showSolution) {    
-        let b2 = new Ball(width/2 - 150, height/3)
-        let b3 = new Ball(width/2 + 150, height/3)
-        triangle = new Triangle(b1, b2, b3)
-        sketch.noFill()
-        sketch.stroke(255)
-        sketch.strokeWeight(5)
-        sketch.circle(b2.x, b2.y, 90)
-        sketch.circle(b3.x, b3.y, 90)
-        triangle.show(sketch)
-        triangle.showAngle(sketch, f, true)
+
+    if(balls.ball_nb >= 2) {
+        sketch.push()
+        sketch.translate(width, height)
+        sketch.rotate(sketch.PI);
+        sketch.stroke(255, 0, 0);
+        sketch.strokeWeight(5);
+        sketch.line(balls.balls[0].x, balls.balls[0].y, balls.balls[1].x, balls.balls[1].y)
+        sketch.pop()
     }
 
-
-    if (!showSolution && balls.ball_nb >= 2) {
-        let b2 = createVector(-(balls.balls[1].x - width), -(balls.balls[1].y - height))
-        let b3 = createVector(-(balls.balls[0].x - width), -(balls.balls[0].y - height))
-        sketch.fill(255)
-        sketch.noStroke()
-        triangle = new Triangle(b1, b2, b3)
-        
-        triangle.show(sketch)
-        triangle.showAngle(sketch, f, true)
-        
-        if (triangle.IsIsoceleTriangle()) {
-            found = true;
-        }
+    triangle.show(sketch)
+    triangle.showLetter(sketch, f)
+    
+    if (endEnonce && (found || showSolution)) {
+        triangle.showAllAltitudeB(sketch)
+    } else {
+        found = triangle.placeAltitudeB(balls)
     }
 
     if (found == true && endEnonce == true && once == true) {
@@ -101,15 +87,24 @@ export function c1TracerIsoceleShow(sketch, f, balls, round) {
 
     if (goDefaultNextStep == true) {
         onExit()
-        return "c2TracerHauteurB"
+        return "c3QCMmediatriceIsocele"
     }
-    return "c1TracerIsocele"
+    return "c2TracerHauteurB"
 }
 
-function onEnter() {
+function onEnter(round) {
     firstRun = false;
-    audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/29_defi_trace_isocele.wav")
+    audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/30_defi_consigne_hauteur_B.wav")
     startTime = millis()
+    let b2 = new Ball(961, 890)
+    let b1 = new Ball(1162, 462)
+    let b3 = new Ball(528, 333)
+    if(!round) {
+        b1 = new Ball(1102, 740)
+        b2 = new Ball(1400, 510)
+        b3 = new Ball(740, 600)
+    }
+    triangle = new Triangle(b1, b2, b3)
 }
 
 function onExit() {
@@ -118,7 +113,6 @@ function onExit() {
     endEnonce = false;
     found = false;
     once = true;
-    goEndTime = false;
     showSolution = false;
     audioMedia.stopSound()
 }
@@ -142,5 +136,17 @@ function showAudioButtons(sketch) {
     }
     if (repeat == false) {
         repeatTrigger = false;
+    }
+}
+
+function showAttempLine(sketch, balls) {
+    if (balls.ball_nb >= 2) {
+        sketch.push()
+        sketch.translate(width, height)
+        sketch.rotate(sketch.PI);
+        sketch.stroke(255, 0, 0);
+        sketch.strokeWeight(5);
+        sketch.line(balls.balls[0].x, balls.balls[0].y, balls.balls[1].x, balls.balls[1].y)
+        sketch.pop()
     }
 }

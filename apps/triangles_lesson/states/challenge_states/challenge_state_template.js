@@ -7,13 +7,22 @@ import {
 } from "../challenge.js";
 import {
     Ball
-} from "../components/ball.js";
-import{
+} from "../../components/ball.js";
+import {
     Triangle
-} from "../components/triangle.js";
+} from "../../components/triangle.js";
 
 let goDefaultNextStep = false;
 let firstRun = true;
+let endEnonce = false;
+
+let found = false;
+let once = true;
+
+let startTime = 0;
+let foundTime = 0;
+let timeToWait = 2000; // in ms
+let goEndTime = false;
 
 let pause = false;
 let repeat = false;
@@ -26,19 +35,39 @@ export function __challengeState__Show(sketch, f, balls, round) {
     }
     showAudioButtons(sketch)
 
-    // WRITE CHALLENGE CODE HERE
+    if (!endEnonce && audioMedia.checkIfAudioEnded()) {
+        endEnonce = true;
+    }
 
+    
+
+    if (found == true && endEnonce == true && once == true) {
+        foundTime = millis()
+        once = false;
+        // audioMedia.stopSound()
+        audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/correct_sound.wav")
+        addPoint(1)
+    }
+    if (found && audioMedia.checkIfAudioEnded()) {
+        goEndTime = true
+    }
+    if (goEndTime) {
+        if (millis() - foundTime > timeToWait) {
+            goDefaultNextStep = true
+        }
+    }
 
     if (goDefaultNextStep == true) {
         onExit()
-        return "__nextChallengeState__"
+        return "__defaultNextChallengeState__"
     }
     return "__challengeState__"
 }
 
 function onEnter() {
     firstRun = false;
-    // audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/29_defi_trace_isocele.wav")
+    // audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/31_defi_consigne_QCM_mediatrice_isocele.wav")
+    startTime = millis()
 }
 
 function onExit() {

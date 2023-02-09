@@ -1,10 +1,20 @@
 // CREDITS : Exploding circle by Luxone, https://editor.p5js.org/Luxone/sketches/BkUl_rNY7
 
+import {
+  audioMedia,
+  navBar
+} from "../display.js"
+
 var center = {x:0, y:0}
 var circles
 let firstRun = true;
 let goDefaultNextStep = false;
 let buttonIsActivated = false;
+
+let pause = false;
+let repeat = false;
+let pauseTrigger = false;
+let repeatTrigger = false;
 
 center.x = width/2;
 center.y = height/2;
@@ -23,6 +33,13 @@ export function startShow(sketch, f, balls) {
       // let str="onEnter"
       // eval(str)
       onEnter()
+    }
+    showAudioButtons(sketch)
+    segmentButton(sketch, balls)
+
+    if(segment)
+    {
+      showAttempLine(sketch, balls)
     }
 
     circles.present(sketch);
@@ -51,6 +68,7 @@ export function startShow(sketch, f, balls) {
 }
 
 function onEnter() {
+  audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/test_audio.wav")
   circles = new circle(center.x,center.y,100,1000, 60, 10);
   firstRun = false;
 }
@@ -134,3 +152,59 @@ class circle {
     }
     }
   }
+
+  function showAudioButtons(sketch) {
+    pause = navBar.checkPauseButtons()
+    repeat = navBar.checkRepeatButtons()
+    navBar.showPlayPauseButton(sketch, pause)
+    navBar.showRepeatButton(sketch, repeat)
+    if (pause == true && pauseTrigger == false) {
+        audioMedia.pauseSound()
+        pauseTrigger = true;
+    }
+    if (pause == false && pauseTrigger == true) {
+        audioMedia.resumeSound()
+        pauseTrigger = false;
+    }
+    if (repeat == true && repeatTrigger == false) {
+        audioMedia.restartSound()
+        repeatTrigger = true;
+    }
+    if (repeat == false ) {
+        repeatTrigger = false;
+    }
+}
+
+let segment = false
+
+// function mouseClicked() {
+//   segment = !segment
+// }
+
+function showAttempLine(sketch, balls) {
+  if (balls.ball_nb >= 3) {
+      sketch.push()
+      sketch.translate(width, height)
+      sketch.rotate(sketch.PI);
+      sketch.stroke(255, 0, 0);
+      sketch.strokeWeight(5);
+      sketch.line(balls.balls[2].x, balls.balls[2].y, balls.balls[1].x, balls.balls[1].y)
+      sketch.pop()
+  }
+}
+
+function segmentButton(sketch, balls) {
+  if (balls.ball_nb >= 1) {
+    sketch.stroke(255)
+    sketch.strokeWeight(4)
+    sketch.line(0, 980, 100, 980)
+    sketch.line(100, 980, 100, 1080)
+    if(balls.balls[0].y < 100 && balls.balls[0].x > 1820)
+    {
+      segment = true;
+    }
+    else{
+      segment = false
+    }
+  }
+}

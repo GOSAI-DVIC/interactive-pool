@@ -72,6 +72,20 @@ export class Triangle {
         return false;
     }
 
+    IsIsoceleTriangle(tolerance = 2) { //tolerance is in degrees
+        if (abs(this.angle_a - this.angle_b) < tolerance || abs(this.angle_b - this.angle_c) < tolerance || abs(this.angle_c - this.angle_a) < tolerance) {
+            return true;
+        }
+        return false;
+    }
+
+    IsEquilateralTriangle(tolerance = 2) { //tolerance is in degrees
+        if (abs(this.angle_a - this.angle_b) < tolerance && abs(this.angle_b - this.angle_c) < tolerance) {
+            return true;
+        }
+        return false;
+    }
+
     changeColor(rgb) {
         this.color = rgb; //example : (255,141,92) or 255 for gray shades
     }
@@ -86,13 +100,16 @@ export class Triangle {
         sketch.pop();
     }
 
-    showAngle(sketch, f) {
+    showAngle(sketch, f, reverse = false) {
         sketch.textFont(f, 48);
         // textSize(48);
         sketch.noStroke();
         sketch.fill(255);
         let distance = 60;
         let angle_text = 180
+        if (reverse) {
+            angle_text = 0
+        }
         sketch.textAlign(CENTER, CENTER);
 
         sketch.push();
@@ -429,7 +446,7 @@ export class Triangle {
         sketch.circle((this.triangle[1].x + this.middle2.x) / 2, (this.triangle[1].y + this.middle2.y) / 2, 25);
         sketch.circle((this.triangle[2].x + this.middle2.x) / 2, (this.triangle[2].y + this.middle2.y) / 2, 50);
         sketch.circle((this.triangle[1].x + this.middle2.x) / 2, (this.triangle[1].y + this.middle2.y) / 2, 50);
-        
+
         sketch.pop();
     }
 
@@ -488,13 +505,13 @@ export class Triangle {
         }
         return false
     }
-    
+
     placeAltitudeA(balls, tolerance = 40) {
         if (balls.ball_nb >= 2) {
             let A_ball_ref = createVector(-(this.triangle[0].x - width), -(this.triangle[0].y - height))
             let H_ball_ref = createVector(-(this.Hx - width), -(this.Hy - height))
-            if((Math.abs((balls.balls[0].x-H_ball_ref.x)*(A_ball_ref.y-H_ball_ref.y) - (balls.balls[0].y-H_ball_ref.y)*(A_ball_ref.x-H_ball_ref.x)) / Math.sqrt(Math.pow(A_ball_ref.x-H_ball_ref.x, 2) + Math.pow(A_ball_ref.y-H_ball_ref.y, 2)))<tolerance){
-                if((Math.abs((balls.balls[1].x-H_ball_ref.x)*(A_ball_ref.y-H_ball_ref.y) - (balls.balls[1].y-H_ball_ref.y)*(A_ball_ref.x-H_ball_ref.x)) / Math.sqrt(Math.pow(A_ball_ref.x-H_ball_ref.x, 2) + Math.pow(A_ball_ref.y-H_ball_ref.y, 2)))<tolerance){
+            if ((Math.abs((balls.balls[0].x - H_ball_ref.x) * (A_ball_ref.y - H_ball_ref.y) - (balls.balls[0].y - H_ball_ref.y) * (A_ball_ref.x - H_ball_ref.x)) / Math.sqrt(Math.pow(A_ball_ref.x - H_ball_ref.x, 2) + Math.pow(A_ball_ref.y - H_ball_ref.y, 2))) < tolerance) {
+                if ((Math.abs((balls.balls[1].x - H_ball_ref.x) * (A_ball_ref.y - H_ball_ref.y) - (balls.balls[1].y - H_ball_ref.y) * (A_ball_ref.x - H_ball_ref.x)) / Math.sqrt(Math.pow(A_ball_ref.x - H_ball_ref.x, 2) + Math.pow(A_ball_ref.y - H_ball_ref.y, 2))) < tolerance) {
                     return true
                 }
             }
@@ -505,8 +522,8 @@ export class Triangle {
         if (balls.ball_nb >= 2) {
             let B_ball_ref = createVector(-(this.triangle[1].x - width), -(this.triangle[1].y - height))
             let I_ball_ref = createVector(-(this.Ix - width), -(this.Iy - height))
-            if((Math.abs((balls.balls[0].x-I_ball_ref.x)*(B_ball_ref.y-I_ball_ref.y) - (balls.balls[0].y-I_ball_ref.y)*(B_ball_ref.x-I_ball_ref.x)) / Math.sqrt(Math.pow(B_ball_ref.x-I_ball_ref.x, 2) + Math.pow(B_ball_ref.y-I_ball_ref.y, 2)))<tolerance){
-                if((Math.abs((balls.balls[1].x-I_ball_ref.x)*(B_ball_ref.y-I_ball_ref.y) - (balls.balls[1].y-I_ball_ref.y)*(B_ball_ref.x-I_ball_ref.x)) / Math.sqrt(Math.pow(B_ball_ref.x-I_ball_ref.x, 2) + Math.pow(B_ball_ref.y-I_ball_ref.y, 2)))<tolerance){
+            if ((Math.abs((balls.balls[0].x - I_ball_ref.x) * (B_ball_ref.y - I_ball_ref.y) - (balls.balls[0].y - I_ball_ref.y) * (B_ball_ref.x - I_ball_ref.x)) / Math.sqrt(Math.pow(B_ball_ref.x - I_ball_ref.x, 2) + Math.pow(B_ball_ref.y - I_ball_ref.y, 2))) < tolerance) {
+                if ((Math.abs((balls.balls[1].x - I_ball_ref.x) * (B_ball_ref.y - I_ball_ref.y) - (balls.balls[1].y - I_ball_ref.y) * (B_ball_ref.x - I_ball_ref.x)) / Math.sqrt(Math.pow(B_ball_ref.x - I_ball_ref.x, 2) + Math.pow(B_ball_ref.y - I_ball_ref.y, 2))) < tolerance) {
                     return true
                 }
             }
@@ -517,8 +534,8 @@ export class Triangle {
         if (balls.ball_nb >= 2) {
             let C_ball_ref = createVector(-(this.triangle[2].x - width), -(this.triangle[2].y - height))
             let J_ball_ref = createVector(-(this.Jx - width), -(this.Jy - height))
-            if((Math.abs((balls.balls[0].x-J_ball_ref.x)*(C_ball_ref.y-J_ball_ref.y) - (balls.balls[0].y-J_ball_ref.y)*(C_ball_ref.x-J_ball_ref.x)) / Math.sqrt(Math.pow(C_ball_ref.x-J_ball_ref.x, 2) + Math.pow(C_ball_ref.y-J_ball_ref.y, 2)))<tolerance){
-                if((Math.abs((balls.balls[1].x-J_ball_ref.x)*(C_ball_ref.y-J_ball_ref.y) - (balls.balls[1].y-J_ball_ref.y)*(C_ball_ref.x-J_ball_ref.x)) / Math.sqrt(Math.pow(C_ball_ref.x-J_ball_ref.x, 2) + Math.pow(C_ball_ref.y-J_ball_ref.y, 2)))<tolerance){
+            if ((Math.abs((balls.balls[0].x - J_ball_ref.x) * (C_ball_ref.y - J_ball_ref.y) - (balls.balls[0].y - J_ball_ref.y) * (C_ball_ref.x - J_ball_ref.x)) / Math.sqrt(Math.pow(C_ball_ref.x - J_ball_ref.x, 2) + Math.pow(C_ball_ref.y - J_ball_ref.y, 2))) < tolerance) {
+                if ((Math.abs((balls.balls[1].x - J_ball_ref.x) * (C_ball_ref.y - J_ball_ref.y) - (balls.balls[1].y - J_ball_ref.y) * (C_ball_ref.x - J_ball_ref.x)) / Math.sqrt(Math.pow(C_ball_ref.x - J_ball_ref.x, 2) + Math.pow(C_ball_ref.y - J_ball_ref.y, 2))) < tolerance) {
                     return true
                 }
             }
@@ -664,7 +681,7 @@ export class Triangle {
             this.linedash(sketch, this.triangle[2].x, this.triangle[2].y, Lx, Ly, 10) // A
         }
     }
-    
+
     showDottedLineB(sketch) {
         this.k = 1.4
         if (this.angle_a > 90) { //BÂC is optus, draw dashlines is required
@@ -678,7 +695,7 @@ export class Triangle {
             sketch.stroke(10, 200, 10)
             sketch.strokeWeight(4)
             this.linedash(sketch, this.triangle[0].x, this.triangle[0].y, Lx, Ly, 10, '-') // B
-        }  else if (this.angle_c > 90) { //CBY is optus, draw dashlines is required
+        } else if (this.angle_c > 90) { //CBY is optus, draw dashlines is required
             let Lx = (this.k * (this.Hx - this.triangle[2].x)) + this.triangle[2].x
             let Ly = (this.k * (this.Hy - this.triangle[2].y)) + this.triangle[2].y
 
@@ -782,7 +799,7 @@ export class Triangle {
     }
 
     showIsoceleEqualSymbols(sketch) {
-        if(this.angle_a == this.angle_b) {
+        if (this.angle_a == this.angle_b) {
             sketch.stroke(255, 255, 0)
             sketch.noFill()
             sketch.strokeWeight(3)
@@ -791,7 +808,7 @@ export class Triangle {
             sketch.circle(this.middle2.x, this.middle2.y, 25)
             sketch.circle(this.middle2.x, this.middle2.y, 45)
         }
-        if(this.angle_b == this.angle_c) {
+        if (this.angle_b == this.angle_c) {
             sketch.stroke(255, 255, 0)
             sketch.noFill()
             sketch.strokeWeight(3)
@@ -800,7 +817,7 @@ export class Triangle {
             sketch.circle(this.middle1.x, this.middle1.y, 25)
             sketch.circle(this.middle1.x, this.middle1.y, 45)
         }
-        if(this.angle_a == this.angle_c) {
+        if (this.angle_a == this.angle_c) {
             sketch.stroke(255, 255, 0)
             sketch.noFill()
             sketch.strokeWeight(3)
@@ -812,7 +829,7 @@ export class Triangle {
     }
 
     showEquilateralEqualSymbols(sketch) {
-        if(this.angle_a == this.angle_b && this.angle_b == this.angle_c) {
+        if (this.angle_a == this.angle_b && this.angle_b == this.angle_c) {
             sketch.stroke(255, 255, 0)
             sketch.noFill()
             sketch.strokeWeight(3)
@@ -820,5 +837,23 @@ export class Triangle {
             sketch.circle(this.middle2.x, this.middle2.y, 40)
             sketch.circle(this.middle3.x, this.middle3.y, 40)
         }
+    }
+
+    sign(p1, p2, p3) {
+        return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
+    }
+
+    PointInTriangle(pt) {
+        let d1, d2, d3;
+        let has_neg, has_pos;
+
+        d1 = this.sign(pt, this.triangle[0], this.triangle[1]);
+        d2 = this.sign(pt, this.triangle[1], this.triangle[2]);
+        d3 = this.sign(pt, this.triangle[2], this.triangle[0]);
+
+        has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0);
+        has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0);
+
+        return !(has_neg && has_pos);
     }
 }

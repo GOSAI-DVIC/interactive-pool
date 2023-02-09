@@ -35,6 +35,7 @@ export function mediatriceLessonSegmentShow(sketch, f) {
     if (goDefaultNextStep == true) {
         onExit()
         return "mediatriceLessonTriangle"
+        // return "end"
     }
     return "mediatriceLessonSegment"
 }

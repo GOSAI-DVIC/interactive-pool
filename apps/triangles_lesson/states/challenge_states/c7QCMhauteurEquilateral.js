@@ -16,10 +16,11 @@ let goDefaultNextStep = false;
 let firstRun = true;
 let endEnonce = false;
 
-let triangle;
-
 let found = false;
 let once = true;
+let once1 = true;
+let once2 = true;
+let showSolution = false;
 
 let startTime = 0;
 let foundTime = 0;
@@ -27,60 +28,61 @@ let timeToWait = 2000; // in ms
 let solutionTime = 20000; // in ms
 let goEndTime = false;
 
+let triangle1;
+let triangle2;
+let triangle3;
+
 let pause = false;
 let repeat = false;
 let pauseTrigger = false;
 let repeatTrigger = false;
 
-let showSolution = false;
-
-export function c1TracerIsoceleShow(sketch, f, balls, round) {
+export function c7QCMhauteurEquilateralShow(sketch, f, balls, round) {
     if (firstRun) {
         onEnter()
     }
     showAudioButtons(sketch)
 
-
-    
-    let b1 = createVector(-(width/2 - width), -(height/2 - height))
-    sketch.circle(b1.x, b1.y, 90)
-
-    if (!endEnonce && audioMedia.checkIfAudioEnded()) {
-        endEnonce = true;
-    }
+    triangle1.show(sketch)
+    triangle2.show(sketch)
+    triangle3.show(sketch)
+    triangle1.showAllAltitudeA(sketch)
+    triangle2.showAllAltitudeA(sketch)
+    triangle3.showAllAltitudeA(sketch)
+    triangle1.showAllAltitudeB(sketch)
+    triangle2.showAllAltitudeB(sketch)
+    triangle3.showAllAltitudeB(sketch)
 
     if(!showSolution && endEnonce == true && millis() - startTime > solutionTime) {
         showSolution = true;
         audioMedia.stopSound()
         audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/39_voici_la_solution.wav")
     }
-    if(showSolution) {    
-        let b2 = new Ball(width/2 - 150, height/3)
-        let b3 = new Ball(width/2 + 150, height/3)
-        triangle = new Triangle(b1, b2, b3)
+    if(showSolution) {
         sketch.noFill()
-        sketch.stroke(255)
+        sketch.stroke(255, 0, 255)
         sketch.strokeWeight(5)
-        sketch.circle(b2.x, b2.y, 90)
-        sketch.circle(b3.x, b3.y, 90)
-        triangle.show(sketch)
-        triangle.showAngle(sketch, f, true)
+        sketch.circle(triangle2.x, triangle3.y, 280)
     }
 
-
-    if (!showSolution && balls.ball_nb >= 2) {
-        let b2 = createVector(-(balls.balls[1].x - width), -(balls.balls[1].y - height))
-        let b3 = createVector(-(balls.balls[0].x - width), -(balls.balls[0].y - height))
-        sketch.fill(255)
-        sketch.noStroke()
-        triangle = new Triangle(b1, b2, b3)
-        
-        triangle.show(sketch)
-        triangle.showAngle(sketch, f, true)
-        
-        if (triangle.IsIsoceleTriangle()) {
+    if(endEnonce && (!found || !showSolution) &&balls.ball_nb >= 1) {
+        let ball0 = createVector(-(balls.balls[0].x - width), -(balls.balls[0].y - height))
+        let ball1 = createVector(-(balls.balls[1].x - width), -(balls.balls[1].y - height))
+        if (triangle2.PointInTriangle(ball0) || triangle2.PointInTriangle(ball1)) {
             found = true;
         }
+        if(once1 && triangle1.PointInTriangle(ball0) || triangle1.PointInTriangle(ball1)) {
+            once1 = false;
+            audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/wrong_answer_sound.wav")
+        }
+        if(once2 && triangle2.PointInTriangle(ball0) || triangle2.PointInTriangle(ball1)) {
+            once2 = false;
+            audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/wrong_answer_sound.wav")
+        }
+    }
+
+    if (!endEnonce && audioMedia.checkIfAudioEnded()) {
+        endEnonce = true;
     }
 
     if (found == true && endEnonce == true && once == true) {
@@ -101,26 +103,44 @@ export function c1TracerIsoceleShow(sketch, f, balls, round) {
 
     if (goDefaultNextStep == true) {
         onExit()
-        return "c2TracerHauteurB"
+        return "c8TracerHauteursTriangle"
     }
-    return "c1TracerIsocele"
+    return "c7QCMhauteurEquilateral"
 }
 
 function onEnter() {
     firstRun = false;
-    audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/29_defi_trace_isocele.wav")
+    audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/35_defi_consigne_QCM_hauteur_equilateral.wav")
+    
+    let b1 = new Ball(1313, 662)
+    let b2 = new Ball(1650, 790)
+    let b3 = new Ball(1548, 513)
+    triangle1 = new Triangle(b1, b2, b3)
+    
+    let b4 = new Ball(1138, 743)
+    let b5 = new Ball(804, 718)
+    let b6 = new Ball(992, 443)
+    triangle2 = new Triangle(b4, b5, b6)
+
+    let b7 = new Ball(300, 700)
+    let b8 = new Ball(600, 700)
+    let b9 = new Ball(450, 500)
+    triangle3 = new Triangle(b7, b8, b9)
+
     startTime = millis()
 }
 
 function onExit() {
     firstRun = true;
     goDefaultNextStep = false;
+    audioMedia.stopSound()
     endEnonce = false;
     found = false;
     once = true;
-    goEndTime = false;
+    once1 = true;
+    once2 = true;
     showSolution = false;
-    audioMedia.stopSound()
+    goEndTime = false;
 }
 
 function showAudioButtons(sketch) {

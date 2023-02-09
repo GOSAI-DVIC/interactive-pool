@@ -86,7 +86,7 @@ export function challengeIntroductionShow(sketch, f, balls) {
 
 function onEnter() {
   circles = new circle(center.x, center.y, 100, 1000, 60, 10);
-  audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/25_1min30_defi_intro.wav")
+  audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/25_2min_defi_intro.wav")
   firstRun = false;
 }
 

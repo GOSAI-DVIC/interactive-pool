@@ -1,52 +1,93 @@
+import {
+    audioMedia
+} from "../display.js";
+import {
+    c1TracerIsoceleShow,
+} from "./challenge_states/c1TracerIsocele.js";
+import {
+    c2TracerHauteurBShow,
+} from "./challenge_states/c2TracerHauteurB.js";
+import {
+    c3QCMmediatriceIsoceleShow,
+} from "./challenge_states/c3QCMmediatriceIsocele.js";
+import {
+    c4TracerMediatricesTriangleShow,
+} from "./challenge_states/c4TracerMediatricesTriangle.js";
+import {
+    c5TracerEquilateralShow,
+} from "./challenge_states/c5TracerEquilateral.js";
+import {
+    c6TracerMediatriceSegmentABShow,
+} from "./challenge_states/c6TracerMediatriceSegmentAB.js";
+import {
+    c7QCMhauteurEquilateralShow
+} from "./challenge_states/c7QCMhauteurEquilateral.js";
+import {
+    c8TracerHauteursTriangleShow
+} from "./challenge_states/c8TracerHauteursTriangle.js";
+
 let goDefaultNextStep = false;
 let firstRun = true;
 
 let numberOfPoint = 0;
 
-let timeLeft = 60; // 60 seconds
+let timeLeft = 120; // 120 seconds
 let lastSecond = 0;
 
-let challengeState = "1TracerIsocele";
-let round = true;
+// let challengeState = "c8TracerHauteursTriangle";
+// let challengeState = "c7QCMhauteurEquilateral";
+// let challengeState = "c6TracerMediatriceSegmentAB";
+// let challengeState = "c5TracerEquilateral";
+// let challengeState = "c4TracerMediatricesTriangle";
+// let challengeState = "c3QCMmediatriceIsocele";
+// let challengeState = "c2TracerHauteurB";
+let challengeState = "c1TracerIsocele";
 
-export function challengeShow(sketch, f) {
+let round = true; //Default
+// let round = false;
+
+export function challengeShow(sketch, f, balls) {
     if (firstRun) {
         onEnter()
     }
     sketch.push()
-    sketch.translate(-300,0)
+    sketch.translate(-300, 0)
     showTimerIcon(sketch, f)
     sketch.pop()
     sketch.textFont(f, 70);
     sketch.textAlign(sketch.CENTER)
     sketch.fill(255);
     sketch.text(`Score : ${numberOfPoint}`, width / 2 + 300, 177)
-    
+    showPointIncrementation(sketch, f)
+
     // challenge state machine
     switch (challengeState) {
         case "c1TracerIsocele":
-            challengeState = c1TracerIsocele(sketch, f, balls, round);
+            challengeState = c1TracerIsoceleShow(sketch, f, balls, round);
             break;
         case "c2TracerHauteurB":
-            challengeState = c2TracerHauteurB(sketch, f, balls, round);
+            challengeState = c2TracerHauteurBShow(sketch, f, balls, round);
             break;
         case "c3QCMmediatriceIsocele":
-            challengeState = c3QCMmediatriceIsocele(sketch, f, balls, round);
+            challengeState = c3QCMmediatriceIsoceleShow(sketch, f, balls, round);
             break;
         case "c4TracerMediatricesTriangle":
-            challengeState = c4TracerMediatricesTriangle(sketch, f, balls, round);
+            challengeState = c4TracerMediatricesTriangleShow(sketch, f, balls, round);
             break;
         case "c5TracerEquilateral":
-            challengeState = c5TracerEquilateral(sketch, f, balls, round);
+            challengeState = c5TracerEquilateralShow(sketch, f, balls, round);
             break;
         case "c6TracerMediatriceSegmentAB":
-            challengeState = c6TracerMediatriceSegmentAB(sketch, f, balls, round);
+            challengeState = c6TracerMediatriceSegmentABShow(sketch, f, balls, round);
             break;
         case "c7QCMhauteurEquilateral":
-            challengeState = c7QCMhauteurEquilateral(sketch, f, balls, round);
+            challengeState = c7QCMhauteurEquilateralShow(sketch, f, balls, round);
             break;
         case "c8TracerHauteursTriangle":
-            challengeState = c8TracerHauteursTriangle(sketch, f, balls, round);
+            challengeState = c8TracerHauteursTriangleShow(sketch, f, balls, round);
+            if(challengeState == "c1TracerIsocele"){
+                round = !round;
+            }
             break;
         default:
             break;
@@ -78,6 +119,9 @@ export function getNumberOfPoint() {
 
 export function addPoint(toAdd) {
     numberOfPoint += toAdd;
+    pointIncrementation = toAdd;
+    yPointIncrementation = 27;
+    intensityPointIncrementation = 255;
 }
 
 function showTimerIcon(sketch, f) {
@@ -112,4 +156,26 @@ function showTimerIcon(sketch, f) {
     if (timeLeft < 0) {
         goDefaultNextStep = true;
     }
+}
+
+let pointIncrementation = 0;
+let yPointIncrementation = 0; //27;
+let intensityPointIncrementation = 0; //255;
+
+function showPointIncrementation(sketch, f) {
+    if (intensityPointIncrementation > 0) {
+        sketch.textFont(f, 50);
+        sketch.fill(intensityPointIncrementation)
+        if (pointIncrementation >= 0) {
+            sketch.text(`+ ${pointIncrementation}`, width / 2 + 300, 250 - yPointIncrementation)
+        }
+        if (pointIncrementation < 0) {
+            sketch.text(`- ${abs(pointIncrementation)}`, width / 2 + 300, 250)
+        }
+        if (yPointIncrementation > 0) {
+            yPointIncrementation -= 1;
+        }
+        intensityPointIncrementation -= 2;
+    }
+
 }

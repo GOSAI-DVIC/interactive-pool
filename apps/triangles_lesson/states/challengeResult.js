@@ -38,13 +38,13 @@ export function challengeResultShow(sketch, f) {
     sketch.textAlign(sketch.CENTER)
     sketch.text("Ton score du Défi :", width / 2, 350);
     sketch.textFont(f, 80);
-    if(numberOfPoint >= 1) {
+    if(numberOfPoint >= 0.5) {
         sketch.text(`${numberOfPoint} points`, width / 2, 600);
         sketch.textFont(f, 100);
         sketch.text("Bravo!", width / 2, 850);
     }
     else {
-        sketch.text("0 point", width / 2, 600);
+        sketch.text(`${numberOfPoint} point`, width / 2, 600);
         sketch.textFont(f, 50);
         sketch.text("Ce n'est qu'un jeu, ça ne veut rien dire!", width / 2, 850);
     }
@@ -61,7 +61,7 @@ function onEnter() {
     numberOfPoint = getNumberOfPoint();
     // console.log(numberOfPoint)
     audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/37_bis_finish_sound_effect.wav")
-    audioMedia.setAudioVolume(0.4)
+    audioMedia.setAudioVolume(0.2)
 }
 
 function onExit() {

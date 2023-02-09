@@ -16,38 +16,35 @@ let goDefaultNextStep = false;
 let firstRun = true;
 let endEnonce = false;
 
-let triangle;
-
 let found = false;
 let once = true;
+
+let triangle;
 
 let startTime = 0;
 let foundTime = 0;
 let timeToWait = 2000; // in ms
 let solutionTime = 20000; // in ms
 let goEndTime = false;
+let showSolution = false;
 
 let pause = false;
 let repeat = false;
 let pauseTrigger = false;
 let repeatTrigger = false;
 
-let showSolution = false;
-
-export function c1TracerIsoceleShow(sketch, f, balls, round) {
+export function c5TracerEquilateralShow(sketch, f, balls, round) {
     if (firstRun) {
         onEnter()
     }
     showAudioButtons(sketch)
 
-
-    
-    let b1 = createVector(-(width/2 - width), -(height/2 - height))
-    sketch.circle(b1.x, b1.y, 90)
-
     if (!endEnonce && audioMedia.checkIfAudioEnded()) {
         endEnonce = true;
     }
+
+    let b1 = createVector(-(width / 2 - width), -(height / 2 - height))
+    sketch.circle(b1.x, b1.y, 90)
 
     if(!showSolution && endEnonce == true && millis() - startTime > solutionTime) {
         showSolution = true;
@@ -55,8 +52,8 @@ export function c1TracerIsoceleShow(sketch, f, balls, round) {
         audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/39_voici_la_solution.wav")
     }
     if(showSolution) {    
-        let b2 = new Ball(width/2 - 150, height/3)
-        let b3 = new Ball(width/2 + 150, height/3)
+        let b2 = new Ball(width/2 - 150, height/2 + 258)
+        let b3 = new Ball(width/2 + 150, height/2 + 258)
         triangle = new Triangle(b1, b2, b3)
         sketch.noFill()
         sketch.stroke(255)
@@ -67,19 +64,20 @@ export function c1TracerIsoceleShow(sketch, f, balls, round) {
         triangle.showAngle(sketch, f, true)
     }
 
+    if (endEnonce) {
+        if (!showSolution && balls.ball_nb >= 2) {
+            let b2 = createVector(-(balls.balls[1].x - width), -(balls.balls[1].y - height))
+            let b3 = createVector(-(balls.balls[0].x - width), -(balls.balls[0].y - height))
+            sketch.fill(255)
+            sketch.noStroke()
+            triangle = new Triangle(b1, b2, b3)
 
-    if (!showSolution && balls.ball_nb >= 2) {
-        let b2 = createVector(-(balls.balls[1].x - width), -(balls.balls[1].y - height))
-        let b3 = createVector(-(balls.balls[0].x - width), -(balls.balls[0].y - height))
-        sketch.fill(255)
-        sketch.noStroke()
-        triangle = new Triangle(b1, b2, b3)
-        
-        triangle.show(sketch)
-        triangle.showAngle(sketch, f, true)
-        
-        if (triangle.IsIsoceleTriangle()) {
-            found = true;
+            triangle.show(sketch)
+            triangle.showAngle(sketch, f, true)
+
+            if (triangle.IsEquilateralTriangle()) {
+                found = true;
+            }
         }
     }
 
@@ -101,26 +99,26 @@ export function c1TracerIsoceleShow(sketch, f, balls, round) {
 
     if (goDefaultNextStep == true) {
         onExit()
-        return "c2TracerHauteurB"
+        return "c6TracerMediatriceSegmentAB"
     }
-    return "c1TracerIsocele"
+    return "c5TracerEquilateral"
 }
 
 function onEnter() {
     firstRun = false;
-    audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/29_defi_trace_isocele.wav")
+    audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/33_defi_trace_equilateral.wav")
     startTime = millis()
 }
 
 function onExit() {
     firstRun = true;
     goDefaultNextStep = false;
+    audioMedia.stopSound()
     endEnonce = false;
     found = false;
     once = true;
-    goEndTime = false;
     showSolution = false;
-    audioMedia.stopSound()
+    goEndTime = false;
 }
 
 function showAudioButtons(sketch) {

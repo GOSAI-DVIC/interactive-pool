@@ -56,7 +56,8 @@ import {
     countdownShow
 } from "./states/countdown.js"
 import {
-    challengeShow
+    challengeShow,
+    getNumberOfPoint
 } from "./states/challenge.js"
 import {
     challengeResultShow
@@ -67,6 +68,10 @@ let bgAudio = new Audio("./platform/home/apps/triangles_lesson/assets/bg_music.w
 let balls = new Balls();
 let refreshCircleTrigger = 0;
 let audioEnded = false;
+let startingTime = 0;
+let globalTime = 0;
+let once = true;
+let challengePoints = 0;
 // let bgAudioFirstTrigger = true;
 
 export const triangles_lesson = new p5((sketch) => {
@@ -74,7 +79,9 @@ export const triangles_lesson = new p5((sketch) => {
     sketch.activated = false;
 
     let f;
-    let state = "challenge";
+    let state = "start"
+    // let state = "challenge";
+    // let state = "hauteurPracticeC";
 
     sketch.preload = () => {
         f = loadFont("/gosai/pool/core/server/assets/FallingSky-JKwK.otf");
@@ -102,7 +109,6 @@ export const triangles_lesson = new p5((sketch) => {
     sketch.windowResized = () => resizeCanvas(windowWidth, windowHeight);
 
     sketch.show = () => {
-        console.log(state)
         sketch.clear();
         sketch.fill(0);
 
@@ -127,6 +133,7 @@ export const triangles_lesson = new p5((sketch) => {
                 state = testShow(sketch, f, balls);
                 break;
             case "start":
+                startingTime = millis()
                 state = startShow(sketch, f, balls);
                 bgAudio.volume = 0.2;
                 bgAudio.play();
@@ -188,10 +195,33 @@ export const triangles_lesson = new p5((sketch) => {
                 break;
             case "outro":
                 state = curtainShow(sketch, f, false);
+                bgAudio.volume = 0.3;
                 bgAudio.play();
+
                 break;
             case "end":
                 audioSlowlyDecreaseToPause();
+                if(once) {
+                    once = false;
+                    globalTime = millis() - startingTime;
+                    challengePoints = getNumberOfPoint()
+                    //convert to seconds
+                    globalTime = globalTime / 1000;
+                    //Round to 2 decimals
+                    globalTime = Math.round(globalTime * 100) / 100;
+                    //Save data in json
+                    saveData();
+                }
+                sketch.stroke(255)
+                sketch.fill(255);
+                sketch.textFont(f, 70);
+                sketch.textAlign(sketch.CENTER)
+                sketch.text("Merci d'avoir joué !", sketch.width / 2, sketch.height / 2);
+                sketch.text("Vous avez gagné " + challengePoints + " points !", sketch.width / 2, sketch.height / 2 + 100);
+                sketch.text("Votre temps global est de " + globalTime + " s", sketch.width / 2, sketch.height / 2 + 200);
+                // save data in json
+
+
                 // Save (one time) in a file the data of the experience (global time and challenge points)
                 break;
             default:
