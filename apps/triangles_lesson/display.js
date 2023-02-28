@@ -210,7 +210,7 @@ export const triangles_lesson = new p5((sketch) => {
                     //Round to 2 decimals
                     globalTime = Math.round(globalTime * 100) / 100;
                     //Save data in json
-                    saveData();
+                    // saveData();
                 }
                 sketch.stroke(255)
                 sketch.fill(255);

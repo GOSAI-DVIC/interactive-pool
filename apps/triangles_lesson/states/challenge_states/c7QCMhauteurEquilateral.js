@@ -53,30 +53,34 @@ export function c7QCMhauteurEquilateralShow(sketch, f, balls, round) {
     triangle2.showAllAltitudeB(sketch)
     triangle3.showAllAltitudeB(sketch)
 
-    if(!showSolution && endEnonce == true && millis() - startTime > solutionTime) {
+    if (!showSolution && endEnonce == true && millis() - startTime > solutionTime) {
         showSolution = true;
         audioMedia.stopSound()
         audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/39_voici_la_solution.wav")
     }
-    if(showSolution) {
+    if (showSolution) {
         sketch.noFill()
         sketch.stroke(255, 0, 255)
         sketch.strokeWeight(5)
-        sketch.circle(triangle2.x, triangle3.y, 280)
+        sketch.circle(triangle2.x, triangle2.y, 280)
     }
 
-    if(endEnonce && (!found || !showSolution) &&balls.ball_nb >= 1) {
+    if (endEnonce && (!found || !showSolution) && balls.ball_nb >= 1) {
         let ball0 = createVector(-(balls.balls[0].x - width), -(balls.balls[0].y - height))
         let ball1 = createVector(-(balls.balls[1].x - width), -(balls.balls[1].y - height))
         if (triangle2.PointInTriangle(ball0) || triangle2.PointInTriangle(ball1)) {
             found = true;
         }
-        if(once1 && triangle1.PointInTriangle(ball0) || triangle1.PointInTriangle(ball1)) {
+        if (once1 && triangle1.PointInTriangle(ball0) || triangle1.PointInTriangle(ball1)) {
             once1 = false;
+
+            audioMedia.stopSound()
             audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/wrong_answer_sound.wav")
         }
-        if(once2 && triangle2.PointInTriangle(ball0) || triangle2.PointInTriangle(ball1)) {
+        if (once2 && triangle3.PointInTriangle(ball0) || triangle3.PointInTriangle(ball1)) {
             once2 = false;
+
+            audioMedia.stopSound()
             audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/wrong_answer_sound.wav")
         }
     }
@@ -92,7 +96,7 @@ export function c7QCMhauteurEquilateralShow(sketch, f, balls, round) {
         audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/correct_sound.wav")
         addPoint(1)
     }
-    if ((found||showSolution) && audioMedia.checkIfAudioEnded()) {
+    if ((found || showSolution) && audioMedia.checkIfAudioEnded()) {
         goEndTime = true
     }
     if (goEndTime) {
@@ -111,12 +115,12 @@ export function c7QCMhauteurEquilateralShow(sketch, f, balls, round) {
 function onEnter() {
     firstRun = false;
     audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/35_defi_consigne_QCM_hauteur_equilateral.wav")
-    
+
     let b1 = new Ball(1313, 662)
     let b2 = new Ball(1650, 790)
     let b3 = new Ball(1548, 513)
     triangle1 = new Triangle(b1, b2, b3)
-    
+
     let b4 = new Ball(1138, 743)
     let b5 = new Ball(804, 718)
     let b6 = new Ball(992, 443)

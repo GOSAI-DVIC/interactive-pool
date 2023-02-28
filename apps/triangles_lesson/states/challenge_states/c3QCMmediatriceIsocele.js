@@ -47,48 +47,49 @@ export function c3QCMmediatriceIsoceleShow(sketch, f, balls, round) {
         endEnonce = true;
     }
 
-    if(!showSolution && endEnonce == true && millis() - startTime > solutionTime) {
+    if (!showSolution && endEnonce == true && millis() - startTime > solutionTime) {
         showSolution = true;
         audioMedia.stopSound()
         audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/39_voici_la_solution.wav")
     }
-    if(showSolution) {
+    if (showSolution) {
         sketch.noFill()
         sketch.stroke(0, 255, 0)
         sketch.strokeWeight(5)
-        if(round){
+        if (round) {
             sketch.circle(triangle3.x, triangle3.y, 280)
-        }
-        else {
+        } else {
             sketch.circle(triangle2.x, triangle2.y, 280)
         }
     }
 
-    if(endEnonce && (!found || !showSolution) &&balls.ball_nb >= 1) {
+    if (endEnonce && (!found || !showSolution) && balls.ball_nb >= 1) {
         let ball0 = createVector(-(balls.balls[0].x - width), -(balls.balls[0].y - height))
         let ball1 = createVector(-(balls.balls[1].x - width), -(balls.balls[1].y - height))
-        if(round) {
+        if (round) {
             if (triangle3.PointInTriangle(ball0) || triangle3.PointInTriangle(ball1)) {
                 found = true;
             }
-            if(once1 && triangle1.PointInTriangle(ball0) || triangle1.PointInTriangle(ball1)) {
+            if (once1 && triangle1.PointInTriangle(ball0) || triangle1.PointInTriangle(ball1)) {
                 once1 = false;
+
+                audioMedia.stopSound()
                 audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/wrong_answer_sound.wav")
             }
-            if(once2 && triangle2.PointInTriangle(ball0) || triangle2.PointInTriangle(ball1)) {
+            if (once2 && triangle2.PointInTriangle(ball0) || triangle2.PointInTriangle(ball1)) {
                 once2 = false;
+                audioMedia.stopSound()
                 audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/wrong_answer_sound.wav")
             }
-        }
-        else {
+        } else {
             if (triangle2.PointInTriangle(ball0) || triangle2.PointInTriangle(ball1)) {
                 found = true;
             }
-            if(once1 && triangle1.PointInTriangle(ball0) || triangle1.PointInTriangle(ball1)) {
+            if (once1 && triangle1.PointInTriangle(ball0) || triangle1.PointInTriangle(ball1)) {
                 once1 = false;
                 audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/wrong_answer_sound.wav")
             }
-            if(once2 && triangle3.PointInTriangle(ball0) || triangle3.PointInTriangle(ball1)) {
+            if (once2 && triangle3.PointInTriangle(ball0) || triangle3.PointInTriangle(ball1)) {
                 once2 = false;
                 audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/wrong_answer_sound.wav")
             }
@@ -111,7 +112,7 @@ export function c3QCMmediatriceIsoceleShow(sketch, f, balls, round) {
         audioMedia.playSound("./platform/home/apps/triangles_lesson/assets/challenge/correct_sound.wav")
         addPoint(1)
     }
-    if ((found||showSolution) && audioMedia.checkIfAudioEnded()) {
+    if ((found || showSolution) && audioMedia.checkIfAudioEnded()) {
         goEndTime = true
     }
     if (goEndTime) {
@@ -134,18 +135,17 @@ function onEnter(round) {
     let b1 = new Ball(1263, 662)
     let b2 = new Ball(1600, 790)
     let b3 = new Ball(1508, 633)
-    if(!round) 
-    {
-        b1 = new Ball(350, height/2+100 + 100)
-        b2 = new Ball(395, height/2 - 204 + 100)
-        b3 = new Ball(560, height/2 + 91 + 100)
+    if (!round) {
+        b1 = new Ball(350, height / 2 + 100 + 100)
+        b2 = new Ball(395, height / 2 - 204 + 100)
+        b3 = new Ball(560, height / 2 + 91 + 100)
     }
     triangle1 = new Triangle(b1, b2, b3)
 
-    let b4 = new Ball(width/2 - 100, height/2+100 + 100)
-    let b5 = new Ball(width/2 + 15, height/2 - 204 + 100)
-    let b6 = new Ball(width/2 + 60, height/2 + 91 + 100)
-    if(!round) {
+    let b4 = new Ball(width / 2 - 100, height / 2 + 100 + 100)
+    let b5 = new Ball(width / 2 + 15, height / 2 - 204 + 100)
+    let b6 = new Ball(width / 2 + 60, height / 2 + 91 + 100)
+    if (!round) {
         b4 = new Ball(820, 700)
         b5 = new Ball(1080, 700)
         b6 = new Ball(950, 580)
@@ -155,7 +155,7 @@ function onEnter(round) {
     let b7 = new Ball(350, 700)
     let b8 = new Ball(650, 700)
     let b9 = new Ball(500, 590)
-    if(!round) {
+    if (!round) {
         b7 = new Ball(1263, 662)
         b8 = new Ball(1600, 790)
         b9 = new Ball(1508, 603)

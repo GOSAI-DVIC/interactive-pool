@@ -1,0 +1,1 @@
+apps/triangles_lesson/assets/*.wav filter=lfs diff=lfs merge=lfs -text

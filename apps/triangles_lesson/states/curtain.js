@@ -19,7 +19,7 @@ let x_triangle_perpendicular_bijector = 1200
 let x_segment = -size
 let x_triangle_altitude = 400
 
-let waitingTimeAfterAudio = 0; //milliseconds
+let waitingTimeAfterAudio = 10000; //milliseconds
 let endAudioTime = 0; //milliseconds
 let audioEnded = false;
 

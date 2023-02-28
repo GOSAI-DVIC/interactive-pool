@@ -24,7 +24,7 @@ let once = true;
 let startTime = 0;
 let foundTime = 0;
 let timeToWait = 2000; // in ms
-let solutionTime = 3000; // in ms
+let solutionTime = 20000; // in ms
 let goEndTime = false;
 
 let showSolution = false;
