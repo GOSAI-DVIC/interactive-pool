@@ -114,9 +114,7 @@ export const triangles_full_lesson = new p5((sketch) => {
     sketch.windowResized = () => resizeCanvas(windowWidth, windowHeight);
 
     sketch.show = () => {
-        if(firstRun) {
-            onEnter();
-        }
+        firstRun ? onEnter() : null
         sketch.clear();
 
         exit_button(sketch, balls, f);
