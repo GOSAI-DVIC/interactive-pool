@@ -108,6 +108,7 @@ function onEnter() {
 }
 
 function onExit() {
+    timeLeft = 120;
     firstRun = true;
     goDefaultNextStep = false;
     audioMedia.stopSound()
