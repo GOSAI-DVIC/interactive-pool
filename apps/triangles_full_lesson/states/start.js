@@ -53,7 +53,10 @@ export function startShow(sketch, f, balls) {
     sketch.text("Place un palet* dans le cercle pour démarrer!", sketch.width / 2, 3 * sketch.height / 4);
     sketch.textFont(f, 40);
     sketch.text("*palet ou boule", sketch.width / 2, 3 * sketch.height / 4 + 50);
-
+    sketch.stroke(255)
+    sketch.strokeWeight(3)
+    sketch.noFill()
+    sketch.circle(width/2, height/2, 200)
     for (let i = 0; i < balls.balls.length; i++) {
       if (dist(balls.balls[i].x, balls.balls[i].y, sketch.width / 2, sketch.height / 2) < 200 && buttonIsActivated == false) {
         buttonIsActivated = true;
