@@ -105,13 +105,14 @@ function showTimerIcon(sketch, f) {
     sketch.fill(255);
     sketch.textFont(f, 70);
     sketch.textAlign(sketch.CENTER)
+    console.log(lastSecond)
     if (timeLeft < 10) {
         sketch.text(`0:0${timeLeft} s`, width / 2, 177);
     } else {
         sketch.text(`0:${timeLeft} s`, width / 2, 177);
     }
 
-    if (1 - lastSecond >= 1000) {
+    if (millis() - lastSecond >= 1000) {
         timeLeft -= 1;
         lastSecond = millis();
     }

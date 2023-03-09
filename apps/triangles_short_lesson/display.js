@@ -92,7 +92,6 @@ export const triangles_short_lesson = new p5((sketch) => {
         // Background Audio
         bgAudio.loop = true;
 
-        console.log(state)
         // state machine
         switch (state) {
             case "mediatriceLessonSegment":
@@ -144,8 +143,7 @@ function onEnter() {
     firstRun = false;
     resetAll()
 
-    // state = "mediatriceLessonSegment"
-    state = "challengeIntroduction"
+    state = "mediatriceLessonSegment"
 
     startingTime = millis();
     exit = true;
