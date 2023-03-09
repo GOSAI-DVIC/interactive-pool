@@ -67,9 +67,11 @@ function onEnter() {
 }
 
 function onExit() {
+    timeLeft = 30;
     firstRun = true;
     goDefaultNextStep = false;
     audioMedia.stopSound()
+
 }
 
 export function challengeReset() {
