@@ -1,8 +1,5 @@
-//var death = loadImage('./platform/home/apps/sandtable/components/death.png');
-import {Fireworks} from "./Firework.js"
-
-
-export class Crab{
+import {Fireworks} from "./firework.js"
+export class Rabbit{
   constructor(x,y,r,stateLife){
     this.x = x;
     this.y = y;
@@ -18,12 +15,9 @@ export class Crab{
     this.image = loadImage('./platform/home/apps/sandtable/components/crabe.png');
     this.stateLife = stateLife;
     this.deathTime = 0;
-    let firework;
-    console.log(this.firework);
     this.angle = 0;
     this.alpha = 255;
   }
-  
   move(){
     if(this.stateLife == true){
       this.x = this.x + this.xspeed1;
@@ -58,14 +52,10 @@ export class Crab{
       }  
     }
   } 
-  
   getR(){
     return this.r;
   }
-
-  
   show(sketch){
-    //this.alpha = 255;
     if(this.stateLife == true){
       
       this.firework = undefined;
@@ -104,7 +94,6 @@ export class Crab{
       //nose
       sketch.ellipse(0,8,8,5);
       sketch.line(0,8,0,18);
-      
       sketch.fill(255);
       sketch.stroke(255);
       sketch.circle(-9,-8,2);
@@ -152,11 +141,17 @@ export class Crab{
 
     }
   }
-  
-  
-
-  
-
-  
-  
+   
 }
+
+
+
+
+
+
+
+
+
+
+
+

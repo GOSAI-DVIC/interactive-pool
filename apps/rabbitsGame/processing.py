@@ -2,7 +2,7 @@ from core.application import BaseApplication
 import time
 
 class Application(BaseApplication):
-    """sandtable"""
+    """rabbitsGame"""
 
     def __init__(self, name, hal, server, manager):
         super().__init__(name, hal, server, manager)
@@ -17,5 +17,17 @@ class Application(BaseApplication):
         
         if source == "ball" and data is not None:
             if event == "balls": self.server.send_data("ball", data)
-            # if event == "fps"  : self.server.send_data("fps",  data)
-            # if event == "cue_data": self.server.send_data("cue", data)
+            
+
+
+
+
+
+
+
+
+
+
+
+
+

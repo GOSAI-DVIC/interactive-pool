@@ -1,4 +1,4 @@
-import {Particles} from "./Particles.js"
+import {Particles} from "./particles.js"
 
 export class Fireworks{
     constructor(x,y){
@@ -11,9 +11,6 @@ export class Fireworks{
     }
     
     showFirework(sketch){
-        // console.log(this.particles[1].pos);
-        // console.log("HERE");
-        console.log("point 2 : ", this.particles[2].pos);
       for(let i=0; i<this.particles.length;i++){
         this.particles[i].show(sketch);
         this.particles[i].displayParticle();
@@ -22,3 +19,23 @@ export class Fireworks{
     
    
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  

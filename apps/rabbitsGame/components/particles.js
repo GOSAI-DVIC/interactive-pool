@@ -18,8 +18,16 @@ export class Particles{
        
      show(sketch){
        sketch.stroke(color(this.color.x,this.color.y,this.color.z,this.alpha));
-       //sketch.strokeWeight(3);
        sketch.point(this.pos.x,this.pos.y);
        this.alpha = this.alpha * this.slow;
      }
      }
+
+
+
+
+
+
+
+
+     

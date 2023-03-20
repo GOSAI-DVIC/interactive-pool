@@ -1,23 +1,15 @@
-import {Crab} from "./components/crab.js"
-import {Bubble} from "./components/boule.js"
-// import {Ball} from "./components/ball.js"
-// import {Grain} from "./components/grain.js"
-// import {Can} from "./components/can.js"
+import {Rabbit} from "./components/rabbit.js"
+import {Bubble} from "./components/bubble.js"
 
-export const sandtable = new p5(sketch => {
-    sketch.name = "sandtable"
+export const rabbitsGame = new p5(sketch => {
+    sketch.name = "rabbitsGame"
     sketch.activated = false
 
-    let crabs = [];
+    let rabbits = [];
     let balls = [];
-    let deaths = [];
     let max_ball = 20;
     let ball_nb;
     let previous_ball_nb = max_ball;
-
-    //let count = 0;
-    //let delta = millis();
-
 
     sketch.preload = () => {
         //sable = loadImage('./platform/home/apps/sandtable/components/sable.jpg');
@@ -31,22 +23,17 @@ export const sandtable = new p5(sketch => {
             let b=new Bubble(-500,- 500)
             balls.push(b)
         }
-
         socket.on("ball", data => sketch.update_data(data));
         sketch.activated = true
-        
         
         for (var a = 0; a<6; a++) {
             let x = 0;
             let y = random(height);
             let r = random(40, 60);
             let state = true;
-            let crab = new Crab(x, y, r,state);
-            crabs.push(crab);
-           
+            let rabbit = new Rabbit(x, y, r,state);
+            rabbits.push(rabbit);
         }
-        
-
     }
 
     sketch.update_data = (data) => {
@@ -77,50 +64,41 @@ export const sandtable = new p5(sketch => {
 
     sketch.show = () => {
         sketch.clear();
-        //sketch.fill(221,186,138);
-        //sketch.rect(0,0,1920,1080);
         sketch.push();
         sketch.push();
         sketch.pop();
-
-        for (let d of deaths) {
-            d.show(sketch);
-        }
         
-        for (let ball of balls) {
-            ball.show(sketch);
-        }
-    
-
-        for (var i = 0; i<crabs.length; i++) {
-
+        for (var i = 0; i<rabbits.length; i++) {
             for (let ball of balls) {
-                if (dist(ball.x, ball.y, crabs[i].x, crabs[i].y)<(crabs[i].getR()/2) + (ball.getR()/2)) {
-                    if(crabs[i].stateLife == true ){
-                        crabs[i].deathTime = millis();
+                if (dist(ball.x, ball.y, rabbits[i].x, rabbits[i].y)<(rabbits[i].getR()/2) + (ball.getR()/2)) {
+                    if(rabbits[i].stateLife == true ){
+                        rabbits[i].deathTime = millis();
                     }
-                    crabs[i].stateLife = false;
-                    
+                    rabbits[i].stateLife = false;
                 }  
             } 
         } 
-        
-        for(let i=0; i<crabs.length; i++){
-            if(crabs[i].stateLife == false && millis()-crabs[i].deathTime >= 3000){
-                crabs[i].x = 0;
-                crabs[i].y = random(height);
-                crabs[i].stateLife = true;
-                crabs[i].alpha = 255;
+        for(let i=0; i<rabbits.length; i++){
+            if(rabbits[i].stateLife == false && millis()-rabbits[i].deathTime >= 3000){
+                rabbits[i].x = 0;
+                rabbits[i].y = random(height);
+                rabbits[i].stateLife = true;
+                rabbits[i].alpha = 255;
 
             }
-
         }
-        for(let i=0; i<crabs.length; i++){
-            crabs[i].move();
-            crabs[i].show(sketch);
+        for(let i=0; i<rabbits.length; i++){
+            rabbits[i].move();
+            rabbits[i].show(sketch);
         }
-
-        
         sketch.pop();
     };
 });
+
+
+
+
+
+
+
+
