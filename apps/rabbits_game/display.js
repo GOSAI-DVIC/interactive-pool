@@ -1,8 +1,8 @@
 import {Rabbit} from "./components/rabbit.js"
 import {Bubble} from "./components/bubble.js"
 
-export const rabbitsGame = new p5(sketch => {
-    sketch.name = "rabbitsGame"
+export const rabbits_game = new p5(sketch => {
+    sketch.name = "rabbits_game"
     sketch.activated = false
 
     let rabbits = [];

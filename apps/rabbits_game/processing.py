@@ -2,7 +2,7 @@ from core.application import BaseApplication
 import time
 
 class Application(BaseApplication):
-    """rabbitsGame"""
+    """rabbits_game"""
 
     def __init__(self, name, hal, server, manager):
         super().__init__(name, hal, server, manager)
