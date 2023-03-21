@@ -17,18 +17,18 @@ export class SolarSystem{
     {
         let planets_rep = [];
         let anneau = random([0, 1]); //this is to put some ellipse randomly around some of the 9 planets 
-        for (let i = 1; i < 9; i++){
-            let xplanet = i*25;// this is a ratio to put every planets a little bit further from the sun 
-            //let yplanet = 0;
-            let yplanet = i*12;
-            let radiusw = 100 + (i-1) * 50;//radius of the ellipse on wich the planets turns on
-            let radiush = 25 + (i-1) * 12;
-            let velocity = 0.01 - (i-1) * 0.001;
-            let r = random(10, 40);
-            let color = [tabColor[i-1][0],tabColor[i-1][1],tabColor[i-1][2]];
-            let planet = new Planet(0, 0, xplanet, yplanet, r, radiusw, radiush, velocity, 0, color, anneau);
-            planets_rep.push(planet);
-        }
+    for (let i = 1; i < 9; i++){
+        let xplanet = i*25;// this is a ratio to put every planets a little bit further from the sun 
+        let yplanet = 0;
+        //console.log(xplanet, yplanet);
+        let radiusw = 100 + (i-1) * 50;//radius of the ellipse on wich the planets turns on
+        let radiush = 25 + (i-1) * 12;
+        let velocity = 0.01 - (i-1) * 0.001;
+        let r = random(10, 40);
+        let color = [tabColor[i-1][0],tabColor[i-1][1],tabColor[i-1][2]];
+        let planet = new Planet(0, 0, xplanet, yplanet, r, radiusw, radiush, velocity, 0, color, anneau);
+      planets_rep.push(planet);
+    }
     return planets_rep;
     }
 
@@ -42,7 +42,7 @@ export class SolarSystem{
                 this.planets[i].showAnneau(sketch);
             }
             this.planets[i].show(sketch);
-            //this.planets[i].move(sketch);
+            this.planets[i].move(sketch);
         }
         
         sketch.pop();

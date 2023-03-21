@@ -15,11 +15,11 @@ export class Planet{
   this.anneau = anneau;
   }
   
-  /*move(){ //function moves planets around the sun
+  move(){ //function moves planets around the sun
     this.theta = this.theta + this.velocity;
     this.xplanet = this.xsun + this.radiusw * cos(this.theta);
-    this.yplanet = this.ysun + this.radiush * sin(this.theta); 
-  }*/
+    this.yplanet = this.ysun + this.radiush * sin(this.theta);  
+  }
   
   show(sketch) {
     sketch.noFill();

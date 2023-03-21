@@ -1,14 +1,14 @@
 {
     "name" : "Interactive Pool",
     "camera": {
-        "number": 0,
+        "number":0,
         "type" : "standard",
         "width": 1920,
         "height": 1080,
         "flip": false
     },
     "applications": {
-        "startup": ["balls","univers"],
+        "startup": ["show_hands", "menu", "balls"],
         "disabled": [],
         "menu_control": ["sandtable", "affine", "triangles_remarkable_lines", "triangles_full_lesson", "triangles_short_lesson"],
         "no_menu_tutorial_gif" : ["affine", "triangles_remarkable_lines", "triangles_full_lesson", "triangles_short_lesson"]
