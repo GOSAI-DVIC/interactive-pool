@@ -20,7 +20,7 @@ export const balls = new p5((sketch) => {
             .position(0, 0);
         sketch.activated = true;
 
-        socket.on("ball", (data) => balls.update_data(data));
+        socket.on("applications_balls_positions", (data) => balls.update_data(data));
         socket.on("fps", (data) => (fps = data));
         // sketch.emit = (name, data = undefined) => {
         //     if (data == undefined) socket.emit(name);
