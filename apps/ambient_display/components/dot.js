@@ -2,7 +2,7 @@ export class Dot{
     constructor(){
       this.pos = createVector(random(width),random(height));
       this.color = createVector(random(0,255),random(0,255),random(0,255));
-      this.vel = createVector(random(-1,1),random(-1,1));
+      this.vel = createVector(random(-2,2),random(-2,2));
     }
     
     updateDot(){
@@ -24,7 +24,7 @@ export class Dot{
     
     showDot(sketch){
       sketch.stroke(this.color.x,this.color.y,this.color.z);
-      sketch.strokeWeight(3);
+      sketch.strokeWeight(7);
       sketch.point(this.pos.x,this.pos.y);
     }
   }

@@ -65,7 +65,7 @@ export const ambient_display = new p5(sketch => {
             dot.showDot(sketch);
         }
       
-        let min = 5; 
+        let min = 50; 
         
         for(let i = 0; i < dist.length; i++) {
             if(dist[i]>min){
